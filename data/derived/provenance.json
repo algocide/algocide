@@ -1,0 +1,24 @@
+{
+  "built_at_utc": "2026-09-24T17:06:52.765137+00:00",
+  "sources": {
+    "perp_basis": {
+      "repo": "https://github.com/michaelaviv/perp-basis",
+      "commit": "a40f37eb426c904b3f40360f6c9b90fbaf689b7d",
+      "rows": 159379,
+      "ts_min": "2026-04-30 20:59:00+00:00",
+      "ts_max": "2026-09-24 15:16:23.591287+00:00",
+      "note": "GitHub Actions cron (*/5) snapshots; CME rows are Yahoo quotes ~15 min delayed with data_age_sec recorded"
+    },
+    "rwa_dashboard": {
+      "repo": "https://github.com/MiggoyGHP/hyperliquid-rwa-dashboard",
+      "commit": "0a7c1fda2dd8089a41e353fa1eaa7ef80221953e",
+      "funding_rows": 636074,
+      "funding_coins": 161,
+      "funding_ts_min": "2023-05-12 00:00:00+00:00",
+      "funding_ts_max": "2026-09-23 23:00:00+00:00",
+      "stock_rows": 31037,
+      "oi_rows": 6326,
+      "note": "fundingHistory bundles fetched by upstream from api.hyperliquid.xyz (fields t, r=fundingRate, p=premium); stock OHLC from Yahoo via yfinance"
+    }
+  }
+}
