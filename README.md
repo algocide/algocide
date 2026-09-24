@@ -3,6 +3,11 @@
 Skeptical, reproducible search for economically meaningful trading edges executable on Hyperliquid, produced
 autonomously in a sandboxed cloud session. **Start with `docs/decision_memo.md`.**
 
+**Bottom line:** no credible, economically meaningful edge was found. The only candidate passing its own pre-registered
+bar is the HYPE perp-vs-spot funding carry (≈7% net on capital in 2026 at 4x on the perp leg, ≈+3 points over T-bills), a
+known carry rather than an alpha. The premium-reversion idea on trade.xyz equity perps is statistically real but not
+capturable at standard HIP-3 fees; it is worth a conditional forward paper test only if growth-mode fees are confirmed.
+
 ## What is in here
 
 | Path | Content |
@@ -14,7 +19,7 @@ autonomously in a sandboxed cloud session. **Start with `docs/decision_memo.md`.
 | `docs/research_ledger.md` | Every run, bug fix, methodological change and validation "look" |
 | `docs/venue_verification.md` | Hyperliquid + trade.xyz mechanics with citations (via search snippets and the official SDK) |
 | `docs/source_register.md` | Data sources: URLs, retrieval dates, coverage, granularity, provenance, limitations |
-| `docs/review_adversarial.md` | Independent reviewer's attack on the finalists (unresolved objections preserved) |
+| `docs/review_adversarial.md` | Independent reviewer's attack on the finalists (17 objections; scripts `experiments/review_*.py`, outputs `results/review/`) |
 | `docs/forward_plan.md` | Forward paper-trading plan: sizing, monitoring, kill switches, pre-declared pass/fail |
 | `data/derived/` | Canonical datasets (Parquet) built from public GitHub snapshot repos, with `provenance.json` |
 | `src/hlr/` | Package: data build, cost model, dependence-aware stats, API client (untested live) |

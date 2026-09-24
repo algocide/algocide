@@ -429,3 +429,13 @@ SDK = via SDK source (local clone, commit 2fdb18f, 2026-06-04).
 | 42 | hyperliquid-python-sdk `hyperliquid/websocket_manager.py` | SDK | WS subscription types |
 | 43 | hyperliquid-python-sdk `api/info/*.yaml` | SDK | base URLs, candle/l2Book schemas |
 | 44 | hyperliquid-python-sdk `examples/*.py` | SDK | `dex:COIN` naming, builder fee example |
+
+
+## Addendum (2026-09-24, from the adversarial review, data-inferred — not from documentation)
+* `fundingHistory.premium` is the hourly AveragePremiumIndex that enters funding: for the native dex,
+  `fundingRate = (p + clamp(0.0001 − p, −5e-4, +5e-4)) / 8` ties 92% of rows to 1e-8.
+* For the xyz dex, `F = 0.5 · (p + clamp(0.0001 − p, −3e-4, +3e-4)) / 8` ties 96–100% of rows per month since 2026-01
+  (multiplier 1.0 before Dec 2025). Hence the xyz clamp is ±3 bps (not ±5 bps) and xyz shorts receive a 5.5% APR floor
+  whenever the premium is within [−2, +4] bps. Source: `experiments/review_followup.py`, `results/review/`.
+* The `time` stamp of a fundingHistory row is the END of its averaging hour (inferred from |Δp| peaks at the stamps
+  containing the 04:00/20:00 ET session switches).

@@ -1,4 +1,4 @@
-# E5 — robustness battery for H4 (K=5 unless stated, standard HIP-3 fees, 25% margin)
+# E5 — robustness battery for H4 (K=5 unless stated, standard HIP-3 fees, 25% margin). Not all variants were pre-registered (review O10).
 
 | test | weeks | net APR | t | win | worst week |
 |---|---|---|---|---|---|

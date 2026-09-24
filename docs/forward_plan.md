@@ -16,10 +16,13 @@ capital. Paper trading here means simulated fills against observed quotes; nothi
 
 | Strategy | Frequency (independent opportunities) | Minimum sample before judging | PASS (continue to small real capital) | FAIL (stop) |
 |---|---|---|---|---|
-| H7 hedged premium reversion (`PremiumReversion`, external sessions, top-15 liquid xyz names, thr 30 bps, exit at |p|<7.5 bps or 6 h) | ≈3–6 events per business day across the universe (≈105 persisting external events / 11 months in the liquid subset) | 60 completed events (≈4–8 weeks) | mean net ≥ +8 bps/event with block-bootstrap 95% lower bound > 0, using OBSERVED touch prices and impact prices; ≥55% wins | mean net ≤ 0 after 60 events, or observed half-spread in the traded names > 15 bps on median |
-| H4 equity funding harvest (`EquityFundingHarvest`, K=5, weekly, liquid names only) — only if growth-mode fees are confirmed | 1 rebalance/week; funding accrues hourly | 12 rebalances (≈3 months) | net weekly mean > 0 with t > 2 AND gross funding APR of selected names ≥ 8% | net ≤ 0 after 12 weeks, or fees confirmed at 9 bps taker (standard) → do not run |
-| H14 para/xyz same-stock differential — monitor only | daily | 12 weeks of collector data | mean differential ≥ 15% APR with ≥ 70% of days same sign, para top-of-book depth ≥ $20k | otherwise drop |
+| F1 HYPE carry (short HYPE perp / long HYPE spot, 25% margin) — operations test | continuous; funding hourly | 8 weeks | realised net funding ≥ 6% annualised; margin logic handled a simulated 30% adverse move without liquidation; spot-leg spread ≤ 5 bps | negative net funding over 8 weeks, or margin top-ups needed more than weekly |
+| F2 H7 hedged premium reversion (`PremiumReversion`, point-in-time premium, external sessions, liquid US equities, thr 30 bps, exit at |p| < 7.5 bps or 6 h) — **only if growth mode is confirmed for those names** | ≈ 2–4 events per business day | 60 completed events (≈ 4–8 weeks) | mean net ≥ +8 bps/event with block-bootstrap 95% lower bound > 0 using OBSERVED touch and impact prices; ≥ 55% wins; observed median half-spread ≤ 3 bps | growth mode not confirmed (do not start); mean net ≤ 0 after 60 events; median half-spread > 5 bps |
 | H3 WTI weekend reversal — monitor only | 1/week | 40 weekends | corr(weekend move, 2 h reopen move) < −0.4 with p < 0.01 | otherwise drop |
+| H4 / H14 — dropped after review; the collector still records the funding and volume needed to revisit them | — | — | — | — |
+
+Note (review O17): the paper trader trades the point-in-time premium a trader actually sees; the backtest statistic was
+an hourly average. The collector samples `premium` every 60 s so both can be computed and compared.
 
 ## Step 2 — risk limits and kill switches (`forward/paper_trader.py`, `RiskLimits`)
 * Gross paper notional ≤ $20k; per-market ≤ $5k (scale with the capital scenario: $5k / $25k / $100k → per-market 5% / 5% / 5%).
@@ -30,9 +33,9 @@ capital. Paper trading here means simulated fills against observed quotes; nothi
 ## Step 3 — sizing scenarios (feasibility, not recommendations)
 | Capital | Positions | Per-position | Notes |
 |---|---|---|---|
-| $5,000 | 2–3 | $1,000 | Costs dominate: at 9 bps taker a $1,000 round trip is $1.80 + hedge; only worthwhile if growth-mode fees; hedge leg needs a broker with fractional shares |
-| $25,000 | 5 | $2,500 | H7 at ~+8 bps net/event × 4 events/day ≈ $8/day ≈ 12%/yr on capital before hedge frictions — only if forward evidence confirms |
-| $100,000 | 5–10 | $5–10k | Capacity limited by OI caps ($25–100M per market, fine) and by top-of-book depth in thin names (unknown; collector records it) |
+| $5,000 | 1 (carry) or 2 (H7) | $1,000–4,000 | Costs dominate H7 ($1.80 per $1,000 round trip at standard fees); carry ≈ $350/yr expected |
+| $25,000 | 1 carry + up to 5 H7 | $2,500 | Carry ≈ $1,750/yr; H7 at +5–10 bps net/event × 3 events/day ≈ $4–8/day — only if forward evidence confirms |
+| $100,000 | same | $5–10k | Carry has no capacity issue; H7 limited by top-of-book depth in liquid names (unobserved; the collector records it) |
 
 ## What would make me stop immediately
 Executable spreads in the liquid xyz names above 15 bps; growth mode confirmed off AND net per event < 5 bps;

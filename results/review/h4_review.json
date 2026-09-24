@@ -1,0 +1,68 @@
+{
+ "baseline": {
+  "net_apr": 0.046831683177789955,
+  "ci": [
+   0.006018643067389954,
+   0.08680533094312327
+  ],
+  "weeks": 39
+ },
+ "exec": {
+  "as reported (Mon 00:00 UTC)": {
+   "weeks": 39,
+   "net_apr": 0.046831683177789955,
+   "t": 2.1821899783141463,
+   "basis_apr": 0.029803315199999993,
+   "gross_apr": 0.11036403921066666
+  },
+  "perp+stock at Mon 14:00 UTC (~09:30-10:00 ET open)": {
+   "weeks": 39,
+   "net_apr": 0.02455316313512329,
+   "t": 1.212021532965296,
+   "basis_apr": 0.0055825856,
+   "gross_apr": 0.11230624876800002
+  },
+  "funding from 00:00 UTC but basis marked at 14:00 UTC (perp entered Sunday night, hedge on Monday open)": {
+   "weeks": 39,
+   "net_apr": 0.022610953577789947,
+   "t": 0.991035616283709,
+   "basis_apr": 0.0055825856,
+   "gross_apr": 0.11036403921066666
+  },
+  "Mon 14:00 UTC, no basis term": {
+   "weeks": 39,
+   "net_apr": 0.01897057753512329,
+   "t": 1.078417390626133,
+   "basis_apr": 0.0,
+   "gross_apr": 0.11230624876800002
+  },
+  "Mon 14:00 UTC, perp half-spread 5 bps": {
+   "weeks": 39,
+   "net_apr": 0.004158496468456621,
+   "t": 0.2067468175025061,
+   "basis_apr": 0.0055825856,
+   "gross_apr": 0.11230624876800002
+  },
+  "Mon 14:00 UTC, perp half-spread 10 bps": {
+   "weeks": 39,
+   "net_apr": -0.021334836864876708,
+   "t": -1.0664073191037307,
+   "basis_apr": 0.0055825856,
+   "gross_apr": 0.11230624876800002
+  },
+  "Mon 00:00 UTC, perp half-spread 5 bps": {
+   "weeks": 39,
+   "net_apr": 0.02643701651112327,
+   "t": 1.2424314362053333,
+   "basis_apr": 0.029803315199999993,
+   "gross_apr": 0.11036403921066666
+  },
+  "Mon 14:00 UTC, growth fees": {
+   "weeks": 39,
+   "net_apr": 0.0658523631351233,
+   "t": 3.180897786938234,
+   "basis_apr": 0.0055825856,
+   "gross_apr": 0.11230624876800002
+  }
+ }
+}

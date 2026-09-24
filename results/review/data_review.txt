@@ -1,0 +1,90 @@
+/home/user/algocide/experiments/review_data.py:16: UserWarning: Converting to PeriodArray/Index representation will drop timezone information.
+  x["month"] = x["ts"].dt.to_period("M").astype(str)
+== xyz: share of rows where funding == mult*(p + clamp(ir - p, -5e-4, 5e-4))/8 exactly, by month ==
+         mult=1.0,ir=0.0001  mult=0.5,ir=0.0001  mult=1.0,ir=5e-05  mult=0.5,ir=5e-05  mult=0.5,ir=0.0
+2025-10               0.451               0.000              0.000                0.0            0.000
+2025-11               0.540               0.000              0.000                0.0            0.000
+2025-12               0.298               0.205              0.205                0.0            0.000
+2026-01               0.000               0.437              0.438                0.0            0.000
+2026-02               0.000               0.373              0.373                0.0            0.002
+2026-03               0.000               0.312              0.312                0.0            0.029
+2026-04               0.000               0.301              0.301                0.0            0.024
+2026-05               0.000               0.244              0.244                0.0            0.016
+2026-06               0.000               0.234              0.234                0.0            0.014
+2026-07               0.000               0.285              0.285                0.0            0.021
+2026-08               0.000               0.327              0.327                0.0            0.024
+2026-09               0.000               0.332              0.332                0.0            0.014
+
+rows with |p|<5e-5: implied 8*F (should equal ir if mult=1, or 0.5*ir if mult=0.5):
+{'count': 23864.0, 'mean': 5.0572e-05, 'std': 1.817e-05, 'min': 0.0, '10%': 5e-05, '50%': 5e-05, '90%': 5e-05, 'max': 0.0001}
+
+recent (>=2026-06) xyz: mean of 8F/0.5 - p by premium bucket (clamp(ir-p) would be +5e-4 for p<-4e-4 and -5e-4 for p>6e-4):
+                        mean       std   size
+premium                                      
+(-1.0, -0.002]      0.000440  0.001250  12147
+(-0.002, -0.001]    0.000309  0.000111  13124
+(-0.001, -0.0005]   0.000301  0.000026  18351
+(-0.0005, -0.0002]  0.000299  0.000010  25126
+(-0.0002, 0.0]      0.000188  0.000064  22281
+(0.0, 0.0002]      -0.000008  0.000063  26402
+(0.0002, 0.0005]   -0.000238  0.000066  44925
+(0.0005, 0.001]    -0.000300  0.000015  46447
+(0.001, 0.002]     -0.000305  0.000080  22433
+(0.002, 1.0]       -0.000418  0.001814  16888
+
+xyz funding exactly 0: 6977  premium exactly 0: 16  premium NaN: 0
+/home/user/algocide/experiments/review_data.py:44: UserWarning: Converting to PeriodArray/Index representation will drop timezone information.
+  dens = hl.groupby(hl["ts"].dt.to_period("M")).agg(rows=("ts", "size"), days=("ts", lambda s: s.dt.date.nunique()))
+
+== 5-min tape: HL gold rows per month (288/day = full) ==
+         rows  days  rows_per_day
+ts                               
+2026-04    26     1          26.0
+2026-05  7459    25         298.0
+2026-06  7839    26         302.0
+2026-07  6463    22         294.0
+2026-08  1417    22          64.0
+2026-09   165    24           7.0
+duplicate (ts, venue, asset) rows: 0
+HL gold snapshot gap minutes: median 5.0, q90 5.5, q99 59.8, share>7min 0.079
+share of snapshot ts with all 3 live venues: 0.755  with >=2: 1.0
+
+== OI snapshot window: 2026-08-14 21:54:49+00:00 -> 2026-09-23 23:57:31+00:00 snapshots per coin (median): 45
+median 24h notional volume across xyz coins: $1.5M; median OI $5.6M
+  xyz:HIMS   rank= 66/109 OI $    2.4M  vol24h $    0.6M
+  xyz:GME    rank= 72/109 OI $    1.7M  vol24h $    0.5M
+  xyz:USAR   rank= 74/109 OI $    1.6M  vol24h $    0.6M
+  xyz:BIRD   rank=107/109 OI $    0.1M  vol24h $    0.0M
+  xyz:MU     rank=  9/109 OI $  140.2M  vol24h $   90.1M
+  xyz:SNDK   rank= 10/109 OI $  138.4M  vol24h $  156.6M
+  xyz:RIVN   rank= 89/109 OI $    0.6M  vol24h $    0.2M
+  xyz:INTC   rank= 15/109 OI $   69.8M  vol24h $   21.5M
+  xyz:BX     rank= 90/109 OI $    0.5M  vol24h $    0.1M
+  xyz:GOOGL  rank= 13/109 OI $  101.8M  vol24h $   19.8M
+  xyz:NVDA   rank= 11/109 OI $  132.4M  vol24h $   45.9M
+  xyz:GOLD   rank=  3/109 OI $  332.2M  vol24h $   61.7M
+  xyz:TSLA   rank= 22/109 OI $   43.8M  vol24h $   18.9M
+bottom-30 by OI: median vol24h $0.15M, median OI $0.35M
+top-15 by OI: median vol24h $86.2M
+coins with median vol24h < $1M: 51 of 109 ; < $5M: 70
+
+== H2 gold HL-Binance differential ==
+days=119 mean=4.30% sd=6.37% autocorr1=0.33 share>0=0.85
+monthly mean differential APR: {Timestamp('2026-04-01 00:00:00+0000', tz='UTC'): 0.8, Timestamp('2026-05-01 00:00:00+0000', tz='UTC'): 2.2, Timestamp('2026-06-01 00:00:00+0000', tz='UTC'): 4.9, Timestamp('2026-07-01 00:00:00+0000', tz='UTC'): 8.3, Timestamp('2026-08-01 00:00:00+0000', tz='UTC'): 4.1, Timestamp('2026-09-01 00:00:00+0000', tz='UTC'): 2.3}
+HAC(7) t-stat of mean differential: 4.91
+sign-following weekly: n=15 flips=4 net mean=-0.7 bps/wk; gross mean=7.4
+always-on short-HL/long-Binance over 119 days: gross 140 bps, net of one round trip 110 bps = 3.37% APR on notional
+
+== H14 para:AVGO - xyz:AVGO hourly differential ==
+hours=2697 mean APR=23.1% ; APR excluding top 1% |diff| hours: 21.9% ; excluding top 24 hours: 21.8%
+para:AVGO funding APR by month: {Timestamp('2026-06-01 00:00:00+0000', tz='UTC'): 15.9, Timestamp('2026-07-01 00:00:00+0000', tz='UTC'): 16.2, Timestamp('2026-08-01 00:00:00+0000', tz='UTC'): 67.7, Timestamp('2026-09-01 00:00:00+0000', tz='UTC'): 36.9}
+xyz:AVGO funding APR by month: {Timestamp('2026-06-01 00:00:00+0000', tz='UTC'): 12.2, Timestamp('2026-07-01 00:00:00+0000', tz='UTC'): 9.8, Timestamp('2026-08-01 00:00:00+0000', tz='UTC'): 12.7, Timestamp('2026-09-01 00:00:00+0000', tz='UTC'): 11.0}
+largest |diff| hours (APR-equivalent): {'2026-07-14 11:00:00+00:00': 844.3, '2026-06-06 01:00:00+00:00': 731.0, '2026-07-14 10:00:00+00:00': 689.8, '2026-06-07 14:00:00+00:00': -576.8, '2026-08-30 23:00:00+00:00': 431.3}
+hyna data ends: 2026-08-30 23:00:00+00:00 -> 2026-09-01 23:00:00+00:00 (main continues to 2026-09-23 23:00:00+00:00 )
+/home/user/algocide/experiments/review_data.py:119: Pandas4Warning: Sorting by default when concatenating all DatetimeIndex is deprecated.  In the future, pandas will respect the default of `sort=False`. Specify `sort=True` or `sort=False` to silence this message. If you see this warnings when not directly calling concat, report a bug to pandas.
+  sep = pd.concat([hb.rename("h"), mb.rename("m")], axis=1).dropna(); sep = sep[sep.index >= "2026-09-01"]
+hyna:BTC|BTC 'September' differential is based on 24 hours
+
+== main BTC settlement cadence: counts of diff (s) == {3600.0: 28859, 28800.0: 79, 3601.0: 8, 3599.0: 8, 7200.0: 3}
+8h-era rows=79 mean rate/settlement=-6.910e-05 (x3 per day => APR -7.6%); 1h-era rows=28859 mean rate=1.655e-05 (APR 14.5%)
+8h-era rows share at 1e-4 (=0.01% per 8h floor): 0.21518987341772153 ; 1h-era share at 1.25e-5: 0.5165113136283308

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""E5: pre-registered robustness battery for H4 (equity-perp funding harvest): start dates, parameter neighbourhood,
+"""E5: robustness battery for H4 (NOT all pre-registered: start dates, K=3/7, trailing 3/14d, stresses and delays were
+added after validation had been inspected — see ledger entries 15 and 21 and review objection O10) (equity-perp funding harvest): start dates, parameter neighbourhood,
 cost stress, funding-reversal stress, execution delay, per-quarter, top coin-week concentration. Uses the same
 simulator as E4 (imported), standard HIP-3 fees unless stated."""
 import os, sys, json
