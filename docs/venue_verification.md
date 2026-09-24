@@ -163,6 +163,9 @@ Source unless noted: https://hyperliquid.gitbook.io/hyperliquid-docs/trading/fee
 - trade.xyz fee page exists (https://docs.trade.xyz/perp-mechanics/fees) but **its content was not
   returned: NOT VERIFIED** whether xyz runs growth mode or what its deployer share is.
 
+
+> Lead's note (2026-09-24): the "0.060%/0.030% at >$5M" figures in the snippet match the SPOT schedule as I recall it (spot base tier 0.070%/0.040%, then 0.060%/0.030%), which would remove the contradiction with the 0.045% perps baseline. This is unverified prior knowledge; the cost model uses 0.045%/0.015% for perps and flags spot fees as an assumption.
+
 ## 4. Leverage and margin
 
 Sources: https://hyperliquid.gitbook.io/hyperliquid-docs/trading/margining and
