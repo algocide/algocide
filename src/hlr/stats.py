@@ -94,3 +94,21 @@ def describe_pnl(x: np.ndarray, per_year: float | None = None) -> dict:
     if per_year:
         out["sharpe_ann"] = sharpe_ann(x, per_year)
     return out
+
+
+def circular_block_bootstrap_ci(x: np.ndarray, stat=np.mean, block: int = 5, n_boot: int = 2000,
+                                alpha: float = 0.05, seed: int = 0) -> tuple[float, float, float]:
+    """Vectorised circular block bootstrap (fixed block length). Returns (point, lo, hi)."""
+    x = np.asarray(x, dtype=float)
+    x = x[~np.isnan(x)]
+    n = len(x)
+    if n < 5:
+        return (float(np.nan), float(np.nan), float(np.nan))
+    block = max(1, min(int(block), n))
+    rng = np.random.default_rng(seed)
+    nb = int(np.ceil(n / block))
+    starts = rng.integers(0, n, size=(n_boot, nb))
+    idx = (starts[:, :, None] + np.arange(block)[None, None, :]).reshape(n_boot, -1)[:, :n] % n
+    samples = x[idx]
+    vals = np.apply_along_axis(stat, 1, samples) if stat is not np.mean else samples.mean(axis=1)
+    return (float(stat(x)), float(np.quantile(vals, alpha / 2)), float(np.quantile(vals, 1 - alpha / 2)))

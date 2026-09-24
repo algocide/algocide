@@ -1,0 +1,15 @@
+{
+ "note_cozanet": "CozanetHQ snapshots hold the top-30 perps by OI in UNITS, so majors may be absent; coins found: ",
+ "scout_BTC": {
+  "n": 37,
+  "corr": 0.8256633404837947,
+  "mean_abs_diff": 1.4746270270270273e-06,
+  "note": "funding-scout 'funding_8h' field compared 1:1 with the hourly bundle rate (its unit is ambiguous; a 1:1 match means it is the hourly rate)"
+ },
+ "scout_ETH": {
+  "n": 37,
+  "corr": 0.9318949153491165,
+  "mean_abs_diff": 1.0454594594594595e-06,
+  "note": "funding-scout 'funding_8h' field compared 1:1 with the hourly bundle rate (its unit is ambiguous; a 1:1 match means it is the hourly rate)"
+ }
+}
