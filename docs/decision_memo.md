@@ -19,7 +19,7 @@ in `docs/forward_plan.md`. Everything else tested was rejected, inconclusive, or
 ## Results at a glance (net of modelled costs)
 | Hypothesis | Net result | Classification |
 |---|---|---|
-| H1 cross-venue dislocation, xyz:GOLD / xyz:CL vs Binance | gross ≈ 0 bps/trade; net −18 bps | Rejected |
+| H1 cross-venue dislocation, xyz:GOLD / xyz:CL vs Binance | gold reverts (t −4.1) but ≈1 bp per event; gross ≈ 0 bps/trade; net −18 bps | Rejected (too small vs fees) |
 | H2 funding differential HL vs CEX (gold) | +4.3% APR gross, ≈ 0 after two-leg costs | Rejected |
 | H3 weekend drift reversal (WTI) | corr −0.77, n = 9 | Inconclusive (monitor) |
 | H4 equity-perp funding harvest, K=5 | +4.7% APR in-sample, +1.5% out-of-sample, negative under cost ×2 | Inconclusive, effectively rejected at standard fees |
