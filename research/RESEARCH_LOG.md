@@ -146,3 +146,21 @@ this run lives in `research/`.
   mainnet gate (USE_TESTNET=false + CONFIRM_MAINNET=true + --acknowledge-risk), test `test_network_gate`.
 * No change to the research conclusion: neither video supplies a strategy with evidence; the deterministic core of
   the agentic approach shows no demonstrated edge; the LLM decider is untested and can only be judged prospectively.
+
+## Phase 3: "watch these three and test their strategies; come up with the most profitable ones"
+* Videos identified via InnerTube metadata (no transcripts): AI Pathways "Claude Tested Over 9,000 Trading Strategies"
+  (mean reversion survives, rules undisclosed), Across The Rubicon "15 AI bots compete" (11 of 15 lost; winner = 40x BTC
+  long), AI Pathways "$102k in a month" (levered LEAPS/momentum picks in one strong month). docs/VIDEO_REVIEW.md.
+* Protocol written first (docs/PROTOCOL_PHASE3.md): 10 predeclared daily configurations (MR-RSI2 ×2, MR-BB ×2, MR-3DOWN,
+  MR-SHORT, MOM-RS ×2, BO ×2), 59 underlyings + BTC/ETH/HYPE daily 2024-09→2026-09 (Yahoo, previous session's file),
+  perp costs and funding, portfolio (5 slots) and $100 single-position modes, dev/val/holdout by date, one holdout look.
+  New daily engine src/hlr2/daily.py with 3 tests (future-info perturbation, next-open fills, stop-first/gap fills,
+  funding sign, sizing caps). Panel audit: 8 names with a >40% day (all genuine events, not splits).
+* Results (portfolio, base): every long mean-reversion variant positive in dev, negative in val (−$9.7 to −$20.4) →
+  V3's claim not reproduced; MR-SHORT modest and consistent (+$1.6/+$7.0; crypto +$5.2 val); MOM-RS(120,top5)
+  +$47.7/+$62.6, all 7 neighbours positive in both periods; BO(55) val +$12.8 but dev negative.
+* One holdout look (MOM-RS(120,top5)): +$23.7, PF 1.35, 41 trades, CI [−1.5, +3.1] on expectancy; adverse +$23.3;
+  standard fees +$22.3; one trade = $20 of it; June–July entries −$49; account mode 3 trades, −$0.74. Perp cross-check
+  May–Sep: underlying −$47.9 vs perp −$50.0 (execution source changes little). Lottery simulation: best of 15 random
+  40x bets ≈ +$2.3k–4k median with zero edge. Report: docs/PHASE3_REPORT.md. Classification: momentum = most profitable,
+  promising, not validated; nothing validated.

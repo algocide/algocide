@@ -42,3 +42,13 @@ were never opened (no candidate qualified).
    and ≥ 50 trades. Optionally run a second instance with `"decider": "llm"` and your own ANTHROPIC_API_KEY to test
    the videos' actual claim (LLM > rules) side by side, same limits.
 2. Evaluate the journal with the phase-1 gates; never raise limits or fund the live venue before that review.
+
+## Phase 3 (three strategy videos) — completed
+* docs/PHASE3_REPORT.md: momentum rank MOM-RS(120,top5,hold20) = most profitable (dev/val/holdout positive, fragile);
+  long mean reversion rejected out of sample; the bot competition is a lottery. Holdout for daily_stocks opened once
+  (results/phase3/HOLDOUT_OPENED_stocks.json) — do not reuse. Trials: 16 (10 + 6 robustness).
+## Exact next step for phase 3
+1. With API access: run MOM-RS(120,top5) prospectively in paper mode, weekly, five slots of ≥ $100 each (account ≥ $500)
+   across the xyz stock perps; log every rebalance; judge after two quarters with the phase-1 gates.
+2. Keep MR-SHORT-RSI2(90) as the $100 single-slot paper observation (never holdout-tested).
+3. Do not re-tune on 2024-09 → 2026-09; treat 2026-09-24 onward as fresh data.

@@ -24,6 +24,13 @@ risk gate → venue → journal). Paper mode by default; live is key-gated and u
 backtested under the same protocol (EXPERIMENTS.csv family A): best profit factor ≈ 1.1 on BTC/ETH 24/7, inconsistent
 elsewhere; no holdout opened; **profitability not demonstrated**. The LLM decision layer is wired but unevaluated.
 
+## Phase 3 (same day): the three "strategy" videos, tested
+`docs/PHASE3_REPORT.md`. Ten predeclared daily rules from the videos' families on 59 xyz-listed underlyings (2024-09 →
+2026-09) plus BTC/ETH/HYPE, perp costs and funding, portfolio and $100 modes. Long mean reversion (video "9,000
+strategies") fails out of sample; the 120-day momentum rank (video "$102k") is the most profitable and the only rule
+positive in development, validation and the one holdout look (+$23.7 on $100, PF 1.35), but one trade carries it and
+the $100 single-slot account cannot trade it; the "15 bots" video is a lottery. **Promising, not validated.**
+
 ## Layout
 | Path | Content |
 |---|---|
@@ -42,6 +49,7 @@ elsewhere; no holdout opened; **profitability not demonstrated**. The LLM decisi
 | `forward/paper_trader.py` | Prospective paper trader for the phase-1 candidate (dry-run; replay mode works offline) |
 | `agent/` | Phase-2 agentic system: feeds, digest, deciders, verifier, risk gate, paper/live venues, heartbeat loop, backtest adapter |
 | `AGENT_SYSTEM.md` | Phase-2 write-up: what the videos describe, what was built, evidence, how to run |
+| `docs/PHASE3_REPORT.md`, `docs/PROTOCOL_PHASE3.md` | Phase-3 protocol and report; `src/hlr2/daily.py` daily engine; `experiments/run_phase3.py`, `phase3_*.py` |
 | `docs/VIDEO_REVIEW.md` | What could be retrieved of the two videos (titles, descriptions, chapters, comments, the creator's repo); no transcript was obtainable |
 | `agent/cli.py` | `gate` / `preflight` / `flatten`: testnet-first network gate mirroring the videos' safe workflow |
 | `tests/test_core.py` | Focused tests (no future information, completed-1h alignment, calendar, sizing/rounding, costs+funding, stop/target sequencing, single position, drawdown pause) |

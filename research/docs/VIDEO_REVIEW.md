@@ -56,3 +56,35 @@ that early P&L is variance. The one strategy the creator later calls "winning" i
   safe workflow: testnet switch, mainnet confirmation gate, `preflight` and `flatten` commands (`agent/cli.py`).
 * Neither video supplies a strategy with evidence. The deterministic core was tested (AGENT_SYSTEM.md §4): no edge
   demonstrated. The LLM decider remains the untested claim; it can only be judged prospectively in paper/testnet mode.
+
+## Second batch (phase 3): three more videos, same method (InnerTube metadata; no transcripts obtainable)
+
+### Video 3 — https://www.youtube.com/watch?v=nLQhKkjkuWI
+**"Claude Tested Over 9,000 Trading Strategies (Here's What Works)"** — *AI Pathways* (79K subscribers), 2026-06-28,
+379,315 views. Chapters: Testing Overview · Methodology (2:32) · What Survived (9:23) · Building On Top (13:16) · Claude
+Prompts (17:17). Description: only a community link and a disclaimer. The most-liked substantive comment summarises the
+video: "Mean reversion was the only strategy family that consistently maintained a positive edge and durability on its
+own; trend and momentum strategies showed potential but were largely fragile and dependent on specific market
+conditions or assets"; another mentions bootstrapping as the robustness method. Critics in the comments: "which mean
+reversion algo did you use? how were entries/exits set up?" (unanswered), and "mean reversion works partly because of
+survivorship bias — large caps with 10+ years of data". Reading: the video reports that a large screen of stock
+strategies favoured daily mean reversion; the exact rules are not disclosed anywhere reachable.
+
+### Video 4 — https://www.youtube.com/watch?v=Tzk7DC92cAk
+**"I made AI trading bots compete to make money… (insane results)"** — *Across The Rubicon* (163K), 2026-02-15,
+180,683 views. Description: "Fifteen AI trading bots powered by OpenClaw were funded with $1,000 each and set loose on
+Hyperliquid in a survival-of-the-fittest competition … Across three rounds, 11 bots lost money but the top four — led
+by YOLO bot's $175 profit from a 40x leveraged Bitcoin long — kept the overall portfolio in the green." Chapters:
+OpenClaw, AI in trading, setup and risks, developing strategies (4:47), three race rounds, conclusion. The companion
+tutorial (ce9lJz45bWM, 2026-02-18) shows the bots are LLM agents with "soul files and strategy documents" ("plug in
+any trader's historical data, back-tested scripts, or community-built skill cartridges"); no strategy is specified.
+Reading: not a strategy; a population of leveraged LLM bets, of which one won. Tested here as a lottery simulation.
+
+### Video 5 — https://www.youtube.com/watch?v=RetsRS5u-8Q
+**"I Tested Letting Claude Trade For A Month and Made $102k"** — *AI Pathways*, 2026-06-14, 337,232 views. Chapters:
+Claude Trader Overview · How I Used Claude (3:31) · Strategy Research (6:00) · Screening Names (7:43) · Choosing
+Contracts (10:19) · Building Options Dashboard (11:22). Comments quoting Claude's own assessment of the video: "the
+$102k came from leveraged LEAPS landing in a strong month — leverage plus timing plus stock-picking; the dashboard
+watched it happen"; "a single cherry-picked 30-day window during a rally, no drawdown data, no multi-month record";
+starting capital about $66k. Reading: discretionary momentum stock/option picking, levered, in one strong month. Its
+Hyperliquid analog is a leveraged momentum long in screened names, tested here as the MOM-RS and BO families.
