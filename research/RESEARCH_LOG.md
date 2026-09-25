@@ -164,3 +164,20 @@ this run lives in `research/`.
   May–Sep: underlying −$47.9 vs perp −$50.0 (execution source changes little). Lottery simulation: best of 15 random
   40x bets ≈ +$2.3k–4k median with zero edge. Report: docs/PHASE3_REPORT.md. Classification: momentum = most profitable,
   promising, not validated; nothing validated.
+
+## 2026-09-25 — phase 4: the "AI Market Analyst on Kimi K3 and GPT-6 Astra" article (leopardracer)
+* X unreachable from the sandbox; the user supplied the article as 26 screenshots; digested verbatim into
+  docs/PHASE4_ARTICLE_DIGEST.md. User decisions: article-faithful report, Claude for both roles, free data only
+  (Hyperliquid + EDGAR), the 59 xyz-listed stocks. Protocol written before any run (docs/PROTOCOL_PHASE4.md).
+* Built research/analyst (warehouse, sources, signals, composite, funnel, llm stages, portfolio, report, cli). SEC and
+  Hyperliquid blocked here (000), api.anthropic.com reachable but no key and paid calls out of scope: LLM stages run
+  through a stub that labels its output; parsers tested on synthetic fixtures.
+* Findings on the panel (dev/val, holdout untouched): base rate of +5% in 20 sessions is 42.5%/35.1% (article assumes
+  15–20%); anomaly events vs quiet sessions at 20 sessions: dev −0.7pp [−3.9, +2.9], val +2.0pp [−1.2, +5.3]; negative
+  anomalies flip sign between splits; strong-flag lift 1.06/1.16; composite val AUC 0.476 (secondary price/volume-only
+  fit 0.501). Verdict under the predeclared rules: no evidence the anomaly score alone is informative; no usable
+  ranking; funnel ranks by anomaly_score. Portfolio math on the article's example basket with real prices: HHI 0.285,
+  average pairwise correlation 0.59, first principal component 70%.
+* Corrections during the run: the composite's coverage rule (0.8) had dropped the momentum term for lack of early
+  history; set to 0.5 (placeholders still excluded) and the price/volume-only fit kept as secondary. Two test
+  mistakes fixed (flag threshold expectation; synthetic dates outside the val range).

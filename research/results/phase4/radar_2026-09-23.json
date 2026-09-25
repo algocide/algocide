@@ -1,0 +1,953 @@
+{
+ "date": "2026-09-23",
+ "requested_date": "2026-09-23",
+ "generated_at": "2026-09-25 13:21 UTC",
+ "assets_monitored": 59,
+ "anomalies": 14,
+ "high_information": 0,
+ "portfolio_risks": 1,
+ "upcoming_catalysts": 0,
+ "catalysts": [],
+ "portfolio": {
+  "asof": "2026-09-23",
+  "n_positions": 4,
+  "flags": [
+   "concentration: HHI 0.285 vs 0.250 if equal-weighted across 4 positions"
+  ],
+  "period_sessions": 5,
+  "portfolio_return": 0.09217318493121254,
+  "contributions": [
+   {
+    "symbol": "AMD",
+    "weight": 0.25,
+    "return": 0.199239024390244,
+    "contribution": 0.049809756097561,
+    "share_of_total": 0.5403931320669159
+   },
+   {
+    "symbol": "NVDA",
+    "weight": 0.4,
+    "return": 0.0542776998597474,
+    "contribution": 0.02171107994389896,
+    "share_of_total": 0.2355465959009837
+   },
+   {
+    "symbol": "TSM",
+    "weight": 0.2,
+    "return": 0.06906540266207029,
+    "contribution": 0.013813080532414057,
+    "share_of_total": 0.14986007636301762
+   },
+   {
+    "symbol": "AVGO",
+    "weight": 0.15,
+    "return": 0.045595122382256825,
+    "contribution": 0.006839268357338523,
+    "share_of_total": 0.07420019566908279
+   }
+  ],
+  "hhi": 0.2850000000000001,
+  "hhi_equal_weight_reference": 0.25,
+  "avg_pairwise_correlation": 0.5909428607004833,
+  "pca_first_component_share": 0.6967465120741891,
+  "correlation_matrix": {
+   "AMD": {
+    "AMD": 1.0,
+    "AVGO": 0.55,
+    "NVDA": 0.42,
+    "TSM": 0.81
+   },
+   "AVGO": {
+    "AMD": 0.55,
+    "AVGO": 1.0,
+    "NVDA": 0.56,
+    "TSM": 0.67
+   },
+   "NVDA": {
+    "AMD": 0.42,
+    "AVGO": 0.56,
+    "NVDA": 1.0,
+    "TSM": 0.53
+   },
+   "TSM": {
+    "AMD": 0.81,
+    "AVGO": 0.67,
+    "NVDA": 0.53,
+    "TSM": 1.0
+   }
+  }
+ },
+ "corr_window": 60,
+ "data_status": {
+  "prices_through": "2026-09-23",
+  "prices_source": "yahoo_daily via https://github.com/MiggoyGHP/hyperliquid-rwa-dashboard@0a7c1fda",
+  "tables": {
+   "filings_index": "empty",
+   "earnings_events": "empty",
+   "insider_form4": "empty",
+   "holdings_13f": "empty",
+   "filing_text": "empty",
+   "xbrl_quarterly": "empty",
+   "catalyst_calendar": "empty"
+  }
+ },
+ "not_available": [
+  "estimate_revisions",
+  "news",
+  "options_activity",
+  "retail_flow"
+ ],
+ "llm_status": "stub (5 deep reads, 3 contradiction runs; outputs are placeholders, no model called)",
+ "companies": [
+  {
+   "symbol": "ARM",
+   "name": "Arm Holdings",
+   "priority": "medium",
+   "price_1d": -0.0019207683073229065,
+   "price_5d": 0.36306254611033695,
+   "volume_ratio": 1.4638761682981571,
+   "z_return": 2.783209848373136,
+   "z_volume": 0.6475412794763582,
+   "anomaly_score": 3.4307511278494944,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (stub provider; 0 filing documents in packet)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run (stub provider)",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 3.43 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 332.56,
+    "return_1d": -0.0019207683073229065,
+    "return_5d": 0.36306254611033695,
+    "volume_ratio": 1.4638761682981571,
+    "z_return": 2.783209848373136,
+    "z_volume": 0.6475412794763582,
+    "anomaly_score": 3.4307511278494944,
+    "return_60d": -0.03207404389079682,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   },
+   "deep_read": {
+    "symbol": "ARM",
+    "stub": true,
+    "model": "stub/claude-sonnet-5",
+    "consistency_rows": [],
+    "min_consistency": null,
+    "flag": null,
+    "n_filing_docs": 0,
+    "raw": {
+     "quarters": [],
+     "language_unchanged_numbers_moved": [],
+     "key_facts": [],
+     "not_answerable": [
+      "all: stub provider"
+     ],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "deep_read"
+    }
+   },
+   "contradiction_engine": {
+    "symbol": "ARM",
+    "stub": true,
+    "model": "stub/claude-opus-5-5",
+    "bull": {
+     "thesis": "[STUB: no model was called; this field is a placeholder]",
+     "claims": [],
+     "strength": null,
+     "assumptions": [],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "bull"
+    },
+    "bear": {
+     "thesis": "[STUB: no model was called; this field is a placeholder]",
+     "claims": [],
+     "strength": null,
+     "assumptions": [],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "bear"
+    },
+    "arbiter": {
+     "claims_checked": [],
+     "checklist": [],
+     "bull_strength": null,
+     "bear_strength": null,
+     "top_contradiction": "[STUB: no model was called; this field is a placeholder]",
+     "what_would_change_conclusion": [],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "arbiter"
+    },
+    "bull_strength": null,
+    "bear_strength": null,
+    "thesis_gap": null,
+    "top_contradiction": "[STUB: no model was called; this field is a placeholder]",
+    "what_would_change_conclusion": [],
+    "checklist": []
+   }
+  },
+  {
+   "symbol": "MSTR",
+   "name": "Strategy (MicroStrategy)",
+   "priority": "medium",
+   "price_1d": -0.030657981234686105,
+   "price_5d": 0.2854652084323981,
+   "volume_ratio": 0.7879497901350222,
+   "z_return": 2.8223197020117423,
+   "z_volume": -0.5779198330907661,
+   "anomaly_score": 3.4002395351025085,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (stub provider; 0 filing documents in packet)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run (stub provider)",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 3.40 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 162.2,
+    "return_1d": -0.030657981234686105,
+    "return_5d": 0.2854652084323981,
+    "volume_ratio": 0.7879497901350222,
+    "z_return": 2.8223197020117423,
+    "z_volume": -0.5779198330907661,
+    "anomaly_score": 3.4002395351025085,
+    "return_60d": 0.7501078981441516,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   },
+   "deep_read": {
+    "symbol": "MSTR",
+    "stub": true,
+    "model": "stub/claude-sonnet-5",
+    "consistency_rows": [],
+    "min_consistency": null,
+    "flag": null,
+    "n_filing_docs": 0,
+    "raw": {
+     "quarters": [],
+     "language_unchanged_numbers_moved": [],
+     "key_facts": [],
+     "not_answerable": [
+      "all: stub provider"
+     ],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "deep_read"
+    }
+   },
+   "contradiction_engine": {
+    "symbol": "MSTR",
+    "stub": true,
+    "model": "stub/claude-opus-5-5",
+    "bull": {
+     "thesis": "[STUB: no model was called; this field is a placeholder]",
+     "claims": [],
+     "strength": null,
+     "assumptions": [],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "bull"
+    },
+    "bear": {
+     "thesis": "[STUB: no model was called; this field is a placeholder]",
+     "claims": [],
+     "strength": null,
+     "assumptions": [],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "bear"
+    },
+    "arbiter": {
+     "claims_checked": [],
+     "checklist": [],
+     "bull_strength": null,
+     "bear_strength": null,
+     "top_contradiction": "[STUB: no model was called; this field is a placeholder]",
+     "what_would_change_conclusion": [],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "arbiter"
+    },
+    "bull_strength": null,
+    "bear_strength": null,
+    "thesis_gap": null,
+    "top_contradiction": "[STUB: no model was called; this field is a placeholder]",
+    "what_would_change_conclusion": [],
+    "checklist": []
+   }
+  },
+  {
+   "symbol": "COIN",
+   "name": "Coinbase",
+   "priority": "medium",
+   "price_1d": -0.014621773511712344,
+   "price_5d": 0.20436447632362786,
+   "volume_ratio": 0.691166063032213,
+   "z_return": 2.3392507123364696,
+   "z_volume": -0.8157955402186537,
+   "anomaly_score": 3.1550462525551235,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (stub provider; 0 filing documents in packet)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run (stub provider)",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 3.16 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 198.13,
+    "return_1d": -0.014621773511712344,
+    "return_5d": 0.20436447632362786,
+    "volume_ratio": 0.691166063032213,
+    "z_return": 2.3392507123364696,
+    "z_volume": -0.8157955402186537,
+    "anomaly_score": 3.1550462525551235,
+    "return_60d": 0.3064952192548631,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   },
+   "deep_read": {
+    "symbol": "COIN",
+    "stub": true,
+    "model": "stub/claude-sonnet-5",
+    "consistency_rows": [],
+    "min_consistency": null,
+    "flag": null,
+    "n_filing_docs": 0,
+    "raw": {
+     "quarters": [],
+     "language_unchanged_numbers_moved": [],
+     "key_facts": [],
+     "not_answerable": [
+      "all: stub provider"
+     ],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "deep_read"
+    }
+   },
+   "contradiction_engine": {
+    "symbol": "COIN",
+    "stub": true,
+    "model": "stub/claude-opus-5-5",
+    "bull": {
+     "thesis": "[STUB: no model was called; this field is a placeholder]",
+     "claims": [],
+     "strength": null,
+     "assumptions": [],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "bull"
+    },
+    "bear": {
+     "thesis": "[STUB: no model was called; this field is a placeholder]",
+     "claims": [],
+     "strength": null,
+     "assumptions": [],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "bear"
+    },
+    "arbiter": {
+     "claims_checked": [],
+     "checklist": [],
+     "bull_strength": null,
+     "bear_strength": null,
+     "top_contradiction": "[STUB: no model was called; this field is a placeholder]",
+     "what_would_change_conclusion": [],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "arbiter"
+    },
+    "bull_strength": null,
+    "bear_strength": null,
+    "thesis_gap": null,
+    "top_contradiction": "[STUB: no model was called; this field is a placeholder]",
+    "what_would_change_conclusion": [],
+    "checklist": []
+   }
+  },
+  {
+   "symbol": "BX",
+   "name": "Blackstone",
+   "priority": "medium",
+   "price_1d": -0.05648287319041212,
+   "price_5d": -0.05864246250986582,
+   "volume_ratio": 1.6963470693855656,
+   "z_return": -1.0687936679659105,
+   "z_volume": 1.4174673999840812,
+   "anomaly_score": 2.4862610679499917,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (stub provider; 0 filing documents in packet)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 2.49 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 119.27,
+    "return_1d": -0.05648287319041212,
+    "return_5d": -0.05864246250986582,
+    "volume_ratio": 1.6963470693855656,
+    "z_return": -1.0687936679659105,
+    "z_volume": 1.4174673999840812,
+    "anomaly_score": 2.4862610679499917,
+    "return_60d": 0.033535528596187136,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   },
+   "deep_read": {
+    "symbol": "BX",
+    "stub": true,
+    "model": "stub/claude-sonnet-5",
+    "consistency_rows": [],
+    "min_consistency": null,
+    "flag": null,
+    "n_filing_docs": 0,
+    "raw": {
+     "quarters": [],
+     "language_unchanged_numbers_moved": [],
+     "key_facts": [],
+     "not_answerable": [
+      "all: stub provider"
+     ],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "deep_read"
+    }
+   }
+  },
+  {
+   "symbol": "META",
+   "name": "Meta (Facebook)",
+   "priority": "medium",
+   "price_1d": 0.01018191691555792,
+   "price_5d": 0.10513730673835253,
+   "volume_ratio": 1.4279233974017709,
+   "z_return": 1.8448077309476125,
+   "z_volume": 0.5692546036330013,
+   "anomaly_score": 2.414062334580614,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (stub provider; 0 filing documents in packet)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 2.41 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 744.1,
+    "return_1d": 0.01018191691555792,
+    "return_5d": 0.10513730673835253,
+    "volume_ratio": 1.4279233974017709,
+    "z_return": 1.8448077309476125,
+    "z_volume": 0.5692546036330013,
+    "anomaly_score": 2.414062334580614,
+    "return_60d": 0.3226093138997512,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   },
+   "deep_read": {
+    "symbol": "META",
+    "stub": true,
+    "model": "stub/claude-sonnet-5",
+    "consistency_rows": [],
+    "min_consistency": null,
+    "flag": null,
+    "n_filing_docs": 0,
+    "raw": {
+     "quarters": [],
+     "language_unchanged_numbers_moved": [],
+     "key_facts": [],
+     "not_answerable": [
+      "all: stub provider"
+     ],
+     "stub": true,
+     "note": "[STUB: no model was called; this field is a placeholder]",
+     "schema": "deep_read"
+    }
+   }
+  },
+  {
+   "symbol": "BB",
+   "name": "BlackBerry",
+   "priority": "medium",
+   "price_1d": -0.027842227378190088,
+   "price_5d": 0.09685863874345557,
+   "volume_ratio": 2.220650188835958,
+   "z_return": 0.700431671453373,
+   "z_volume": 1.6900043016220925,
+   "anomaly_score": 2.3904359730754656,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 2.39 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 8.38,
+    "return_1d": -0.027842227378190088,
+    "return_5d": 0.09685863874345557,
+    "volume_ratio": 2.220650188835958,
+    "z_return": 0.700431671453373,
+    "z_volume": 1.6900043016220925,
+    "anomaly_score": 2.3904359730754656,
+    "return_60d": -0.32852564102564097,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  },
+  {
+   "symbol": "DKNG",
+   "name": "DraftKings",
+   "priority": "medium",
+   "price_1d": -0.025229357798165153,
+   "price_5d": -0.12659268392930534,
+   "volume_ratio": 1.4748370040065089,
+   "z_return": -1.60351528753549,
+   "z_volume": 0.7400539258221137,
+   "anomaly_score": 2.343569213357604,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 2.34 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 21.25,
+    "return_1d": -0.025229357798165153,
+    "return_5d": -0.12659268392930534,
+    "volume_ratio": 1.4748370040065089,
+    "z_return": -1.60351528753549,
+    "z_volume": 0.7400539258221137,
+    "anomaly_score": 2.343569213357604,
+    "return_60d": -0.1763565891472868,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  },
+  {
+   "symbol": "AMAT",
+   "name": "Applied Materials",
+   "priority": "medium",
+   "price_1d": 0.004063836091944273,
+   "price_5d": 0.14203861524387307,
+   "volume_ratio": 0.7042314814103401,
+   "z_return": 1.6195423325777796,
+   "z_volume": -0.7127591355986904,
+   "anomaly_score": 2.33230146817647,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 2.33 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 474.38,
+    "return_1d": 0.004063836091944273,
+    "return_5d": 0.14203861524387307,
+    "volume_ratio": 0.7042314814103401,
+    "z_return": 1.6195423325777796,
+    "z_volume": -0.7127591355986904,
+    "anomaly_score": 2.33230146817647,
+    "return_60d": -0.3170851088333525,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  }
+ ],
+ "funnel": {
+  "universe": 59,
+  "rules": 14,
+  "classifier": 8,
+  "deep_read": 5,
+  "reasoning": 3,
+  "rank_basis": "anomaly_score",
+  "rules_candidates": [
+   {
+    "symbol": "ARM",
+    "anomaly_score": 3.4307511278494944,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "MSTR",
+    "anomaly_score": 3.4002395351025085,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "COIN",
+    "anomaly_score": 3.1550462525551235,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "BX",
+    "anomaly_score": 2.4862610679499917,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "META",
+    "anomaly_score": 2.414062334580614,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "BB",
+    "anomaly_score": 2.3904359730754656,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "DKNG",
+    "anomaly_score": 2.343569213357604,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "AMAT",
+    "anomaly_score": 2.33230146817647,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "GME",
+    "anomaly_score": 2.239364314655344,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "SOXL",
+    "anomaly_score": 2.2273802634753896,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "NVDA",
+    "anomaly_score": 2.226274300997481,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "HOOD",
+    "anomaly_score": 2.161950645182171,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "AMD",
+    "anomaly_score": 2.1438904017073965,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "INTC",
+    "anomaly_score": 2.041034148632038,
+    "n_reasons": 1,
+    "corroborating": 0
+   }
+  ]
+ },
+ "llm": {
+  "provider": "stub",
+  "ledger": [
+   {
+    "stage": "deep_read",
+    "symbol": "ARM",
+    "model": "stub/claude-sonnet-5",
+    "provider": "stub",
+    "input_tokens": 694,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "bull",
+    "symbol": "ARM",
+    "model": "stub/claude-opus-5-5",
+    "provider": "stub",
+    "input_tokens": 466,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "bear",
+    "symbol": "ARM",
+    "model": "stub/claude-opus-5-5",
+    "provider": "stub",
+    "input_tokens": 466,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "arbiter",
+    "symbol": "ARM",
+    "model": "stub/claude-opus-5-5",
+    "provider": "stub",
+    "input_tokens": 858,
+    "output_tokens": 76,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "deep_read",
+    "symbol": "MSTR",
+    "model": "stub/claude-sonnet-5",
+    "provider": "stub",
+    "input_tokens": 694,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "bull",
+    "symbol": "MSTR",
+    "model": "stub/claude-opus-5-5",
+    "provider": "stub",
+    "input_tokens": 466,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "bear",
+    "symbol": "MSTR",
+    "model": "stub/claude-opus-5-5",
+    "provider": "stub",
+    "input_tokens": 466,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "arbiter",
+    "symbol": "MSTR",
+    "model": "stub/claude-opus-5-5",
+    "provider": "stub",
+    "input_tokens": 858,
+    "output_tokens": 76,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "deep_read",
+    "symbol": "COIN",
+    "model": "stub/claude-sonnet-5",
+    "provider": "stub",
+    "input_tokens": 694,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "bull",
+    "symbol": "COIN",
+    "model": "stub/claude-opus-5-5",
+    "provider": "stub",
+    "input_tokens": 466,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "bear",
+    "symbol": "COIN",
+    "model": "stub/claude-opus-5-5",
+    "provider": "stub",
+    "input_tokens": 466,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "arbiter",
+    "symbol": "COIN",
+    "model": "stub/claude-opus-5-5",
+    "provider": "stub",
+    "input_tokens": 858,
+    "output_tokens": 76,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "deep_read",
+    "symbol": "BX",
+    "model": "stub/claude-sonnet-5",
+    "provider": "stub",
+    "input_tokens": 694,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   },
+   {
+    "stage": "deep_read",
+    "symbol": "META",
+    "model": "stub/claude-sonnet-5",
+    "provider": "stub",
+    "input_tokens": 693,
+    "output_tokens": 55,
+    "stub": true,
+    "latency_s": 0.0
+   }
+  ],
+  "totals": {
+   "stub/claude-sonnet-5": {
+    "calls": 5,
+    "input_tokens": 3469,
+    "output_tokens": 275,
+    "stub_calls": 5,
+    "cost_usd": null
+   },
+   "stub/claude-opus-5-5": {
+    "calls": 9,
+    "input_tokens": 5370,
+    "output_tokens": 558,
+    "stub_calls": 9,
+    "cost_usd": null
+   }
+  },
+  "cost_estimate_for_budget": {
+   "deep_read": {
+    "model": "claude-sonnet-5",
+    "names": 5,
+    "per_name_usd": null,
+    "total_usd": null
+   },
+   "reasoning": {
+    "model": "claude-opus-5-5",
+    "names": 3,
+    "per_name_usd": null,
+    "total_usd": null
+   },
+   "article_reference": {
+    "kimi_k3_per_name_usd": 1.02,
+    "astra_per_name_usd": 6.0,
+    "kimi_150_names_usd": 153.0,
+    "astra_40_names_usd": 240.0,
+    "astra_10000_names_per_day_usd": 60000.0
+   },
+   "total_usd": null,
+   "note": "None = model has no price in config llm.prices_per_million; fill it from your provider's price page"
+  }
+ }
+}

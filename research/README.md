@@ -31,6 +31,16 @@ strategies") fails out of sample; the 120-day momentum rank (video "$102k") is t
 positive in development, validation and the one holdout look (+$23.7 on $100, PF 1.35), but one trade carries it and
 the $100 single-slot account cannot trade it; the "15 bots" video is a lottery. **Promising, not validated.**
 
+## Phase 4 (same day): the "AI market analyst" article, built
+`ANALYST_SYSTEM.md`, `docs/PHASE4_REPORT.md`, `docs/PHASE4_ARTICLE_DIGEST.md`. The article's architecture (warehouse ->
+signal engine -> deep read -> contradiction engine -> report -> human) as `analyst/`: read-only Hyperliquid and SEC
+EDGAR sources, the formulas verbatim, a Claude-backed provider that only runs with `--live-llm` and your key, a stub
+that lets everything run offline, and a radar report with no scores and no buy/sell language. Checked on the 59-name
+panel under a predeclared protocol: after an anomaly (score > 2) the 20-session return beats quiet sessions by +2.0pp
+in validation, CI [−1.2, +5.3]; strong-flag precision 0.41 against a 0.35 base rate (lift 1.16); the composite's
+validation AUC is 0.48. **No evidence the price/volume anomaly alone is informative; the analyst's value is the sourced
+filings layer, which needs your machine to fetch.** 15 tests.
+
 ## Layout
 | Path | Content |
 |---|---|
@@ -52,6 +62,9 @@ the $100 single-slot account cannot trade it; the "15 bots" video is a lottery. 
 | `docs/PHASE3_REPORT.md`, `docs/PROTOCOL_PHASE3.md` | Phase-3 protocol and report; `src/hlr2/daily.py` daily engine; `experiments/run_phase3.py`, `phase3_*.py` |
 | `docs/VIDEO_REVIEW.md` | What could be retrieved of the two videos (titles, descriptions, chapters, comments, the creator's repo); no transcript was obtainable |
 | `agent/cli.py` | `gate` / `preflight` / `flatten`: testnet-first network gate mirroring the videos' safe workflow |
+| `analyst/`, `ANALYST_SYSTEM.md` | Phase-4 AI market analyst: warehouse, EDGAR/Hyperliquid read-only sources, signal engine, composite, funnel, LLM stages (stub/Claude), portfolio math, radar report, CLI |
+| `docs/PHASE4_ARTICLE_DIGEST.md`, `docs/PROTOCOL_PHASE4.md`, `docs/PHASE4_REPORT.md` | Phase-4 source digest (formulas verbatim), predeclared protocol, report; `results/phase4/` backtest, event study, radar |
+| `tests/test_analyst.py` | Phase-4 tests: article worked examples, causality, parsers on synthetic fixtures, provider gating, language check, funnel budgets |
 | `tests/test_core.py` | Focused tests (no future information, completed-1h alignment, calendar, sizing/rounding, costs+funding, stop/target sequencing, single position, drawdown pause) |
 | `data/raw/` | Reconstructed datasets with manifests (see DATA_AUDIT.md) |
 

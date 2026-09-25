@@ -1,0 +1,481 @@
+{
+ "date": "2026-09-23",
+ "requested_date": "2026-09-23",
+ "generated_at": "2026-09-25 13:16 UTC",
+ "assets_monitored": 59,
+ "anomalies": 14,
+ "high_information": 0,
+ "portfolio_risks": 0,
+ "upcoming_catalysts": 0,
+ "catalysts": [],
+ "portfolio": null,
+ "corr_window": 60,
+ "data_status": {
+  "prices_through": "2026-09-23",
+  "prices_source": "yahoo_daily via https://github.com/MiggoyGHP/hyperliquid-rwa-dashboard@0a7c1fda",
+  "tables": {
+   "filings_index": "empty",
+   "earnings_events": "empty",
+   "insider_form4": "empty",
+   "holdings_13f": "empty",
+   "filing_text": "empty",
+   "xbrl_quarterly": "empty",
+   "catalyst_calendar": "empty"
+  }
+ },
+ "not_available": [
+  "estimate_revisions",
+  "news",
+  "options_activity",
+  "retail_flow"
+ ],
+ "llm_status": "not run",
+ "companies": [
+  {
+   "symbol": "ARM",
+   "name": "Arm Holdings",
+   "priority": "medium",
+   "price_1d": -0.0019207683073229065,
+   "price_5d": 0.36306254611033695,
+   "volume_ratio": 1.4638761682981571,
+   "z_return": 2.783209848373136,
+   "z_volume": 0.6475412794763582,
+   "anomaly_score": 3.4307511278494944,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 3.43 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 332.56,
+    "return_1d": -0.0019207683073229065,
+    "return_5d": 0.36306254611033695,
+    "volume_ratio": 1.4638761682981571,
+    "z_return": 2.783209848373136,
+    "z_volume": 0.6475412794763582,
+    "anomaly_score": 3.4307511278494944,
+    "return_60d": -0.03207404389079682,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  },
+  {
+   "symbol": "MSTR",
+   "name": "Strategy (MicroStrategy)",
+   "priority": "medium",
+   "price_1d": -0.030657981234686105,
+   "price_5d": 0.2854652084323981,
+   "volume_ratio": 0.7879497901350222,
+   "z_return": 2.8223197020117423,
+   "z_volume": -0.5779198330907661,
+   "anomaly_score": 3.4002395351025085,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 3.40 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 162.2,
+    "return_1d": -0.030657981234686105,
+    "return_5d": 0.2854652084323981,
+    "volume_ratio": 0.7879497901350222,
+    "z_return": 2.8223197020117423,
+    "z_volume": -0.5779198330907661,
+    "anomaly_score": 3.4002395351025085,
+    "return_60d": 0.7501078981441516,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  },
+  {
+   "symbol": "COIN",
+   "name": "Coinbase",
+   "priority": "medium",
+   "price_1d": -0.014621773511712344,
+   "price_5d": 0.20436447632362786,
+   "volume_ratio": 0.691166063032213,
+   "z_return": 2.3392507123364696,
+   "z_volume": -0.8157955402186537,
+   "anomaly_score": 3.1550462525551235,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 3.16 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 198.13,
+    "return_1d": -0.014621773511712344,
+    "return_5d": 0.20436447632362786,
+    "volume_ratio": 0.691166063032213,
+    "z_return": 2.3392507123364696,
+    "z_volume": -0.8157955402186537,
+    "anomaly_score": 3.1550462525551235,
+    "return_60d": 0.3064952192548631,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  },
+  {
+   "symbol": "BX",
+   "name": "Blackstone",
+   "priority": "medium",
+   "price_1d": -0.05648287319041212,
+   "price_5d": -0.05864246250986582,
+   "volume_ratio": 1.6963470693855656,
+   "z_return": -1.0687936679659105,
+   "z_volume": 1.4174673999840812,
+   "anomaly_score": 2.4862610679499917,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 2.49 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 119.27,
+    "return_1d": -0.05648287319041212,
+    "return_5d": -0.05864246250986582,
+    "volume_ratio": 1.6963470693855656,
+    "z_return": -1.0687936679659105,
+    "z_volume": 1.4174673999840812,
+    "anomaly_score": 2.4862610679499917,
+    "return_60d": 0.033535528596187136,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  },
+  {
+   "symbol": "META",
+   "name": "Meta (Facebook)",
+   "priority": "medium",
+   "price_1d": 0.01018191691555792,
+   "price_5d": 0.10513730673835253,
+   "volume_ratio": 1.4279233974017709,
+   "z_return": 1.8448077309476125,
+   "z_volume": 0.5692546036330013,
+   "anomaly_score": 2.414062334580614,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 2.41 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 744.1,
+    "return_1d": 0.01018191691555792,
+    "return_5d": 0.10513730673835253,
+    "volume_ratio": 1.4279233974017709,
+    "z_return": 1.8448077309476125,
+    "z_volume": 0.5692546036330013,
+    "anomaly_score": 2.414062334580614,
+    "return_60d": 0.3226093138997512,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  },
+  {
+   "symbol": "BB",
+   "name": "BlackBerry",
+   "priority": "medium",
+   "price_1d": -0.027842227378190088,
+   "price_5d": 0.09685863874345557,
+   "volume_ratio": 2.220650188835958,
+   "z_return": 0.700431671453373,
+   "z_volume": 1.6900043016220925,
+   "anomaly_score": 2.3904359730754656,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 2.39 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 8.38,
+    "return_1d": -0.027842227378190088,
+    "return_5d": 0.09685863874345557,
+    "volume_ratio": 2.220650188835958,
+    "z_return": 0.700431671453373,
+    "z_volume": 1.6900043016220925,
+    "anomaly_score": 2.3904359730754656,
+    "return_60d": -0.32852564102564097,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  },
+  {
+   "symbol": "DKNG",
+   "name": "DraftKings",
+   "priority": "medium",
+   "price_1d": -0.025229357798165153,
+   "price_5d": -0.12659268392930534,
+   "volume_ratio": 1.4748370040065089,
+   "z_return": -1.60351528753549,
+   "z_volume": 0.7400539258221137,
+   "anomaly_score": 2.343569213357604,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 2.34 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 21.25,
+    "return_1d": -0.025229357798165153,
+    "return_5d": -0.12659268392930534,
+    "volume_ratio": 1.4748370040065089,
+    "z_return": -1.60351528753549,
+    "z_volume": 0.7400539258221137,
+    "anomaly_score": 2.343569213357604,
+    "return_60d": -0.1763565891472868,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  },
+  {
+   "symbol": "AMAT",
+   "name": "Applied Materials",
+   "priority": "medium",
+   "price_1d": 0.004063836091944273,
+   "price_5d": 0.14203861524387307,
+   "volume_ratio": 0.7042314814103401,
+   "z_return": 1.6195423325777796,
+   "z_volume": -0.7127591355986904,
+   "anomaly_score": 2.33230146817647,
+   "institutional": "not available (no 13F data ingested)",
+   "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+   "fundamental": "not available (deep read not run)",
+   "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+   "sequence": "institutional timing not available; retail flow not available",
+   "contradiction": "not run",
+   "what_would_change": [],
+   "rules": [
+    "anomaly_score 2.33 > 2"
+   ],
+   "corroborating": 0,
+   "signal_facts": {
+    "asof": "2026-09-23",
+    "close": 474.38,
+    "return_1d": 0.004063836091944273,
+    "return_5d": 0.14203861524387307,
+    "volume_ratio": 0.7042314814103401,
+    "z_return": 1.6195423325777796,
+    "z_volume": -0.7127591355986904,
+    "anomaly_score": 2.33230146817647,
+    "return_60d": -0.3170851088333525,
+    "institutional": "not available (no 13F data ingested)",
+    "insider": "no open-market Form 4 transactions in 90 days (or no Form 4 data ingested)",
+    "catalyst": "no earnings event on file (8-K 2.02 not ingested, or foreign filer)",
+    "sequence": {
+     "lag_institutional_to_price_days": null,
+     "institutional_period_end": null,
+     "institutional_filing_date": null,
+     "visible_before_move": null,
+     "lag_retail_to_price_days": null,
+     "retail_available": false
+    }
+   }
+  }
+ ],
+ "funnel": {
+  "universe": 59,
+  "rules": 14,
+  "classifier": 8,
+  "deep_read": 0,
+  "reasoning": 0,
+  "rank_basis": "anomaly_score",
+  "rules_candidates": [
+   {
+    "symbol": "ARM",
+    "anomaly_score": 3.4307511278494944,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "MSTR",
+    "anomaly_score": 3.4002395351025085,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "COIN",
+    "anomaly_score": 3.1550462525551235,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "BX",
+    "anomaly_score": 2.4862610679499917,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "META",
+    "anomaly_score": 2.414062334580614,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "BB",
+    "anomaly_score": 2.3904359730754656,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "DKNG",
+    "anomaly_score": 2.343569213357604,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "AMAT",
+    "anomaly_score": 2.33230146817647,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "GME",
+    "anomaly_score": 2.239364314655344,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "SOXL",
+    "anomaly_score": 2.2273802634753896,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "NVDA",
+    "anomaly_score": 2.226274300997481,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "HOOD",
+    "anomaly_score": 2.161950645182171,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "AMD",
+    "anomaly_score": 2.1438904017073965,
+    "n_reasons": 1,
+    "corroborating": 0
+   },
+   {
+    "symbol": "INTC",
+    "anomaly_score": 2.041034148632038,
+    "n_reasons": 1,
+    "corroborating": 0
+   }
+  ]
+ }
+}

@@ -52,3 +52,19 @@ were never opened (no candidate qualified).
    across the xyz stock perps; log every rebalance; judge after two quarters with the phase-1 gates.
 2. Keep MR-SHORT-RSI2(90) as the $100 single-slot paper observation (never holdout-tested).
 3. Do not re-tune on 2024-09 → 2026-09; treat 2026-09-24 onward as fresh data.
+
+## Phase 4 (AI market analyst from the leopardracer article) — completed
+* `analyst/` built and tested (15 tests): warehouse with provenance and typed placeholders, read-only Hyperliquid and
+  SEC EDGAR adapters (parsers tested on synthetic fixtures; live fetch not possible from this address), the article's
+  signal engine and composite, funnel with budgets and cost estimate, Claude-backed deep read and contradiction engine
+  behind a stub (no key, no paid calls here), portfolio math, radar report with language check.
+* Predeclared evaluation (docs/PROTOCOL_PHASE4.md) ran on dev/val only, holdout untouched: no evidence the price/volume
+  anomaly score is informative (val +2.0pp CI [−1.2, +5.3]; lift 1.16; composite val AUC 0.48). Report:
+  docs/PHASE4_REPORT.md. Radar for 2026-09-23 written with every unavailable field labelled.
+## Exact next step for phase 4
+1. On your machine: `export SEC_USER_AGENT="Name you@example.com"`; `python3 -m analyst.cli ingest --source edgar --what all`
+   (add 13F filer CIKs to a config first if you want institutional flow); then
+   `export ANTHROPIC_API_KEY=...; python3 -m analyst.cli run --date <last session> --live-llm --address <your HL address>`.
+2. Read the radar; fix whatever the first live EDGAR run breaks (file naming varies by filer agent; errors are logged).
+3. Only after 13F/Form 4/XBRL tables have a year of history: refit the composite (`backtest`) so the institutional and
+   fundamental terms stop being placeholders; keep the holdout closed.
