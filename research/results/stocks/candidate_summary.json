@@ -1,0 +1,21 @@
+{
+ "pause": {
+  "first_shadow_trade_exit": "2026-09-14 19:37:56.366322+00:00",
+  "n_counted": 118,
+  "n_shadow": 16,
+  "final_equity_with_pause": 131.08950753447593,
+  "final_shadow_equity": 130.0113490375018,
+  "shadow_net_after_pause": -1.0781584969741433
+ },
+ "holdout_base": {
+  "n": 30,
+  "net": -5.74162323217795,
+  "gross": -5.1927217604600715,
+  "costs": 1.9117273474244325,
+  "funding": 0.026554115246505996,
+  "avg_notional": 106.53517733333334,
+  "avg_leverage": 0.8037139228736222,
+  "avg_hold_min": 185.43948338777778,
+  "max_dd": null
+ }
+}

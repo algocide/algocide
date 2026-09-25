@@ -1,12 +1,7 @@
 Panel(kind=candles, bars=60m, n=5004, 2025-12-21 05:00:00+00:00..2026-07-17 16:00:00+00:00, symbols=['BTC', 'ETH']) 
 splits: {'n_days': '142', 'dev_start': '2025-12-21 05:00:00+00:00', 'val_start': '2026-04-06 18:00:00+00:00', 'hold_start': '2026-06-04 18:00:00+00:00', 'end': '2026-07-17 16:01:00+00:00'} val windows: 5
-Traceback (most recent call last):
-  File "/home/user/algocide/research/experiments/run_experiments.py", line 114, in <module>
-    main()
-  File "/home/user/algocide/research/experiments/run_experiments.py", line 108, in main
-    old = pd.read_csv(os.path.join(out, "experiments.csv")); old = old[~old.config.isin(df.config)]; df = pd.concat([old, df], ignore_index=True)
-                                                                                        ^^^^^^^^^
-  File "/usr/local/lib/python3.11/dist-packages/pandas/core/generic.py", line 6194, in __getattr__
-    return object.__getattribute__(self, name)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'DataFrame' object has no attribute 'config'
+[crypto1h/base] F1b:ma_trend(atr_mult=2.0, fast=10, filter=True, slow=40, tf=1h)       dev n=   9 net=  -1.28 pf= 0.50 | val n=   8 net=  -1.18 pf= 0.37 win_w=1/5 (0.9s)
+[crypto1h/base] F1b:ma_trend(atr_mult=2.0, fast=20, filter=True, slow=80, tf=1h)       dev n=   6 net=   1.27 pf= 1.95 | val n=   3 net=  -0.85 pf= 0.07 win_w=0/5 (0.8s)
+[crypto1h/adverse] F1b:ma_trend(atr_mult=2.0, fast=10, filter=True, slow=40, tf=1h)       dev n=   9 net=  -1.35 pf= 0.47 | val n=   8 net=  -1.28 pf= 0.34 win_w=1/5 (0.8s)
+[crypto1h/adverse] F1b:ma_trend(atr_mult=2.0, fast=20, filter=True, slow=80, tf=1h)       dev n=   6 net=   1.16 pf= 1.86 | val n=   3 net=  -0.87 pf= 0.05 win_w=0/5 (0.9s)
+wrote /home/user/algocide/research/experiments/../results/crypto1h/experiments.csv 30 rows

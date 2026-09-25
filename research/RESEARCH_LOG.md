@@ -49,3 +49,57 @@ this run lives in `research/`.
   exits land at 15:37–15:53 ET; stop rejections when the stop rounds onto the wrong side are logged as rejections.
 
 ## 08:40 Experiments launched (stocks: 37 configs × 3 regimes; crypto15 37 × 2; crypto1h 12 × 2; crypto247 4 × 2)
+
+## 08:55–09:05 Crypto results (dev + validation only; holdout sealed) and a definition bug
+* BTC/ETH, US session, real candles: nothing passes the screening gates. crypto15 (37 sessions only): a few configs show
+  validation PF > 1.3 on 2–12 trades (noise); crypto1h (142 sessions): the best validation PF is 1.39 on 14 trades
+  (vol-compression 1h) with a negative development period; everything else is negative on validation. crypto247 (1h,
+  24/7, distinct experiment): all four trend/channel configs lose on validation (−3 to −26 $ on $100) and trigger
+  the $10 pause. Baseline session-long ≈ 0.
+* Bug found and fixed as a NEW trial family: the MA "strength filter" (|fast−slow| > 0.5 ATR on the crossing bar)
+  can never fire because the spread is ≈ 0 at a cross → 0 trades in every universe. Redefined as a "confirmed cross"
+  (first bar after a cross within 5 bars where |fast−slow| ≥ 0.5 ATR), tagged F1b and rerun (counts against budget).
+* Trials so far: 37 stock configs + 37 crypto15 + 12 crypto1h + 4 crypto247 share the same 37 definitions, i.e.
+  **37 distinct configurations + 1 baseline** before F1b (4 redefined configs) = 41 distinct.
+
+## 09:05 Calibration: sampled mids vs real candles (methodological check, not a trial)
+* Same 8 configurations, BTC/ETH, same window (2026-05-26..07-17, US session), base costs: trade counts differ by
+  10–20%; average modelled stop loss is −1.0 R on candles but −1.1 to −1.9 R on sampled data (stop fills at the next
+  sample beyond the stop); net P&L flips sign in 3 of 8 configs (vol-comp 1h +1.1 vs −1.4; channel 15m −8.3 vs +1.1;
+  pullback +2.1 vs −9.9). Conclusion: at these sample sizes the sampled-mid results carry idiosyncratic error of
+  several dollars per config; they can screen out losers but cannot certify a winner.
+* xyz:NVDA, 2026-08-24..29 (120 hours with real 1h candles from the Freedom fixture): the range of the four 15-min
+  samples is 55% of the true 1h range (median); the last sample differs from the candle close by 5.9 bps (median),
+  23 bps (p90). Figure: results/figures/audit_nvda_sampled_vs_candles.png.
+
+## 09:15–09:30 Stock results (dev + validation only), sampled-stop stress, and two process bugs
+* Stock universe (SNDK, MU, NVDA, META, GOOGL; 92 sessions: dev 46 / val 27 / holdout 19 sealed). Mean-reversion (F2),
+  trend-pullback (F5) and opening-range (F6) families lose in both periods under base costs; the session-long
+  baseline is +2.7 dev / −0.8 val. Positive in both periods: channel breakout 15m (n=12: dev +20.0 PF 1.56, val +16.3
+  PF 2.06; n=24: dev +13.0, val +4.4), channel 1h n=24 (small), MA 1h (10/40) (small, +1.2/+1.2), vol-compression 1h
+  pct=0.1 (13 validation trades). F1b (confirmed cross 15m 10/40): dev +23.2 (PF 3.6) but val −0.2 → rejected as
+  development-only.
+* Sampled-stop stress (execution-model variant, not a new configuration): the stop-proximity factor calibrated on
+  BTC/ETH (0.75 ATR by the predeclared stop-count rule; 0.5 ATR matches candle P&L best) turns channel 15m n=12 into
+  dev −22 / val +4.6 (f=0.5) and dev −32 / val −13.7 (f=0.75). The 1h channel n=24 is nearly unaffected (+3.2/+0.9).
+  Interpretation: the 15m breakout's edge on sampled data is mostly "stops that were never seen"; it cannot be
+  certified from this data.
+* Process bug 1 (fixed): the MA strength filter as first defined could never fire (see 08:55 entry).
+* Process bug 2 (fixed): appending re-runs to experiments.csv replaced rows by configuration name only and dropped the
+  channel family's base/adverse/standard-fee rows for stocks; the rows were regenerated from identical deterministic
+  runs (the trade logs were never lost). Append now keys on (configuration, regime).
+
+## 09:35 Candidate selection, robustness, and the ONE holdout look
+* Screening gates on validation (base costs): only `F4:channel_bo(atr_mult=1.5, n=12, tf=15m)` passes all five
+  (PF 2.06 ≥ 1.3; adverse expectancy +$0.40; 2/3 windows; 37 trades; positive without the best trade; 3/5 markets
+  positive). Selected as the single primary candidate; rules frozen in STRATEGY_SPEC.md before opening the holdout.
+* Robustness (4 new trials, dev+val): n=8 → +19.9/+14.7; n=16 → +13.7/+3.4; atr 1.0 → −5.2/+22.2; atr 2.0 → +11.0/+1.5.
+  Neighbours mostly positive but with large swings → "unstable in magnitude".
+* HOLDOUT (last 19 sessions, 2026-08-31 → 09-25, opened once, marker results/stocks/HOLDOUT_OPENED.json):
+  base n=30, net −$5.74, PF 0.69, win 43%, 0/2 windows, 95% CI on expectancy [−0.63, +0.31]; adverse −$6.60;
+  standard fees −$8.14; sampled-stop stress −$4.70 (f=0.5) / −$9.87 (f=0.75). Long −$1.95, short −$3.79.
+  By market: GOOGL +1.7, NVDA −1.2, MU −2.0, SNDK −4.2 (META: no holdout trade). **Rejected.** No second candidate is
+  evaluated on the holdout (protocol). Final classification for this run: no demonstrated edge.
+* Budget: 45 distinct strategy configurations used (37 predeclared + 4 F1b redefinitions + 4 robustness neighbours)
+  of 60; cost/execution regimes and universes are variants of the same configurations, listed as separate rows in
+  EXPERIMENTS.csv for transparency.

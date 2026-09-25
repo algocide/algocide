@@ -1,0 +1,13 @@
+{
+  "name": "F4:channel_bo(atr_mult=1.5, n=12, tf=15m)",
+  "strategy": "channel_bo",
+  "params": {"tf": "15m", "n": 12, "atr_mult": 1.5},
+  "symbols": ["xyz:SNDK", "xyz:MU", "xyz:NVDA", "xyz:META", "xyz:GOOGL"],
+  "session": "us_regular",
+  "entry_cutoff_min_before_close": 90,
+  "flat_decision_min_before_close": 45,
+  "account": {"equity": 100.0, "risk_per_trade_usd": 1.0, "max_gross_leverage": 2.0, "max_positions": 1, "drawdown_pause_usd": 10.0},
+  "costs": {"taker_fee": 0.00009, "half_spread_bps": "per-market snapshot (costs.IMPACT_HALF_SPREAD_BPS)", "slippage_bps": 1.0, "adverse_stop_bps": 2.0},
+  "status": "EXPLORATORY - NOT VALIDATED (see STRATEGY_SPEC.md and FINAL_REPORT.md)",
+  "frozen_at": "2026-09-25T09:35:00Z"
+}

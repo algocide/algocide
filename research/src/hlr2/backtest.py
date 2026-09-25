@@ -38,11 +38,17 @@ def size_position(price: float, stop_px: float, spec, cm: CostModel, equity: flo
 
 
 def run(panel, strategy, cost_regime: str = "base", funding: dict[str, pd.DataFrame] | None = None, account: Account | None = None,
-        start=None, end=None, allowed_dirs=("long", "short"), priority: dict[str, float] | None = None, record_rejections: bool = True):
+        start=None, end=None, allowed_dirs=("long", "short"), priority: dict[str, float] | None = None, record_rejections: bool = True,
+        stop_proximity_atr: float = 0.0):
+    """stop_proximity_atr (sampled panels only): a stop counts as hit when the observed price comes within this many
+    engine-ATRs (EMA14 of |dClose| x 2) of the stop level, filled AT the stop plus the adverse penalty. It models the
+    unobserved intrabar excursion between 15-minute samples; calibrated on BTC/ETH against real candles."""
     """strategy: object with .prepare(panel) -> per-symbol dict of arrays and .signal(sym, k, state) -> Signal|None and
     .exit(sym, k, pos, state) -> str|None (reason) for discretionary exits. See strategies.py."""
     acct = account or Account()
     syms = panel.symbols
+    if "+prox" in cost_regime:
+        cost_regime, pf = cost_regime.split("+prox"); stop_proximity_atr = float(pf)
     cms = {s: base_model(s, cost_regime) for s in syms}
     specs = {s: SPECS[s] for s in syms}
     st = strategy.prepare(panel)
@@ -58,6 +64,11 @@ def run(panel, strategy, cost_regime: str = "base", funding: dict[str, pd.DataFr
             f = f.sort_values("ts"); fund_idx[s] = (f.ts.values.astype("datetime64[ns]"), f.rate.values.astype(float))
     order = sorted(syms, key=lambda s: ((priority or {}).get(s, cms[s].half_spread_bps), s))   # concurrent-signal rule
     sampled = panel.kind == "sampled"
+    eatr = {}
+    if sampled and stop_proximity_atr > 0:
+        from .indicators import ema
+        for s in syms:
+            c = panel.inst[s].c.values.astype(float); dc = np.abs(np.diff(c, prepend=np.nan)); eatr[s] = ema(2.0 * dc, 14)
 
     def apply_funding(p, t_from, t_to):
         if p["sym"] not in fund_idx: return 0.0
@@ -96,8 +107,11 @@ def run(panel, strategy, cost_regime: str = "base", funding: dict[str, pd.DataFr
                 hit_stop = hit_tgt = False; fill = None
                 if sampled:
                     px_now = c
+                    prox = (stop_proximity_atr * eatr[s][k]) if (stop_proximity_atr > 0 and s in eatr and np.isfinite(eatr[s][k])) else 0.0
                     if pos["dir"] == 1 and px_now <= stop: hit_stop, fill = True, px_now
                     elif pos["dir"] == -1 and px_now >= stop: hit_stop, fill = True, px_now
+                    elif prox > 0 and pos["dir"] == 1 and min(px_now, l) <= stop + prox: hit_stop, fill = True, stop
+                    elif prox > 0 and pos["dir"] == -1 and max(px_now, h) >= stop - prox: hit_stop, fill = True, stop
                     elif target is not None and ((pos["dir"] == 1 and px_now >= target) or (pos["dir"] == -1 and px_now <= target)): hit_tgt, fill = True, target
                 else:
                     if pos["dir"] == 1:

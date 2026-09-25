@@ -41,9 +41,9 @@ def configs(universe: str):
             for tr in (2.0, None):
                 C.append(("F6", OpeningRange(or_min=orm, target_r=tr)))
     if universe == "crypto1h":   # 1h-only data: only 1h configs are meaningful
-        C = [(f, s) for f, s in C if s.params.get("tf") == "1h" and f in ("F1", "F2", "F3", "F4")]
+        C = [(f, s) for f, s in C if s.params.get("tf") == "1h" and f in ("F1", "F1b", "F2", "F3", "F4")]
     if universe == "crypto247":
-        C = [(f, s) for f, s in C if f in ("F1", "F4") and s.params.get("tf") == "1h"]   # small distinct experiment
+        C = [(f, s) for f, s in C if f in ("F1", "F1b", "F4") and s.params.get("tf") == "1h"]   # small distinct experiment
     return C
 
 
@@ -105,7 +105,8 @@ def main():
             print(f"[{u}/{regime}] {cid:70s} dev n={sdev['n_trades']:4d} net={sdev['net_pnl']:7.2f} pf={sdev['profit_factor']:5.2f} | val n={sval['n_trades']:4d} net={sval['net_pnl']:7.2f} pf={sval['profit_factor']:5.2f} win_w={row['val_windows_pos']}/{row['val_windows_n']} ({row['seconds']}s)", flush=True)
     df = pd.DataFrame(rows)
     if a.append and os.path.exists(os.path.join(out, "experiments.csv")):
-        old = pd.read_csv(os.path.join(out, "experiments.csv")); old = old[~old.config.isin(df.config)]; df = pd.concat([old, df], ignore_index=True)
+        old = pd.read_csv(os.path.join(out, "experiments.csv")); key = set(zip(df.config, df.regime))
+        old = old[[(c, g) not in key for c, g in zip(old.config, old.regime)]]; df = pd.concat([old, df], ignore_index=True)
     df.to_csv(os.path.join(out, "experiments.csv"), index=False)
     print("wrote", os.path.join(out, "experiments.csv"), len(df), "rows")
 

@@ -7,6 +7,17 @@ trading only: no keys, no order submission, no purchases. **Read `FINAL_REPORT.m
 Everything for this run lives under `research/`; the previous session's work (funding-carry / premium-reversion
 research, `docs/`, `src/hlr/`, `experiments/e*.py`) is untouched.
 
+## Results at a glance (2026-09-25)
+* **Conclusion: no demonstrated edge.** 45 distinct configurations across six strategy families were tested under a
+  pre-registered protocol. On the five selected stock perps (15-minute sampled mids, May–Sep 2026) only the 15-minute
+  channel breakout passed the development + validation gates; it then lost on the untouched holdout (−$5.7 on $100
+  over 19 sessions, PF 0.69) under every cost regime, and its earlier gains were mostly stops that sampled data cannot
+  see. On BTC/ETH (real candles) nothing passed the gates in the US session; 24/7 trend and channel rules lost.
+* Nothing is handed to paper trading as a candidate. `forward/paper_trader.py` can observe the frozen rules for
+  research only (label: unproven).
+* The one change that would make this research decisive is API access from the environment (allow
+  `api.hyperliquid.xyz`) so that real 15-minute candles and a spread history can be recorded from now on.
+
 ## Layout
 | Path | Content |
 |---|---|
