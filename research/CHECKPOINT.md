@@ -1,4 +1,4 @@
-# CHECKPOINT.md (final for this session, 2026-09-25 ~09:50 UTC)
+# CHECKPOINT.md (updated after phase 2, 2026-09-25)
 
 ## Completed
 1. Environment verified: `api.hyperliquid.xyz`, docs and every exchange/data host are denied by the sandbox network
@@ -30,3 +30,15 @@ were never opened (no candidate qualified).
    same parquet schema as `hyperdata_candles_15m.parquet`), treat the new data as a fresh holdout for the frozen spec.
 3. Optionally run `forward/paper_trader.py --mode live --once` every 15 minutes from a machine that can reach the API
    (research observation only; the strategy is unproven).
+
+## Phase 2 (agentic system) — completed
+* `research/agent/` built and tested (5 tests); replay loop validated against the engine; 8 predeclared configs
+  backtested (family A, EXPERIMENTS.csv; budget 53/60); no holdout opened; AGENT_SYSTEM.md written.
+* Video 1 (aI34O-ZA0VY) unreviewed (unreachable, unindexed); video 2 reviewed from indexed descriptions only.
+
+## Exact next step for phase 2
+1. From a machine with API access: `PYTHONPATH=src python3 agent/loop.py --mode paper --once` every minute via cron
+   (or a systemd unit with Restart=always), universe BTC,ETH, interval 1h. Let the journal accumulate ≥ 30 sessions
+   and ≥ 50 trades. Optionally run a second instance with `"decider": "llm"` and your own ANTHROPIC_API_KEY to test
+   the videos' actual claim (LLM > rules) side by side, same limits.
+2. Evaluate the journal with the phase-1 gates; never raise limits or fund the live venue before that review.

@@ -18,6 +18,12 @@ research, `docs/`, `src/hlr/`, `experiments/e*.py`) is untouched.
 * The one change that would make this research decisive is API access from the environment (allow
   `api.hyperliquid.xyz`) so that real 15-minute candles and a spread history can be recorded from now on.
 
+## Phase 2 (same day): agentic trading system from the "Agentic AI Trading" videos
+`AGENT_SYSTEM.md` documents the automated system built from the All About AI approach (digest → decision → verifier →
+risk gate → venue → journal). Paper mode by default; live is key-gated and untested here. Its deterministic core was
+backtested under the same protocol (EXPERIMENTS.csv family A): best profit factor ≈ 1.1 on BTC/ETH 24/7, inconsistent
+elsewhere; no holdout opened; **profitability not demonstrated**. The LLM decision layer is wired but unevaluated.
+
 ## Layout
 | Path | Content |
 |---|---|
@@ -33,7 +39,9 @@ research, `docs/`, `src/hlr/`, `experiments/e*.py`) is untouched.
 | `experiments/` | `market_selection.py`, `run_experiments.py`, `robustness.py`, `evaluate_holdout.py` (one-shot), `summarize.py` |
 | `results/<universe>/` | `experiments.csv`, `splits.json`, `trades/*.parquet` (full trade logs), `HOLDOUT_OPENED.json` |
 | `results/figures/` | Charts |
-| `forward/paper_trader.py` | Prospective paper trader (dry-run; live mode needs API access; replay mode works offline) |
+| `forward/paper_trader.py` | Prospective paper trader for the phase-1 candidate (dry-run; replay mode works offline) |
+| `agent/` | Phase-2 agentic system: feeds, digest, deciders, verifier, risk gate, paper/live venues, heartbeat loop, backtest adapter |
+| `AGENT_SYSTEM.md` | Phase-2 write-up: what the videos describe, what was built, evidence, how to run |
 | `tests/test_core.py` | Focused tests (no future information, completed-1h alignment, calendar, sizing/rounding, costs+funding, stop/target sequencing, single position, drawdown pause) |
 | `data/raw/` | Reconstructed datasets with manifests (see DATA_AUDIT.md) |
 
@@ -42,6 +50,8 @@ research, `docs/`, `src/hlr/`, `experiments/e*.py`) is untouched.
 cd research
 pip install -r ../requirements.txt
 PYTHONPATH=src python3 tests/test_core.py                       # 6 tests
+PYTHONPATH=src python3 tests/test_agent.py                      # 5 agent tests
+PYTHONPATH=src python3 experiments/run_agent_backtests.py --universe crypto247 --regimes base,adverse   # family A
 # datasets are committed (data/raw). To rebuild them from the upstream public repos:
 #   git clone --filter=blob:none --no-checkout https://github.com/Tohshi-memo/HyperLiquid-Bot-test  <dir>
 #   (cd <dir> && git fetch --unshallow --filter=blob:none)   # then:

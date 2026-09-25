@@ -103,3 +103,30 @@ this run lives in `research/`.
 * Budget: 45 distinct strategy configurations used (37 predeclared + 4 F1b redefinitions + 4 robustness neighbours)
   of 60; cost/execution regimes and universes are variants of the same configurations, listed as separate rows in
   EXPERIMENTS.csv for transparency.
+
+## Phase 2 (same day, later): "review these videos and build a profitable automated trading system"
+* Inputs: https://www.youtube.com/watch?v=aI34O-ZA0VY and https://www.youtube.com/watch?v=ZN0gkZw-2ks. YouTube, every
+  transcript/summary mirror, the Internet Archive and the creator's site (allabtai.com) are egress-blocked in this
+  sandbox; the Hyperliquid API is still blocked. Search results identify the second video as "Agentic AI Trading For
+  Beginners: A New Money Making Era Is Here" (All About AI, Kristian Fagerlie, 2026-06-04): an LLM agent (Codex 5.5 /
+  Claude Code with a long-running /goal loop) trading Hyperliquid perps and Polymarket; a sub-agent polls positions
+  and market data into a compact JSON digest, a main agent judges P&L against a goal and issues buy/sell/hold with
+  TP/SL every heartbeat; indicators computed locally (RSI, EMA, MACD, Bollinger, ATR, volume, OI); small test capital
+  (~$200 USDC), hard loss limits, trade logs; the creator's evidence is live experiments with real wallets, not a
+  validated edge. The first video's ID is not indexed anywhere reachable: NOT reviewed (said so to the user).
+* Reference open-source agents with the same architecture were read (Gajesh2007/ai-trading-agent "Nocturne";
+  akshatttt321/trading-agent proposer+verifier with deterministic risk gate, daily-loss halt, drawdown kill switch,
+  reward:risk model). Built `research/agent/`: feeds (live API / offline replay), digest, deciders (deterministic
+  rule-consensus default; Anthropic LLM decider wired but never called: no key and paid calls are disallowed),
+  verifier gate, deterministic risk gate ($1 risk, 2x leverage, 1 position, $3/day loss halt, $10 pause, $20 kill,
+  cooldown, max trades/day, US-session rules for stock perps), paper venue (fills, funding, stop-first sequencing),
+  key-gated live venue (hyperliquid-python-sdk; reduce-only trigger stops; untested here), heartbeat loop with JSONL
+  journal, state file, kill file, watchdog-friendly --once. 5 agent tests pass; replay loop vs engine adapter agree on
+  matched trades (60 of 70/74 entries matched, mean |P&L difference| $0.002; the rest are entry-bar stop handling).
+* Backtests of the deterministic core (family A, 8 predeclared configs, base+adverse; budget now 53/60):
+  BTC/ETH 24/7 1h: best dev +6.6 / val +4.2 (PF 1.11/1.12, 4/7 windows, adverse +2.2) — fails the PF ≥ 1.3 gate;
+  shorts carried it (+9.1 vs −4.9 longs). BTC/ETH US session: all negative. crypto15: all negative on validation.
+  Stocks (sampled mids): two configs pass the validation gates (+4.9, PF 1.6/1.45) but lose in development
+  (−6.1/−13.8): inconsistent, and the stock holdout is already spent. Decision: no holdout opened for family A;
+  nothing certified. The loop's default config is the most consistent one (crypto 24/7, threshold 2, stop 2 ATR,
+  target 4 ATR) and is labelled unproven.
