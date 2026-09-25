@@ -1,0 +1,12 @@
+Panel(kind=candles, bars=60m, n=5004, 2025-12-21 05:00:00+00:00..2026-07-17 16:00:00+00:00, symbols=['BTC', 'ETH']) 
+splits: {'n_days': '142', 'dev_start': '2025-12-21 05:00:00+00:00', 'val_start': '2026-04-06 18:00:00+00:00', 'hold_start': '2026-06-04 18:00:00+00:00', 'end': '2026-07-17 16:01:00+00:00'} val windows: 5
+Traceback (most recent call last):
+  File "/home/user/algocide/research/experiments/run_experiments.py", line 114, in <module>
+    main()
+  File "/home/user/algocide/research/experiments/run_experiments.py", line 108, in main
+    old = pd.read_csv(os.path.join(out, "experiments.csv")); old = old[~old.config.isin(df.config)]; df = pd.concat([old, df], ignore_index=True)
+                                                                                        ^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/pandas/core/generic.py", line 6194, in __getattr__
+    return object.__getattribute__(self, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DataFrame' object has no attribute 'config'

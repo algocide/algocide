@@ -1,0 +1,11 @@
+Panel(kind=candles, bars=15m, n=5008, 2026-05-26 10:15:00+00:00..2026-07-17 14:00:00+00:00, symbols=['BTC', 'ETH']) 
+splits: {'n_days': '37', 'dev_start': '2026-05-26 10:15:00+00:00', 'val_start': '2026-06-21 18:00:00+00:00', 'hold_start': '2026-07-07 18:00:00+00:00', 'end': '2026-07-17 14:01:00+00:00'} val windows: 2
+[crypto15/base] F1b:ma_trend(atr_mult=2.0, fast=10, filter=True, slow=40, tf=15m)      dev n=  11 net=  -2.63 pf= 0.53 | val n=   6 net=   3.13 pf= 4.13 win_w=1/2 (0.9s)
+[crypto15/base] F1b:ma_trend(atr_mult=2.0, fast=20, filter=True, slow=80, tf=15m)      dev n=   4 net=  -1.52 pf= 0.03 | val n=   4 net=   0.64 pf= 4.15 win_w=1/2 (0.8s)
+[crypto15/base] F1b:ma_trend(atr_mult=2.0, fast=10, filter=True, slow=40, tf=1h)       dev n=   2 net=  -0.50 pf= 0.00 | val n=   2 net=  -0.91 pf= 0.00 win_w=0/2 (0.9s)
+[crypto15/base] F1b:ma_trend(atr_mult=2.0, fast=20, filter=True, slow=80, tf=1h)       dev n=   1 net=  -0.79 pf= 0.00 | val n=   0 net=   0.00 pf=  nan win_w=0/2 (0.9s)
+[crypto15/adverse] F1b:ma_trend(atr_mult=2.0, fast=10, filter=True, slow=40, tf=15m)      dev n=  11 net=  -2.86 pf= 0.48 | val n=   6 net=   2.85 pf= 3.88 win_w=1/2 (0.9s)
+[crypto15/adverse] F1b:ma_trend(atr_mult=2.0, fast=20, filter=True, slow=80, tf=15m)      dev n=   4 net=  -1.55 pf= 0.01 | val n=   4 net=   0.55 pf= 3.49 win_w=1/2 (0.9s)
+[crypto15/adverse] F1b:ma_trend(atr_mult=2.0, fast=10, filter=True, slow=40, tf=1h)       dev n=   2 net=  -0.50 pf= 0.00 | val n=   2 net=  -0.90 pf= 0.00 win_w=0/2 (0.9s)
+[crypto15/adverse] F1b:ma_trend(atr_mult=2.0, fast=20, filter=True, slow=80, tf=1h)       dev n=   1 net=  -0.79 pf= 0.00 | val n=   0 net=   0.00 pf=  nan win_w=0/2 (0.9s)
+wrote /home/user/algocide/research/experiments/../results/crypto15/experiments.csv 74 rows

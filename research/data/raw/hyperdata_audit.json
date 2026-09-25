@@ -1,0 +1,171 @@
+{
+ "1h": {
+  "BTC": {
+   "rows": 5004,
+   "dups_removed": 0,
+   "first": "2025-12-21 04:00:00+00:00",
+   "last": "2026-07-17 15:00:00+00:00",
+   "misaligned": 0,
+   "gap_events": 0,
+   "missing_bars": 0,
+   "zero_volume_bars": 0,
+   "zero_trade_bars": 0,
+   "ohlc_inconsistent": 0,
+   "abs_logret_gt_10pct": 0
+  },
+  "ETH": {
+   "rows": 5004,
+   "dups_removed": 0,
+   "first": "2025-12-21 04:00:00+00:00",
+   "last": "2026-07-17 15:00:00+00:00",
+   "misaligned": 0,
+   "gap_events": 0,
+   "missing_bars": 0,
+   "zero_volume_bars": 0,
+   "zero_trade_bars": 0,
+   "ohlc_inconsistent": 0,
+   "abs_logret_gt_10pct": 0
+  },
+  "HYPE": {
+   "rows": 5001,
+   "dups_removed": 0,
+   "first": "2025-12-21 07:00:00+00:00",
+   "last": "2026-07-17 15:00:00+00:00",
+   "misaligned": 0,
+   "gap_events": 0,
+   "missing_bars": 0,
+   "zero_volume_bars": 0,
+   "zero_trade_bars": 0,
+   "ohlc_inconsistent": 0,
+   "abs_logret_gt_10pct": 0
+  },
+  "SOL": {
+   "rows": 5003,
+   "dups_removed": 0,
+   "first": "2025-12-21 05:00:00+00:00",
+   "last": "2026-07-17 15:00:00+00:00",
+   "misaligned": 0,
+   "gap_events": 0,
+   "missing_bars": 0,
+   "zero_volume_bars": 0,
+   "zero_trade_bars": 0,
+   "ohlc_inconsistent": 0,
+   "abs_logret_gt_10pct": 0
+  }
+ },
+ "15m": {
+  "BTC": {
+   "rows": 5008,
+   "dups_removed": 0,
+   "first": "2026-05-26 10:00:00+00:00",
+   "last": "2026-07-17 13:45:00+00:00",
+   "misaligned": 0,
+   "gap_events": 0,
+   "missing_bars": 0,
+   "zero_volume_bars": 0,
+   "zero_trade_bars": 0,
+   "ohlc_inconsistent": 0,
+   "abs_logret_gt_10pct": 0
+  },
+  "ETH": {
+   "rows": 5008,
+   "dups_removed": 0,
+   "first": "2026-05-26 10:00:00+00:00",
+   "last": "2026-07-17 13:45:00+00:00",
+   "misaligned": 0,
+   "gap_events": 0,
+   "missing_bars": 0,
+   "zero_volume_bars": 0,
+   "zero_trade_bars": 0,
+   "ohlc_inconsistent": 0,
+   "abs_logret_gt_10pct": 0
+  },
+  "HYPE": {
+   "rows": 5015,
+   "dups_removed": 0,
+   "first": "2026-05-26 08:15:00+00:00",
+   "last": "2026-07-17 13:45:00+00:00",
+   "misaligned": 0,
+   "gap_events": 0,
+   "missing_bars": 0,
+   "zero_volume_bars": 0,
+   "zero_trade_bars": 0,
+   "ohlc_inconsistent": 0,
+   "abs_logret_gt_10pct": 0
+  },
+  "SOL": {
+   "rows": 5007,
+   "dups_removed": 0,
+   "first": "2026-05-26 10:15:00+00:00",
+   "last": "2026-07-17 13:45:00+00:00",
+   "misaligned": 0,
+   "gap_events": 0,
+   "missing_bars": 0,
+   "zero_volume_bars": 0,
+   "zero_trade_bars": 0,
+   "ohlc_inconsistent": 0,
+   "abs_logret_gt_10pct": 0
+  }
+ },
+ "funding": {
+  "BTC": {
+   "rows": 5040,
+   "first": "2025-12-19 16:00:00.091000+00:00",
+   "last": "2026-07-17 15:00:00.050000+00:00",
+   "mean_hourly": 4.581684087301588e-06,
+   "abs_max": 6.93858e-05
+  },
+  "ETH": {
+   "rows": 5040,
+   "first": "2025-12-19 16:00:00.091000+00:00",
+   "last": "2026-07-17 15:00:00.050000+00:00",
+   "mean_hourly": 5.330570654761906e-06,
+   "abs_max": 7.28383e-05
+  },
+  "HYPE": {
+   "rows": 5040,
+   "first": "2025-12-19 16:00:00.091000+00:00",
+   "last": "2026-07-17 15:00:00.050000+00:00",
+   "mean_hourly": 1.0189573591269844e-05,
+   "abs_max": 0.0001597154
+  },
+  "SOL": {
+   "rows": 5040,
+   "first": "2025-12-19 16:00:00.091000+00:00",
+   "last": "2026-07-17 15:00:00.050000+00:00",
+   "mean_hourly": -2.321533948412698e-06,
+   "abs_max": 0.000138459
+  }
+ },
+ "spreads_snapshot_2026-07-17": [
+  {
+   "symbol": "BTC",
+   "bid": 63948.0,
+   "ask": 63949.0,
+   "mid": 63948.5,
+   "spread_bps": 0.1563758336786632,
+   "top_depth_usd": 309508.32,
+   "slip1k_bps": 0.0781879168393316,
+   "slip10k_bps": 0.0781879168393316,
+   "slip50k_bps": 0.0781879168393316
+  },
+  {
+   "symbol": "ETH",
+   "bid": 1837.4,
+   "ask": 1837.5,
+   "mid": 1837.45,
+   "spread_bps": 0.5442324961218484,
+   "top_depth_usd": 4123.49308,
+   "slip1k_bps": 0.2721162480596868,
+   "slip10k_bps": 0.2721162480609242,
+   "slip50k_bps": 0.2721162480621616
+  }
+ ],
+ "provenance": {
+  "repo": "https://github.com/lukasbecker36-dot/hyperdata",
+  "commit": "a4aa1d92f4491a2be640ccb289156f9a8bb537b1",
+  "data_commit": "2026-07-17T18:56:11+01:00 (candles/funding), 2026-07-17T19:26:25+01:00 (spreads)",
+  "retrieved": "2026-09-25",
+  "method": "author's fetch_*.py hitting POST https://api.hyperliquid.xyz/info candleSnapshot / fundingHistory / l2Book"
+ }
+}
