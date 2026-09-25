@@ -98,5 +98,15 @@ def test_replay_loop_and_kill_switch():
     shutil.rmtree(tmp); print("test_replay_loop_and_kill_switch ok", "trades:", len(tr))
 
 
+def test_network_gate():
+    from agent.cli import resolve_network, TESTNET_URL, MAINNET_URL
+    assert resolve_network({}, True) == (TESTNET_URL, "testnet")                                            # default: testnet
+    assert resolve_network({"USE_TESTNET": "false"}, True) == (TESTNET_URL, "testnet")                       # no confirmation -> testnet
+    assert resolve_network({"USE_TESTNET": "false", "CONFIRM_MAINNET": "true"}, False) == (TESTNET_URL, "testnet")   # no acknowledgement -> testnet
+    assert resolve_network({"USE_TESTNET": "false", "CONFIRM_MAINNET": "true"}, True) == (MAINNET_URL, "mainnet")
+    assert resolve_network({"USE_TESTNET": "true", "CONFIRM_MAINNET": "true"}, True) == (TESTNET_URL, "testnet")
+    print("test_network_gate ok")
+
+
 if __name__ == "__main__":
-    test_digest_causal_and_schema(); test_decider_and_verifier(); test_risk_gate(); test_paper_venue(); test_replay_loop_and_kill_switch(); print("ALL AGENT TESTS PASSED")
+    test_digest_causal_and_schema(); test_decider_and_verifier(); test_risk_gate(); test_paper_venue(); test_replay_loop_and_kill_switch(); test_network_gate(); print("ALL AGENT TESTS PASSED")

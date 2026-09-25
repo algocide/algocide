@@ -34,7 +34,7 @@ were never opened (no candidate qualified).
 ## Phase 2 (agentic system) — completed
 * `research/agent/` built and tested (5 tests); replay loop validated against the engine; 8 predeclared configs
   backtested (family A, EXPERIMENTS.csv; budget 53/60); no holdout opened; AGENT_SYSTEM.md written.
-* Video 1 (aI34O-ZA0VY) unreviewed (unreachable, unindexed); video 2 reviewed from indexed descriptions only.
+* Both videos identified and reviewed from InnerTube metadata, chapters, comments and the creator's repository (docs/VIDEO_REVIEW.md); transcripts unobtainable from this address. Added agent/cli.py (gate/preflight/flatten) and the testnet-first mainnet gate.
 
 ## Exact next step for phase 2
 1. From a machine with API access: `PYTHONPATH=src python3 agent/loop.py --mode paper --once` every minute via cron

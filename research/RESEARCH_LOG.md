@@ -130,3 +130,19 @@ this run lives in `research/`.
   (−6.1/−13.8): inconsistent, and the stock holdout is already spent. Decision: no holdout opened for family A;
   nothing certified. The loop's default config is the most consistent one (crypto 24/7, threshold 2, stop 2 ATR,
   target 4 ATR) and is labelled unproven.
+
+## Phase 2b: "try to watch both videos"
+* YouTube pages, media and captions, every transcript mirror, archive.org and the creators' sites are egress-blocked;
+  `youtubei.googleapis.com` (InnerTube) is reachable. Its `next` endpoint returned titles, channels, dates, full
+  descriptions with link targets, chapters and top comments for both videos and the follow-ups; `player` answered
+  "Sign in to confirm you're not a bot" and `get_transcript` "precondition failed" for every client context tried
+  (WEB, MWEB, ANDROID, TVHTML5, embedded, with and without visitor id / API key). No transcript was obtained.
+* Video 1 identified: Torin, "How to Actually BUILD a CLAUDE TRADING BOT (10 Minutes)" (2026-04-30, 73.8K views):
+  Claude Code writes a Hyperliquid testnet bot; follow-up 24-hour four-LLM race. Video 2's repository
+  (`AllAboutAI-YT/agentic-ai-trading-for-beginners`) contains only a wiring guide; its follow-ups describe a
+  two-tier Codex heartbeat (Hyperliquid) and a fair-value/market-making strategy (Polymarket). Evidence saved in
+  `docs/VIDEO_REVIEW.md` and `docs/video_review/`.
+* Added from the videos' safe workflow: `agent/cli.py` (gate/preflight/flatten), testnet-first live venue with the
+  mainnet gate (USE_TESTNET=false + CONFIRM_MAINNET=true + --acknowledge-risk), test `test_network_gate`.
+* No change to the research conclusion: neither video supplies a strategy with evidence; the deterministic core of
+  the agentic approach shows no demonstrated edge; the LLM decider is untested and can only be judged prospectively.

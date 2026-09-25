@@ -1,21 +1,22 @@
 # AGENT_SYSTEM.md — the "agentic" automated trading system (built 2026-09-25, phase 2)
 
 ## 0. What was asked, what could be reviewed, what was built
-Asked: review two YouTube videos and build a profitable automated trading system based on them.
+Asked: review two YouTube videos and build a profitable automated trading system based on them. Full details of what
+was retrievable are in `docs/VIDEO_REVIEW.md` (YouTube pages and captions are blocked here; the InnerTube `next`
+endpoint gave titles, descriptions, chapters, links and comments; no transcript could be obtained).
 
-* **Video 2** (`ZN0gkZw-2ks`) is "Agentic AI Trading For Beginners: A New Money Making Era Is Here" (All About AI /
-  Kristian Fagerlie, 2026-06-04). YouTube and every transcript mirror are blocked from this sandbox, so the review rests
-  on indexed descriptions, the creator's companion guide as indexed by search, and the open-source agents the videos'
-  approach matches. The approach: an LLM agent (Codex 5.5 or Claude Code running a long-lived `/goal` loop) trading
-  Hyperliquid perps (and Polymarket); a lightweight sub-agent polls positions and market data into a compact JSON
-  digest; a main agent evaluates P&L against a goal and issues buy/sell/hold decisions with take-profit and stop-loss
-  each heartbeat; indicators (RSI, EMA, MACD, Bollinger, ATR, volume, open-interest change) are computed locally;
-  small test capital (about $200 USDC on Arbitrum), hard loss limits, and a review of every trade log before sizing up.
-  The evidence offered in that ecosystem is live experiments with real wallets (including a Codex-vs-Claude head to
-  head), not a validated edge.
-* **Video 1** (`aI34O-ZA0VY`) could not be identified: its ID is not indexed anywhere reachable. Not reviewed.
+* **Video 1** (`aI34O-ZA0VY`): "How to Actually BUILD a CLAUDE TRADING BOT (10 Minutes)", Torin, 2026-04-30. Claude
+  Code writes a Hyperliquid **testnet** bot from a rules prompt ("real positions, zero financial risk"); the follow-up
+  races four LLMs with $1,000 for 24 hours. It teaches mechanics and "testnet first"; it offers no strategy evidence.
+* **Video 2** (`ZN0gkZw-2ks`): "Agentic AI Trading For Beginners: A New Money Making Era Is Here", All About AI,
+  2026-06-04. Chapters: Hyperliquid setup → data collection for the agent → finding a strategy → agentic setup →
+  trading → conclusion. Its repository holds a single wiring guide (API-wallet `.env`, testnet default, IOC orders at
+  mark ±0.3%, reduce-only closes, a mainnet confirmation gate, "this is not a full trading bot"). The companion guide
+  describes the heartbeat loop (wake, read positions and market state, hold/hedge/scale/exit/switch, sleep) and warns
+  that "short runs are dominated by variance". The creator's later "winning" strategy is on Polymarket, not Hyperliquid.
 * **Built**: the same architecture, engineered so that its decision core can be backtested under the protocol of
-  phase 1, with paper trading by default and a key-gated live venue. **Profitability is not demonstrated**; see §4.
+  phase 1, with paper trading by default, a testnet-first live venue with the videos' mainnet gate, and `preflight` /
+  `flatten` commands. **Profitability is not demonstrated**; see §4.
 
 ## 1. Architecture (`research/agent/`)
 ```
@@ -28,6 +29,8 @@ risk.py      RiskGate: $1 planned risk incl. costs, gross notional <= 2x equity,
              szDecimals rounding, $10 minimum; the decider sees these limits and cannot change them
 venues.py    PaperVenue (taker fees, half-spread + 1 bp, adverse stop fill, hourly funding, stop-before-target on a bar)
              HyperliquidVenue (official SDK; IOC entry, reduce-only trigger stop and take-profit; closes if the stop is rejected)
+cli.py       preflight (connect, metadata, unified USDC balance, positions), flatten (reduce-only close all), gate
+             (network resolution: testnet unless USE_TESTNET=false AND CONFIRM_MAINNET=true AND --acknowledge-risk)
 loop.py      heartbeat: new completed bar -> manage position -> digest -> decide -> verify -> risk -> execute -> journal
              modes: replay (offline), paper (live data, simulated fills), live (--live --acknowledge-risk + env keys)
 backtest_adapter.py  the same rules as an hlr2 Strategy, so evidence is produced by the tested engine
@@ -50,9 +53,13 @@ PYTHONPATH=src python3 tests/test_agent.py                                    # 
 PYTHONPATH=src python3 agent/loop.py --mode replay --source candles --interval 1h --universe BTC,ETH \
     --start 2026-05-01 --end 2026-06-01 --state results/agent/replay_state.json   # offline, no network
 PYTHONPATH=src python3 agent/loop.py --mode paper --once                      # live data, paper fills (needs api.hyperliquid.xyz)
-# live (NOT run here): export HL_AGENT_PRIVATE_KEY=<agent wallet key> HL_ACCOUNT_ADDRESS=<main address>
-#   set "live": {"enabled": true} in your config copy, smoke-test on testnet (base_url api.hyperliquid-testnet.xyz), then
+# testnet / live (NOT run here): export HL_AGENT_PRIVATE_KEY=<API wallet key> HL_ACCOUNT_ADDRESS=<main account address>
+#   PYTHONPATH=src python3 agent/cli.py gate          # shows which network the environment selects (testnet by default)
+#   PYTHONPATH=src python3 agent/cli.py preflight     # connect, metadata, unified USDC balance, positions
+#   set "live": {"enabled": true} in your config copy and run on TESTNET first:
 #   PYTHONPATH=src python3 agent/loop.py --config my.json --mode live --live --acknowledge-risk
+#   mainnet additionally requires USE_TESTNET=false and CONFIRM_MAINNET=true in the environment.
+#   PYTHONPATH=src python3 agent/cli.py flatten --acknowledge-risk   # emergency: close everything reduce-only
 # LLM decider (optional): set "decider": "llm" and ANTHROPIC_API_KEY; every LLM output still passes the verifier and risk gate.
 ```
 Run it under a watchdog (systemd `Restart=always` or a cron `--once` every minute); the loop only acts on new

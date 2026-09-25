@@ -42,6 +42,8 @@ elsewhere; no holdout opened; **profitability not demonstrated**. The LLM decisi
 | `forward/paper_trader.py` | Prospective paper trader for the phase-1 candidate (dry-run; replay mode works offline) |
 | `agent/` | Phase-2 agentic system: feeds, digest, deciders, verifier, risk gate, paper/live venues, heartbeat loop, backtest adapter |
 | `AGENT_SYSTEM.md` | Phase-2 write-up: what the videos describe, what was built, evidence, how to run |
+| `docs/VIDEO_REVIEW.md` | What could be retrieved of the two videos (titles, descriptions, chapters, comments, the creator's repo); no transcript was obtainable |
+| `agent/cli.py` | `gate` / `preflight` / `flatten`: testnet-first network gate mirroring the videos' safe workflow |
 | `tests/test_core.py` | Focused tests (no future information, completed-1h alignment, calendar, sizing/rounding, costs+funding, stop/target sequencing, single position, drawdown pause) |
 | `data/raw/` | Reconstructed datasets with manifests (see DATA_AUDIT.md) |
 

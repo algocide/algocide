@@ -69,10 +69,12 @@ class HyperliquidVenue:
         if not live.get("enabled") or not acknowledge_risk: raise RuntimeError("live venue disabled: set live.enabled and pass --live --acknowledge-risk")
         key = os.environ.get(live["private_key_env"]); addr = os.environ.get(live["account_address_env"])
         if not key or not addr: raise RuntimeError(f"missing {live['private_key_env']} / {live['account_address_env']}")
+        from agent.cli import resolve_network
+        base_url, self.network = resolve_network(acknowledge_risk=acknowledge_risk)   # testnet unless USE_TESTNET=false + CONFIRM_MAINNET=true
         from eth_account import Account
         from hyperliquid.exchange import Exchange
         from hyperliquid.info import Info
-        wallet = Account.from_key(key); self.info = Info(live["base_url"], skip_ws=True); self.ex = Exchange(wallet, live["base_url"], account_address=addr); self.addr = addr
+        wallet = Account.from_key(key); self.info = Info(base_url, skip_ws=True); self.ex = Exchange(wallet, base_url, account_address=addr); self.addr = addr; self.base_url = base_url
 
     def open(self, sym, dr, qty, price, stop, target, now, bar_idx):
         spec = SPECS[sym]; is_buy = dr == 1
