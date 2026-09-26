@@ -1,0 +1,10 @@
+{
+  "max_drawdown_pct": 15.0,
+  "max_daily_loss_pct": 3.0,
+  "max_position_frac": 0.10,
+  "max_gross_frac": 0.30,
+  "max_staleness_ms": 5000,
+  "max_consecutive_errors": 5,
+  "escalate_below_confidence": 0.60,
+  "kill_file": "KILLED"
+}

@@ -5,3 +5,6 @@ statsmodels>=0.14
 pyarrow>=16
 matplotlib>=3.9
 requests>=2.31
+pydantic>=2.7
+anthropic>=1.8
+pytest>=8

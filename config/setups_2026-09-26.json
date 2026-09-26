@@ -1,0 +1,160 @@
+{
+  "compiled": "2026-09-26",
+  "note": "Finalists from docs/agent/research_2026-09-26.md compiled into typed specs. status=paper means the loop may trade it on paper; watch means shadow-judge only; rejected means never. Invalidation rules are evaluated in code on every tick against StateVector fields; a rule that persists for persist_ticks flips the setup to invalidated. evidence_class: measured = tested in this repository on real observations; reported = from dated primary/secondary sources; speculation = a mechanism story without measurement.",
+  "setups": [
+    {
+      "id": "hype_carry",
+      "name": "HYPE perp short vs HYPE spot funding carry (perp leg managed here; spot leg held by the operator)",
+      "coin": "HYPE",
+      "bias": "short",
+      "horizon_candles": 24,
+      "evidence_class": "measured",
+      "status": "paper",
+      "thesis": "Longs pay hourly funding to shorts; the interest floor (0.01%/8h) plus HYPE's speculative long demand netted about 7% on capital in 2026 at 25% margin in this repository's own test (docs/finalists.md F1). Not an alpha: it is compensation for supplying leverage.",
+      "catalyst": "Binance spot listing (2026-09-24) and the Bitnomial CFTC listing (pending) raise speculative demand near the 2026-09-23 all-time high; more long demand means more funding, until arbitrage capital compresses it.",
+      "bear_case": "The Binance listing makes cross-venue arbitrage easier, which compresses Hyperliquid funding; unlocks add supply; a bear regime turns funding negative for months; the short perp needs USDC margin that the spot leg does not supply, so a fast rally forces top-ups.",
+      "invalidation": [
+        {"metric": "funding_1h_bps", "op": "<", "value": 0.0, "persist_ticks": 72, "note": "funding negative for 72 consecutive hourly ticks"},
+        {"metric": "drawdown_pct", "op": ">", "value": 5.0, "persist_ticks": 1, "note": "book drawdown over 5% while running a carry means the hedge is broken"}
+      ],
+      "sources": ["docs/finalists.md F1", "docs/decision_memo.md", "AOL/Motley Fool 2026-09-26 (Binance listing, ATH $98)", "Globe and Mail 2026-09-24 (Bitnomial)"]
+    },
+    {
+      "id": "xyz_premium_reversion_nvda",
+      "name": "Hedged premium reversion on a liquid trade.xyz US-equity perp (H7), external session only",
+      "coin": "xyz:NVDA",
+      "bias": "neutral",
+      "horizon_candles": 6,
+      "evidence_class": "measured",
+      "status": "watch",
+      "thesis": "The hourly premium of xyz perps is an AR(1) with half-life about 1.6 h; honest-timing capture is 9-17 bps over 6 h, which is only positive under growth-mode fees (docs/review_adversarial.md O1). Growth mode for trade.xyz is now reported as enabled (2026-09-26 search snippets), which the 2026-09-24 session could not verify.",
+      "catalyst": "Growth-mode fees confirmed for trade.xyz (reported); the forward paper test in docs/forward_plan.md can start.",
+      "bear_case": "A 3x deployer fee increase has been proposed (undated) and would kill the trade; half-spreads in liquid names are unobserved; the backtest measured an hourly average, not the touch; 71% of historical events were internal-session oracle artefacts.",
+      "invalidation": [
+        {"metric": "spread_bps", "op": ">", "value": 10.0, "persist_ticks": 3, "note": "observed half-spread far above the 5 bps break-even"}
+      ],
+      "sources": ["docs/review_adversarial.md O1-O5", "docs/forward_plan.md F2", "Coin Metrics substack (trade.xyz in growth mode; search snippet 2026-09-26)", "AMBCrypto / Bitget News (3x HIP-3 fee proposal; search snippet 2026-09-26)"]
+    },
+    {
+      "id": "btc_regime_judge",
+      "name": "BTC native perp, regime-conditioned entries chosen by the judge",
+      "coin": "BTC",
+      "bias": "neutral",
+      "horizon_candles": 12,
+      "evidence_class": "speculation",
+      "status": "paper",
+      "thesis": "Generic directional trading of the most liquid market with the typed judge; the only claim is that a calibrated judge with a strict gate loses slowly enough to be measured. No edge is asserted.",
+      "catalyst": "None. Regime as of 2026-09-26: multi-week uptrend (+36% since 2026-08-18) driven by ETF inflows and short covering, into a hawkish Fed and 5.2% 10-year yields; short-term consolidation after a 7-9% open-interest flush on 2026-09-25.",
+      "bear_case": "Post-squeeze rallies reverse; the Fed is hiking; dominance is slipping (58.5%) so BTC may lag alts; a calibrated judge on 1-minute candles faces 9+ bps round trips against sub-bp edges.",
+      "invalidation": [
+        {"metric": "drawdown_pct", "op": ">", "value": 5.0, "persist_ticks": 1, "note": "stop directional trading after a 5% book drawdown"}
+      ],
+      "sources": ["Bigdata.com market tearsheet 2026-09-26", "Benzinga 2026-09-25 (OI flush)", "MT Newswires 2026-09-24 (Fed)", "Crypto Briefing 2026-09-26 (dominance)"]
+    },
+    {
+      "id": "ena_unlock_overhang",
+      "name": "ENA single-tranche investor unlock on 2026-10-05: pre-event underperformance",
+      "coin": "ENA",
+      "bias": "short",
+      "horizon_candles": 24,
+      "evidence_class": "reported",
+      "status": "watch",
+      "thesis": "The Ethena Foundation accelerated the remaining original-investor ENA unlocks into a single tranche beginning 2026-10-05 (SEC filings by StableCoinX, 2026-08-31 and 2026-09-17). Investors who waited two years for liquidity tend to sell; supply hits in one day.",
+      "catalyst": "2026-10-05 unlock date (primary source).",
+      "bear_case": "Widely disclosed, so likely priced; shorts pay funding if the perp funding turns negative; the foundation or treasury companies (StableCoinX) may absorb supply; a squeeze into the date is common.",
+      "invalidation": [
+        {"metric": "funding_1h_bps", "op": "<", "value": -1.0, "persist_ticks": 24, "note": "paying more than ~9%/yr to be short for a day"},
+        {"metric": "ret_20_bps", "op": "<", "value": -1500.0, "persist_ticks": 1, "note": "already down 15% into the event: priced"}
+      ],
+      "sources": ["StableCoinX Inc. Form S-1 2026-08-31 (Bigdata.com)", "StableCoinX Inc. Form 8-K 2026-09-17 (Bigdata.com)"]
+    },
+    {
+      "id": "uni_cme_listing_fade",
+      "name": "UNI: sell-the-news into the CME futures listing on 2026-10-19",
+      "coin": "UNI",
+      "bias": "short",
+      "horizon_candles": 24,
+      "evidence_class": "reported",
+      "status": "watch",
+      "thesis": "UNI more than doubled in a month on an SEC exemption and the CME listing announcement, then fell 11.5% in a day on 2026-09-23. Listing events on this cycle (HYPE on Binance, -4.5% on listing day) have been sold.",
+      "catalyst": "CME UNI futures listing 2026-10-19 (reported).",
+      "bear_case": "A CME listing enables basis trades and institutional access, which can add demand; momentum in a name up 67% YTD can run further; two anecdotes are not a base rate.",
+      "invalidation": [
+        {"metric": "ret_20_bps", "op": ">", "value": 2000.0, "persist_ticks": 1, "note": "momentum continuing: do not fight"}
+      ],
+      "sources": ["MSN / Motley Fool 2026-09-24 (Bigdata.com)", "AOL 2026-09-26 (HYPE listing-day move)"]
+    },
+    {
+      "id": "eth_btc_catchup",
+      "name": "ETH outperforms BTC while the staking queue, treasury buying and ETF flows persist",
+      "coin": "ETH",
+      "bias": "long",
+      "horizon_candles": 24,
+      "evidence_class": "reported",
+      "status": "watch",
+      "thesis": "ETH is +71% over three months vs BTC +40%; 1.68M ETH queued to stake vs 154k exiting (2026-09-24); BitMine holds 4.9% of supply; ETH ETF inflows have outpaced BTC's on a market-cap-adjusted basis since July (21Shares, 2026-09-01).",
+      "catalyst": "Glamsterdam upgrade on the Sepolia testnet 2026-10-06; continued ETF inflows.",
+      "bear_case": "Staking moves coins already owned (supply relief, not demand); ETH is still -10% YTD; one week in September saw $140M of ETF outflows; a hiking Fed hits high beta first.",
+      "invalidation": [
+        {"metric": "mid", "op": "<", "value": 2391.0, "persist_ticks": 24, "note": "below the 2026-09-02 low for a day"}
+      ],
+      "sources": ["AOL 2026-09-25 (staking queue)", "21Shares 2026-09-01", "BitMine 8-K 2026-09-21", "MT Newswires 2026-09-24 (ETH ETF flows)"]
+    },
+    {
+      "id": "hype_cross_venue_basis",
+      "name": "HYPE perp vs Binance spot dislocations after the 2026-09-24 listing",
+      "coin": "HYPE",
+      "bias": "neutral",
+      "horizon_candles": 3,
+      "evidence_class": "speculation",
+      "status": "watch",
+      "thesis": "A new major venue for the same asset creates transient cross-venue dislocations while market makers connect. The analogous H1 test on commodity perps found about 1 bp of reversion, below any fee.",
+      "catalyst": "Binance listing 2026-09-24 (done).",
+      "bear_case": "H1 rejected on economics; needs a cross-venue tape that this repository does not have for HYPE.",
+      "invalidation": [],
+      "sources": ["docs/hypothesis_comparison.md H1"]
+    },
+    {
+      "id": "zec_crowded_long_unwind",
+      "name": "Short ZEC after the privacy-coin momentum breaks",
+      "coin": "ZEC",
+      "bias": "short",
+      "horizon_candles": 24,
+      "evidence_class": "reported",
+      "status": "rejected",
+      "thesis": "ZEC is up about 2,500% YTD with record $2.4B open interest; altcoin OI exceeded BTC OI on 2026-09-06 for the first time since 2024, driven by ZEC. Crowded leveraged longs unwind violently.",
+      "catalyst": "None dated.",
+      "bear_case": "Shorting a parabolic asset has unbounded loss; the timing signal is unspecified; funding may be positive (pays shorts) but a 20% daily squeeze dwarfs it. Rejected: the risk layer cannot make this safe.",
+      "invalidation": [],
+      "sources": ["Benzinga 2026-09-08 (Glassnode privacy sector)", "Yahoo Finance 2026-09-08 (altcoin OI > BTC OI)"]
+    },
+    {
+      "id": "sui_unlock_oct1",
+      "name": "SUI unlock 2026-10-01",
+      "coin": "SUI",
+      "bias": "short",
+      "horizon_candles": 24,
+      "evidence_class": "reported",
+      "status": "rejected",
+      "thesis": "Scheduled unlock of about 13.26M SUI on 2026-10-01.",
+      "catalyst": "2026-10-01.",
+      "bear_case": "At about $0.80 that is roughly $10.6M against a $3.3B market cap (0.3%): too small to move price net of costs. Rejected on size.",
+      "invalidation": [],
+      "sources": ["Cryptocurrency Exchange Announcements 2026-09-15 (Bigdata.com)"]
+    },
+    {
+      "id": "btc_uptober_seasonality",
+      "name": "Long BTC because October is seasonally strong",
+      "coin": "BTC",
+      "bias": "long",
+      "horizon_candles": 24,
+      "evidence_class": "speculation",
+      "status": "rejected",
+      "thesis": "Media narrative (Uptober).",
+      "catalyst": "Calendar.",
+      "bear_case": "No mechanism, a handful of observations, and the same headline appears every year. Rejected.",
+      "invalidation": [],
+      "sources": ["Benzinga 2026-09-25 headline"]
+    }
+  ]
+}

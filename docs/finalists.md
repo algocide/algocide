@@ -46,6 +46,12 @@ if growth mode is confirmed for the liquid names and their half-spreads are ≤ 
 external sessions (04:00–20:00 ET, Mon–Fri), liquid US equities only, hedge 1:1 with stock at the oracle proxy, exit at
 |p| < 7.5 bps or 6 h, ≤ 5 concurrent, ≤ 5% of capital per market. Pass/fail in `docs/forward_plan.md`.
 
+**Update 2026-09-26 (reported, not verified live):** web-search snippets of a Coin Metrics note say trade.xyz is running
+growth mode (fees cut by more than 90%, taker 0.009%), which was the unverified precondition above, and that Hyperliquid has
+proposed letting HIP-3 deployers raise fees by up to 3x, asset by asset, with no timeline. Confirm per market with
+`{"type":"userFees"}` before starting the paper test; if the 3x increase lands on the liquid US equities, drop F2.
+Sources and the rest of that day's research: `docs/agent/research_2026-09-26.md`.
+
 **How the evidence could mislead**: the backtest statistic is an hourly average (a TWAP), not the touch; 71% of
 historical events were in internal sessions where the oracle chases the perp; a third were non-equities; event
 clustering across names; possible survivorship in the coin list.

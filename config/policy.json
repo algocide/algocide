@@ -1,0 +1,10 @@
+{
+  "min_setup_quality": 2,
+  "min_confidence": 0.80,
+  "kelly_fraction": 0.25,
+  "payoff_ratio": 1.0,
+  "max_position_frac": 0.10,
+  "horizon_candles": 12,
+  "max_spread_bps": 5.0,
+  "max_staleness_ms": 5000
+}

@@ -8,6 +8,39 @@ bar is the HYPE perp-vs-spot funding carry (≈7% net on capital in 2026 at 4x o
 known carry rather than an alpha. The premium-reversion idea on trade.xyz equity perps is statistically real but not
 capturable at standard HIP-3 fees; it is worth a conditional forward paper test only if growth-mode fees are confirmed.
 
+## Session 2026-09-26: the "24/7 AI trading agent" prompt, run against this repository
+
+A widely shared prompt asks for a two-layer autonomous agent (a slow BRAIN for research and review, a fast typed REFLEX
+judge on every candle, a deterministic state engine, a hard risk layer, an overnight self-improvement loop). It was
+run here in good faith and with the same scepticism as the research above. Read `docs/agent/decision_memo.md` first;
+its last section is "WHAT COULD I BE WRONG ABOUT?".
+
+| Path | Content |
+|---|---|
+| `docs/agent/decision_memo.md` | What was possible, what was built, the prompt's own final check applied, the verdict, what could be wrong |
+| `docs/agent/research_2026-09-26.md` | Regime call (trend, flows, leverage, stablecoins, macro, narratives) with dated citations; ten candidate setups graded paper / watch / rejected |
+| `docs/agent/build_plan.md` | The six phases (spec, architecture, plan, test-first build, review, ship) with exact files and the approval gate at each |
+| `config/setups_2026-09-26.json` | The candidates compiled into typed specs with numeric invalidation rules evaluated in code |
+| `config/policy.json`, `config/risk.json` | Every threshold and limit; the model never sets any of them |
+| `src/hlagent/` | The agent: `schema`, `state_engine`, `policy`, `risk`, `judge` (Jev adapter, rule baseline, replay), `setups`, `execution` (paper; live disarmed), `datafeed`, `loop`, `brain`, `review` |
+| `tests/test_agent_*.py` | 73 tests: causality, determinism, token budget, gate, Kelly cap, kill switch, clipping, fail-closed judge, paper accounting, loop end to end, Brier and proposals |
+| `results/agent_review/2026-09-26-dryrun-synthetic*.md` | Reviews of the two offline dry runs on synthetic data (plumbing checks, not evidence) |
+
+```bash
+pip install -r requirements.txt
+python3 -m pytest                                                              # all suites
+PYTHONPATH=src python3 -m hlagent.loop --mode synthetic --ticks 600 --coins BTC,HYPE --out data/agent_dryrun
+PYTHONPATH=src python3 -m hlagent.review --out data/agent_dryrun --results results/agent_review
+# with network access to api.hyperliquid.xyz (paper fills on live data; no keys):
+PYTHONPATH=src python3 -m hlagent.loop --mode paper --coins BTC,HYPE --interval 1m --judge rule --out data/agent
+```
+
+**Bottom line of that session:** the agent is a measurement instrument with bounded downside, not a money machine.
+Its research layer reached the same conclusion as the 2026-09-24 work: one modest carry worth an operations test,
+one conditional paper test, a watch list. AgenKit (the harness the prompt names) and Jev (the judge) were unreachable
+from the sandbox; the Jev adapter's wire format is inferred and fails closed, and the six-phase discipline was
+followed by hand. Nothing live was run.
+
 ## What is in here
 
 | Path | Content |

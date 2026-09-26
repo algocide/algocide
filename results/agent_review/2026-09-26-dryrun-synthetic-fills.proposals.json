@@ -1,0 +1,20 @@
+{
+ "date": "2026-09-26-dryrun-synthetic-fills",
+ "policy_updates": {
+  "min_confidence": 0.85,
+  "payoff_ratio": 4.016
+ },
+ "reasons": [
+  "overconfident bucket(s): [0.6,0.7) obs 0.45 n=377, [0.7,0.8) obs 0.46 n=314, [0.8,0.9) obs 0.53 n=309, [0.9,1.0) obs 0.51 n=696",
+  "payoff_ratio measured from 71 closed trades",
+  "do not arm live: need Brier skill > 0 on >= 200 real resolved decisions and net P&L > 0 after fees"
+ ],
+ "rule_calibration": {
+  "0.50": 0.509,
+  "0.60": 0.454,
+  "0.70": 0.455,
+  "0.80": 0.531,
+  "0.90": 0.507
+ },
+ "do_not_arm_live": true
+}

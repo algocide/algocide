@@ -1,0 +1,4 @@
+# Only for the (disarmed by default) live executor in src/hlagent/execution.py. Not needed for research, tests,
+# the synthetic dry run, or paper trading with live data.
+-r requirements.txt
+hyperliquid-python-sdk>=0.24
