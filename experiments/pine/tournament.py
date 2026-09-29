@@ -64,7 +64,7 @@ def _alarm(signum, frame):
 
 
 def work(task):
-    file, src, tf_ms, symbols, max_bars, end_ms, fee, out, time_limit, max_rss_mb = task
+    file, src, tf_ms, symbols, max_bars, end_ms, fee, out, time_limit, max_rss_mb, magnify = task
     from pinebt.engine import CompiledScript, Runner
     signal.signal(signal.SIGALRM, _alarm)
     metas = []
@@ -79,12 +79,13 @@ def work(task):
     compile_s = time.time() - t0
     for sym in symbols:
         meta = {"file": file, "symbol": sym, "tf_ms": tf_ms, "flags": sorted(cs.flags), "pyramiding": cs.cfg["pyramiding"],
-                "poc": cs.cfg["process_orders_on_close"], "decl": cs.cfg["decl"], "compile_s": round(compile_s, 3)}
+                "poc": cs.cfg["process_orders_on_close"], "decl": cs.cfg["decl"], "compile_s": round(compile_s, 3),
+                "magnify": magnify}
         try:
             signal.alarm(int(time_limit * 1.5) + 30)
             try:
                 r = Runner(cs, sym, tf_ms, end_ms=end_ms, max_bars=max_bars, fee=fee, time_limit=time_limit,
-                           max_rss_mb=max_rss_mb).run()
+                           max_rss_mb=max_rss_mb, magnify=magnify).run()
             finally:
                 signal.alarm(0)
             days, deq = daily(r["TC"], r["equity"])
@@ -97,7 +98,7 @@ def work(task):
                         us_per_bar=round(1e6 * r["seconds"] / max(1, nb), 1), err_bars=r["err_bars"],
                         first_err=r["first_err"], blown=r["blown"], n_closed=len(cl), n_fills=r["n_fills"],
                         fees=round(r["fees"], 2), funding=round(r["funding"], 2), eq_end=round(r["equity"][-1], 4) if nb else None,
-                        sec_calls=r["sec_calls"], shadow_bars=r["shadow_bars"])
+                        sec_calls=r["sec_calls"], shadow_bars=r["shadow_bars"], minutes_walked=r["minutes_walked"])
         except BaseException as e:
             if isinstance(e, KeyboardInterrupt):
                 raise
@@ -120,6 +121,7 @@ def main():
     ap.add_argument("--max-rss-mb", type=float, default=5000.0,
                     help="per-worker memory guard; a run above it is recorded as memory_limit instead of risking an OOM kill")
     ap.add_argument("--tasks-per-child", type=int, default=20)
+    ap.add_argument("--magnify", action="store_true", help="fill price orders against 1-minute candles (bar magnifier)")
     ap.add_argument("--sample", type=int, default=0)
     ap.add_argument("--files", default="")
     ap.add_argument("--files-from", default="", help="JSON list of vault file names to run")
@@ -155,8 +157,8 @@ def main():
                 for sym in syms:
                     fs.write(json.dumps({"file": r.file, "symbol": sym, "tf_ms": int(r.tf_ms), "status": "not_run_bar_cap"}) + "\n")
     p = p[(p.tf_ms >= a.min_tf_ms) & ~p.file.isin(done)].sort_values(["tf_ms", "file"], ascending=[False, True])
-    tasks = [(r.file, r.source, int(r.tf_ms), syms, a.max_bars, end_ms, a.fee, a.out, a.time_limit, a.max_rss_mb)
-             for r in p.itertuples()]
+    tasks = [(r.file, r.source, int(r.tf_ms), syms, a.max_bars, end_ms, a.fee, a.out, a.time_limit, a.max_rss_mb,
+              a.magnify) for r in p.itertuples()]
     print(f"{len(tasks)} scripts to run ({len(done)} already done)", flush=True)
     t0 = time.time()
     n = 0

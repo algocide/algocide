@@ -9,9 +9,16 @@ modify by id, apply to trades of `from_entry` (or all), and allocate qty_percent
 Overrides (pre-registered): every opening order is sized at 100/pyramiding percent of current equity (explicit qty
 ignored for openings), total exposure is capped at 1x equity, each fill costs `fee` (fraction of notional), funding is
 charged at bar close from the per-bar funding sum.
+
+Bar magnifier (optional, `Broker.mag`): price orders are checked against the 1-minute candles inside each chart bar,
+each with its own open -> nearer extreme -> farther extreme -> close path, instead of one guessed path for the whole
+bar (TradingView's "Bar Magnifier" does the same with lower-timeframe data). The script still runs once per chart bar.
+Minutes where no pending order can trigger are skipped in one vectorised step; `Magnifier(brute=True)` walks every
+minute and must give identical results.
 """
 from __future__ import annotations
 import math
+import numpy as np
 
 NA = float("nan")
 
@@ -53,9 +60,22 @@ class ExitOrder:
     __slots__ = ("id", "frm", "qty", "pct", "profit", "limit", "loss", "stop", "tprice", "tpoints", "toffset", "bar")
 
 
+class Magnifier:
+    """1-minute candles covering the chart bars: chart bar i spans minutes a[i] <= m < b[i]."""
+
+    def __init__(self, t, o, h, l, c, T, TC, brute: bool = False):
+        t = np.asarray(t, np.int64)
+        self.O, self.H, self.L, self.C = (np.asarray(x, float) for x in (o, h, l, c))
+        self.a = np.searchsorted(t, np.asarray(T, np.int64), side="left").tolist()
+        self.b = np.searchsorted(t, np.asarray(TC, np.int64), side="left").tolist()
+        self.brute = brute
+        self.minutes_walked = 0
+
+
 class Broker:
     def __init__(self, D, cfg: dict, fee: float = 0.0007, cap: float = 1.0, shadow: bool = False):
         self.D = D
+        self.mag: Magnifier | None = None
         self.O, self.H, self.L, self.C, self.T, self.TC = D.O, D.H, D.L, D.C, D.T, D.TC
         self.FUND = getattr(D, "FUND", None)
         self.tick = D.mintick
@@ -429,7 +449,119 @@ class Broker:
         self._close_trade(tr, min(q, abs(tr.q)), px, i)
 
     def _process_path(self, i):
-        o, h, l, c = self.O[i], self.H[i], self.L[i], self.C[i]
+        mg = self.mag
+        if mg is not None and mg.b[i] > mg.a[i]:
+            self._process_minutes(mg, mg.a[i], mg.b[i])
+            return
+        self._walk(self.O[i], self.H[i], self.L[i], self.C[i])
+
+    # ---- bar magnifier
+    def _process_minutes(self, mg: Magnifier, a: int, b: int):
+        m = a
+        while m < b:
+            if not self.porders and not (self.exits and self.trades):
+                return
+            nxt = m if mg.brute else self._next_hot(mg, m, b)
+            if nxt > m:
+                self._advance_trails(mg, m, nxt)
+            if nxt >= b:
+                return
+            mg.minutes_walked += 1
+            self._walk(float(mg.O[nxt]), float(mg.H[nxt]), float(mg.L[nxt]), float(mg.C[nxt]))
+            m = nxt + 1
+
+    def _fixed_exit_levels(self, x: ExitOrder, tr: Trade):
+        """Limit and stop levels of an exit without its trailing part."""
+        long = tr.q > 0
+        e, tk = tr.px, self.tick
+        lim = x.limit
+        if x.profit is not None:
+            p = e + x.profit * tk if long else e - x.profit * tk
+            lim = p if lim is None else (min(lim, p) if long else max(lim, p))
+        stp = x.stop
+        if x.loss is not None:
+            q = e - x.loss * tk if long else e + x.loss * tk
+            stp = q if stp is None else (max(stp, q) if long else min(stp, q))
+        return lim, stp
+
+    def _next_hot(self, mg: Magnifier, m: int, b: int) -> int:
+        """First minute in [m, b) where some pending order could trigger (a necessary condition), else b."""
+        rise, fall, trails = [], [], []
+        for po in self.porders.values():
+            if po.bar >= self.i:
+                continue
+            buy = po.d == 1
+            if po.limit is not None:
+                (fall if buy else rise).append(po.limit)
+            if po.stop is not None:
+                (rise if buy else fall).append(po.stop)
+        for x in self.exits.values():
+            key = (x.id, x.frm)
+            trailing = x.toffset is not None and (x.tprice is not None or x.tpoints is not None)
+            for tr in self.trades:
+                if x.frm is not None and tr.eid != x.frm:
+                    continue
+                if key in tr.exits_done:
+                    continue
+                long = tr.q > 0
+                lim, stp = self._fixed_exit_levels(x, tr)
+                if lim is not None:
+                    (rise if long else fall).append(lim)
+                if stp is not None:
+                    (fall if long else rise).append(stp)
+                if trailing:
+                    if tr.trail_on.get(key):
+                        trails.append((long, tr.trail_ext[key], x.toffset * self.tick))
+                    else:
+                        act = x.tprice if x.tprice is not None else (
+                            tr.px + x.tpoints * self.tick if long else tr.px - x.tpoints * self.tick)
+                        (rise if long else fall).append(act)
+        best = b
+        hs, ls = mg.H[m:b], mg.L[m:b]
+        if rise:
+            cond = hs >= min(rise)
+            k = int(cond.argmax())
+            if cond[k]:
+                best = min(best, m + k)
+        if fall:
+            cond = ls <= max(fall)
+            k = int(cond.argmax())
+            if cond[k]:
+                best = min(best, m + k)
+        for long, e0, off in trails:
+            if long:
+                cond = ls <= np.maximum.accumulate(np.maximum(hs, e0)) - off
+            else:
+                cond = hs >= np.minimum.accumulate(np.minimum(ls, e0)) + off
+            k = int(cond.argmax())
+            if cond[k]:
+                best = min(best, m + k)
+        return best
+
+    def _advance_trails(self, mg: Magnifier, m: int, nxt: int):
+        """Skipped minutes can't fill or activate anything; they only move active trailing extremes."""
+        hi = lo = None
+        for x in self.exits.values():
+            if x.toffset is None or (x.tprice is None and x.tpoints is None):
+                continue
+            key = (x.id, x.frm)
+            for tr in self.trades:
+                if x.frm is not None and tr.eid != x.frm:
+                    continue
+                if not tr.trail_on.get(key):
+                    continue
+                if tr.q > 0:
+                    if hi is None:
+                        hi = float(mg.H[m:nxt].max())
+                    tr.trail_ext[key] = max(tr.trail_ext[key], hi)
+                else:
+                    if lo is None:
+                        lo = float(mg.L[m:nxt].min())
+                    tr.trail_ext[key] = min(tr.trail_ext[key], lo)
+
+    def _walk(self, o, h, l, c):
+        """One OHLC path (a chart bar, or one minute under the magnifier)."""
+        i = self.i
         path = (o, h, l, c) if (h - o) <= (o - l) else (o, l, h, c)
         for s in range(3):
             p0, p1 = path[s], path[s + 1]

@@ -300,3 +300,77 @@ def test_lower_timeframe_security_obeys_bar_cap():
     r = Runner(CompiledScript(src), "BTCUSDT", 86_400_000, max_bars=300, end_ms=1_759_104_000_000).run()
     (n, capped), = r["shadow_bars"].values()
     assert n == 300 and capped
+
+
+# ---------------------------------------------------------------- bar magnifier (1-minute fills)
+def run_on_mag(src, bars, minutes, fee=0.0, brute=False):
+    """Like run_on, with price orders filled against synthetic 1-minute candles (t, o, h, l, c)."""
+    from pinebt.broker import Magnifier
+    from pinebt.engine import SecurityHub, tf_cfg
+    cs = CompiledScript(src)
+    r = Runner(cs, bars.symbol, bars.tf_ms, fee=fee)
+    bk = Broker(bars, cs.cfg, fee)
+    bk.mag = Magnifier(*minutes, bars.T, bars.TC, brute=brute)
+    hub = SecurityHub(r, bars.symbol, bars.tf_ms, bars)
+    step = cs.build(rt, bars, bk, hub, tf_cfg(bars.symbol, bars.tf_ms))
+    for i in range(bars.n):
+        bk.begin_bar(i)
+        step(i)
+        bk.end_bar(i)
+    return bk
+
+
+def flat_then(minute_rows):
+    """Chart bar 0 is flat at 100 (one flat minute per chart minute); chart bar 1 is built from minute_rows."""
+    rows = [(100.0, 100.0, 100.0, 100.0)] * 60 + list(minute_rows)
+    t = T0 + np.arange(len(rows)) * 60_000
+    o, h, l, c = (np.array(x, float) for x in zip(*rows))
+    b1 = rows[60:]
+    bars = bars_from([100.0, b1[-1][3]], opens=[100.0, b1[0][0]], highs=[100.0, max(r[1] for r in b1)],
+                     lows=[100.0, min(r[2] for r in b1)])
+    return bars, (t, o, h, l, c)
+
+
+def test_magnifier_removes_trailing_stop_artefact():
+    """A 1-tick trailing stop captures the whole bar on the OHLC path but only the first wiggle on minutes."""
+    rows = [(100 + 0.2 * k, 100.3 + 0.2 * k, 99.8 + 0.2 * k, 100.2 + 0.2 * k) for k in range(60)]
+    bars, minutes = flat_then(rows)
+    src = ("//@version=5\nstrategy('t')\nif bar_index == 0\n    strategy.entry('L', strategy.long)\n"
+           "    strategy.exit('X', 'L', trail_points=10, trail_offset=1)\n")
+    bk, _ = run_on(src, bars)
+    assert len(bk.closed) == 1 and abs(bk.closed[0][7] - 112.0) < 1e-9          # exits one tick under the bar high
+    for brute in (False, True):
+        bm = run_on_mag(src, bars, minutes, brute=brute)
+        assert len(bm.closed) == 1 and abs(bm.closed[0][7] - 101.0) < 1e-9     # activation 101.0, first pullback
+
+
+def test_magnifier_orders_bracket_by_real_minutes():
+    """The OHLC path goes to the nearer low first (stop); the minutes show the take-profit came first."""
+    rows = [(100.0, 101.5, 100.0, 101.4)] + [(101.4, 101.4, 98.9, 99.0)] + [(99.0, 100.0, 99.0, 100.0)] * 58
+    bars, minutes = flat_then(rows)
+    src = ("//@version=5\nstrategy('t')\nif bar_index == 0\n    strategy.entry('L', strategy.long)\n"
+           "    strategy.exit('X', 'L', profit=10, loss=10)\n")
+    bk, _ = run_on(src, bars)
+    assert abs(bk.closed[0][7] - 99.0) < 1e-9
+    bm = run_on_mag(src, bars, minutes)
+    assert abs(bm.closed[0][7] - 101.0) < 1e-9
+
+
+@pytest.mark.parametrize("tf", [H1, 4 * H1])
+def test_magnifier_jumps_match_brute_force_on_real_data(tf):
+    """Skipping cold minutes must not change a single fill."""
+    src = ("//@version=5\nstrategy('t', pyramiding=2)\nf = ta.ema(close, 10)\ns = ta.ema(close, 30)\n"
+           "if ta.crossover(f, s)\n    strategy.entry('L', strategy.long)\n"
+           "if ta.crossunder(f, s)\n    strategy.entry('S', strategy.short, stop=low - 50)\n"
+           "strategy.exit('XL', 'L', profit=3000, loss=2000, trail_points=1500, trail_offset=300)\n"
+           "strategy.exit('XS', 'S', limit=close * 0.97, stop=close * 1.02)\n")
+    cs = CompiledScript(src)
+    out = []
+    for brute in (False, True):
+        r = Runner(cs, "BTCUSDT", tf, end_ms=1_790_640_000_000, max_bars=1500, fee=0.0007, magnify=True,
+                   mag_brute=brute).run()
+        out.append(r)
+    assert len(out[0]["closed"]) > 20
+    assert out[0]["closed"] == out[1]["closed"]
+    assert out[0]["equity"] == out[1]["equity"]
+    assert out[0]["minutes_walked"] < out[1]["minutes_walked"]

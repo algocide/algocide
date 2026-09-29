@@ -203,10 +203,11 @@ class SecurityHub:
 class Runner:
     def __init__(self, script: CompiledScript, symbol: str, tf_ms: int, end_ms: int | None = None,
                  max_bars: int | None = None, fee: float = 0.0007, time_limit: float = 300.0,
-                 max_rss_mb: float | None = None):
+                 max_rss_mb: float | None = None, magnify: bool = False, mag_brute: bool = False):
         self.script, self.symbol, self.tf_ms = script, symbol, tf_ms
         self.end_ms, self.max_bars, self.fee, self.time_limit = end_ms, max_bars, fee, time_limit
         self.max_rss_mb = max_rss_mb
+        self.magnify, self.mag_brute = magnify, mag_brute
         self.shadow_bars = {}           # "symbol|tf_ms|ha" -> (bars, capped)
         self.shadows = {}
         self.in_progress = set()
@@ -263,6 +264,11 @@ class Runner:
         bars = Bars(self.symbol, self.tf_ms, end_ms=self.end_ms, max_bars=self.max_bars)
         self.main_start = bars.T[0] if bars.n else None
         bk = Broker(bars, self.script.cfg, self.fee)
+        if self.magnify:
+            from .broker import Magnifier
+            from .data import load_1m
+            t, o, h, l, c = load_1m(self.symbol)[:5]
+            bk.mag = Magnifier(t, o, h, l, c, bars.T, bars.TC, brute=self.mag_brute)
         hub = SecurityHub(self, self.symbol, self.tf_ms, bars)
         step = self.instantiate(bars, bk, hub, self.symbol, self.tf_ms)
         err_bars, first_err = 0, None
@@ -286,4 +292,5 @@ class Runner:
         return {"n_bars": n, "T": bars.T, "TC": bars.TC, "close": bars.C, "equity": bk.eq_close,
                 "closed": bk.closed, "n_fills": bk.n_fills, "fees": bk.fees_paid, "funding": bk.funding_paid,
                 "blown": bk.blown, "err_bars": err_bars, "first_err": first_err, "seconds": time.time() - t0,
-                "sec_calls": hub.calls, "initial_capital": bk.initial_capital, "shadow_bars": dict(self.shadow_bars)}
+                "sec_calls": hub.calls, "initial_capital": bk.initial_capital, "shadow_bars": dict(self.shadow_bars),
+                "minutes_walked": bk.mag.minutes_walked if bk.mag is not None else 0}
