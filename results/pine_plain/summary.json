@@ -1,0 +1,63 @@
+{
+ "n_scripts": 5283,
+ "n_runs": 10566,
+ "status_counts": {
+  "ok": 9900,
+  "not_run_bar_cap": 510,
+  "compile_error": 52,
+  "parse_error": 46,
+  "unsupported": 36,
+  "runtime_error": 14,
+  "crash": 8
+ },
+ "n_eligible": 3504,
+ "ineligible_reason_counts": {
+  "ETH:trades<20": 1235,
+  "BTC:trades<20": 1134,
+  "BTC:not_run_bar_cap": 255,
+  "ETH:not_run_bar_cap": 255,
+  "ETH:blown": 192,
+  "lookahead_on": 176,
+  "BTC:blown": 93,
+  "BTC:compile_error": 26,
+  "ETH:compile_error": 26,
+  "BTC:parse_error": 23,
+  "ETH:parse_error": 23,
+  "BTC:unsupported": 18,
+  "ETH:unsupported": 18,
+  "random_signal": 8,
+  "BTC:runtime_error": 7,
+  "ETH:runtime_error": 7,
+  "BTC:crash": 4,
+  "ETH:crash": 4
+ },
+ "share_positive_oos_sharpe": 0.3002283105022831,
+ "share_beating_bh_both": 0.04452054794520548,
+ "spearman_is_vs_oos": {
+  "rho": 0.7855640038337947,
+  "p": 0.0
+ },
+ "median_score": -0.4531601236454798,
+ "median_bh_sharpe_btc": 0.7323314348262457,
+ "median_bh_sharpe_eth": 0.42298809677039634,
+ "n_duplicates_collapsed_in_top": 1,
+ "plain_crosssectional_var_daily_sr": {
+  "btc": 4.254910692439549e+23,
+  "eth": 4.2503132573356e+23
+ },
+ "posthoc": {
+  "spearman_is_vs_oos_alpha": {
+   "rho": 0.7363914841968279,
+   "p": 0.0
+  },
+  "spearman_oos_score_vs_beta": 0.1798976347069587,
+  "share_positive_alpha_both": 0.1506849315068493,
+  "median_beta_btc": 0.03094486037432483,
+  "spearman_oos_alpha_vs_oos_trades": -0.7728454649308494,
+  "alpha_persistence_by_turnover_tercile": {
+   "low": 0.3876034653289951,
+   "mid": 0.3946647716992428,
+   "high": 0.8673314747286098
+  }
+ }
+}

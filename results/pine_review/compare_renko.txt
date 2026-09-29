@@ -1,0 +1,5 @@
+== renko: Renko-Boxes-and-TEMA-Indicator-Micro-Profit-Strategy.md
+bars: mine 50328 (2021-01-01 00:00:00 .. 2026-09-28 23:00:00), engine 50328; same open times: True
+final equity: mine 11773.901504, engine 11773.901504; max rel diff 0.000e+00 at bar 0 (2021-01-01 00:00:00)
+closed trades: mine 1289, engine 1289
+trade mismatches: 0

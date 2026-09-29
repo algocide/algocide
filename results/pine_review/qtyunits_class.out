@@ -1,0 +1,105 @@
+1-2-3-Pattern-Quantitative-Trading-Strategy-with-EMAs-MACD-a eng -4.31 True  script-units -4.31 True
+50-Period-EMA-Crossover-with-Monthly-Dollar-Cost-Averaging-D eng 0.78 False  script-units 0.78 False
+ADX-Crossover-Trend-Trading-Strategy.md                      eng 0.06 False  script-units 0.06 False
+ATR-based-Dynamic-Stop-Loss-Strategy.md                      eng 0.14 True  script-units 0.82 True
+Adaptive-Bollinger-Bands-Dynamic-Position-Management-Strateg eng -0.11 True  script-units 0.17 True
+Adaptive-Bollinger-Bands-Trend-Tracking-Strategy.md          eng 0.35 False  script-units -0.47 False
+Adaptive-Grid-Trading-Strategy-with-Dynamic-Adjustment-Mecha eng 0.08 True  script-units 0.21 True
+Adaptive-Multi-MA-Momentum-Breakthrough-Trading-Strategy.md  eng -0.44 True  script-units 0.07 True
+Adaptive-Stop-Loss-Rail-Strategy.md                          eng 0.83 True  script-units 0.69 True
+Algorithm-RSI-Range-Breakout-Strategy.md                     eng -2.60 False  script-units -4.14 True
+All-about-the-ATR-and-EMA-based-trend-following-strategy.md  eng -1.41 False  script-units -1.41 False
+Assassins-Grid-B-A-Dynamic-Grid-Trading-Strategy.md          eng 0.20 False  script-units 0.27 False
+Baseline-Cross-Qualifier-ATR-Volatility-HMA-Trend-Bias-Mean- eng -1.65 True  script-units -1.65 True
+Bollinger-Band-Breakout-Strategy-Based-on-VWAP.md            eng 0.01 False  script-units 0.01 False
+Bollinger-Band-Breakout-Trading-Strategy.md                  eng 0.12 True  script-units 0.12 True
+/home/user/algocide/results/pine_review/qtyunits_patch.py:152: RuntimeWarning: Mean of empty slice
+  row[m + "_score"] = np.nanmean([row.get(f"{m}_btc_sharpe", np.nan), row.get(f"{m}_eth_sharpe", np.nan)])
+Bollinger-Bands-Strategy-Profit-Taking-and-Martingale-Doubli eng nan False  script-units nan False
+Breakout-Bollinger-Band-Trading-Strategy.md                  eng -0.46 True  script-units -0.46 True
+Divergence-Matrix-Trend-Following-Strategy.md                eng -1.01 False  script-units -1.01 False
+Double-Rail-Breakthrough-Moving-Average-Crossover-Strategy.m eng 0.00 False  script-units 0.00 False
+Double-Turtle-Breakthrough-Strategy.md                       eng 0.37 False  script-units 0.37 False
+Dual-EMA-Trend-Following-Strategy-with-Limit-Buy-Entry.md    eng 1.08 False  script-units 1.08 False
+Dual-EMA-Trend-Following-Strategy-with-Staged-Position-Exit. eng 1.06 True  script-units 1.08 False
+Dual-Moving-Average-Breakout-Strategy-441003.md              eng 0.14 True  script-units 0.22 True
+Dual-Moving-Average-Crossover-Arrow-Strategy.md              eng 0.67 True  script-units 0.85 True
+Dual-Moving-Average-Golden-Cross-Strategy.md                 eng -1.83 True  script-units -1.83 True
+Dual-Moving-Average-RSI-Indicator-Combination-Reversal-Strat eng -1.42 True  script-units -1.42 True
+Dynamic-ATR-based-Trailing-Stop-Trading-Strategy.md          eng -0.14 False  script-units -0.14 False
+Dynamic-Balancing-Leveraged-ETF-Investment-Strategy.md       eng -0.12 False  script-units -0.12 False
+/home/user/algocide/results/pine_review/qtyunits_patch.py:152: RuntimeWarning: Mean of empty slice
+  row[m + "_score"] = np.nanmean([row.get(f"{m}_btc_sharpe", np.nan), row.get(f"{m}_eth_sharpe", np.nan)])
+Dynamic-Grid-Trading-Management-Strategy.md                  eng nan False  script-units nan False
+Dynamic-Multi-Timeframe-Pivot-Trend-Breakthrough-Strategy.md eng 0.67 False  script-units 0.67 False
+Dynamic-Rising-ADX-Trend-Following-Strategy.md               eng -2.01 True  script-units -2.01 True
+Dynamic-Trailing-Stop-Dual-Target-Moving-Average-Crossover-S eng 0.06 True  script-units -0.06 True
+Dynamic-Trend-Following-ATR-Multi-Period-Trading-Strategy.md eng -0.14 False  script-units -0.14 False
+Dynamic-Trend-Following-Multi-Indicator-Staged-Take-Profit-T eng -0.18 False  script-units -0.18 False
+EMA-Momentum-Moving-Average-Crossover-Strategy.md            eng -0.40 True  script-units -0.75 True
+EMA-and-Cumulative-Volume-Crossover-Strategy-for-Long-Short. eng 0.60 True  script-units 0.60 True
+EMAC-Exponential-Moving-Average-Cross-Optimized-Strategy.md  eng -0.04 True  script-units -0.04 True
+Ehlers-Instantaneous-Trendline-Strategy.md                   eng 0.03 True  script-units 0.03 True
+Fibonacci-Retracement-Dynamic-Stop-Loss-Strategy.md          eng 0.19 False  script-units -0.10 True
+Fisher-Turnaround-EMA-Multi-Take-Profit-and-Multi-Stop-Strat eng 0.53 False  script-units 0.53 False
+Fixed-Fraction-Trading-Strategy.md                           eng 0.22 False  script-units 0.22 False
+Gradient-Reversal-Trading-Strategy.md                        eng 0.73 False  script-units 0.09 False
+Grid-based-Long-Martingale-Dynamic-Position-Grid-Trading-Str eng 0.16 False  script-units -0.08 True
+Hungry.md                                                    eng 0.09 True  script-units 0.09 True
+Ichimoku-and-MACD-Trend-Reversal-Trading-Strategy.md         eng -0.06 False  script-units -0.03 False
+Keltner-Channel-Pullback-Strategy.md                         eng -2.36 True  script-units -3.35 True
+MA-Cross-Strategy.md                                         eng -26.69 True  script-units -26.69 True
+MOST-Indicator-Dual-Position-Adaptive-Strategy.md            eng 0.00 False  script-units 0.00 False
+McGinley-Moving-Average-Trading-Strategy.md                  eng -2.16 True  script-units -2.80 True
+Mean-Reversion-Bollinger-Band-Dollar-Cost-Averaging-Investme eng -2.81 False  script-units -2.81 False
+Mean-Reversion-Trading-Strategy-Based-on-Moving-Average.md   eng 0.29 False  script-units -0.07 False
+/home/user/algocide/results/pine_review/qtyunits_patch.py:152: RuntimeWarning: Mean of empty slice
+  row[m + "_score"] = np.nanmean([row.get(f"{m}_btc_sharpe", np.nan), row.get(f"{m}_eth_sharpe", np.nan)])
+Modified-Bollinger-Bands-Strategy-Take-Profit-and-Martingale eng nan False  script-units nan False
+Momentum-Breakthrough-TTM-Strategy.md                        eng 0.40 True  script-units 0.40 True
+Momentum-Pullback-Strategy.md                                eng 0.26 False  script-units 1.07 False
+Moving-Average-Crossover-MACD-Slow-Line-Momentum-Strategy.md eng -0.11 False  script-units -0.10 False
+Moving-Average-Crossover-Strategy-434701.md                  eng 0.44 True  script-units 0.46 True
+Moving-Average-Price-Based-Trading-Strategy.md               eng -0.29 True  script-units -0.29 True
+Moving-Average-Pullback-Strategy.md                          eng -0.78 False  script-units -0.78 False
+Multi-Dimensional-Short-Term-Trend-Predictor-Technical-Analy eng 0.19 False  script-units 0.31 False
+Multi-Indicator-Breakout-and-Reversal-Trading-Strategy-A-Dua eng -1.32 False  script-units -0.44 False
+Multi-Indicator-Confirmation-EMA-Breakout-with-DCA-and-Dynam eng -0.96 False  script-units -0.99 False
+Multi-Indicator-Optimized-KDJ-Trend-Crossover-Strategy-Based eng -0.04 True  script-units 0.03 True
+Multi-Moving-Average-Crossover-Trend-Following-Strategy-with eng -0.22 False  script-units -0.22 False
+Multi-Period-RSI-Grid-Trading-Strategy.md                    eng 0.17 False  script-units 0.17 False
+Multi-Target-EMA-Crossover-Trend-Following-Strategy.md       eng -0.07 False  script-units 0.50 False
+Multi-Timeframe-Donchian-Channel-and-ATR-Dynamic-Interval-Vo eng 0.75 True  script-units -0.38 True
+Multi-Timeframe-Moving-Average-Crossover-Strategy.md         eng -1.15 True  script-units -1.15 True
+Multi-Timeframe-Trend-Following-Strategy-with-ATR-Based-Take eng -0.29 False  script-units -0.29 False
+Multi-Timeframe-Trend-Following-with-Stochastic-Oscillator-S eng 0.25 True  script-units 0.47 True
+Multi-timeframe-RSICCIBollinger-Band-DCA-Strategy.md         eng 0.62 False  script-units 0.62 False
+NMVOB-S.md                                                   eng -0.74 True  script-units -0.74 True
+QFL-Oscillation-Stop-Loss-Moving-Average-Strategy.md         eng 0.36 False  script-units 0.36 False
+Quadruple-EMA-Indicators-Trading-Strategy.md                 eng 0.02 True  script-units -0.63 True
+RSI-Indicator-Based-Short-term-Trading-Strategy.md           eng 0.23 False  script-units 0.23 False
+RSI-Indicator-Grid-Trading-Strategy.md                       eng -0.32 False  script-units -0.32 False
+RSI-V-shaped-Pattern-Swing-Trading-Strategy.md               eng -0.25 True  script-units -0.25 True
+RSI-W-Pattern-Breakout-Strategy.md                           eng 0.32 True  script-units 0.32 True
+RSI2-Strategy-Intraday-Reversal-Win-Rate-Backtest.md         eng 0.20 False  script-units -0.40 True
+Reversal-Trading-Strategy-Based-on-Generalized-Support-Resis eng -0.47 False  script-units 1.27 False
+SSL-Channel-Dual-Tranche-Profit-Strategy.md                  eng 0.34 True  script-units 0.34 True
+Simple-Momentum-Strategy-Based-on-SMA-EMA-and-Volume.md      eng 0.66 True  script-units 0.27 True
+/home/user/algocide/results/pine_review/qtyunits_patch.py:152: RuntimeWarning: Mean of empty slice
+  row[m + "_score"] = np.nanmean([row.get(f"{m}_btc_sharpe", np.nan), row.get(f"{m}_eth_sharpe", np.nan)])
+Slow-Moving-Average-Strategy.md                              eng nan False  script-units nan False
+Starbucks-Bullish-Hammer-Trading-Strategy.md                 eng 0.52 True  script-units 0.52 True
+The-Dynamic-Box-Percentage-Tracking-Strategy.md              eng 0.53 False  script-units 0.53 False
+Trading-Strategy-Based-on-MACD-and-RSI-Crossover-Signals.md  eng 0.36 True  script-units 0.36 True
+Trailing-Take-Profit-Trailing-Stop-Loss-Strategy.md          eng -0.07 True  script-units -0.07 True
+Trend-Following-Grid-Strategy.md                             eng 0.36 False  script-units 0.36 False
+Trend-Following-Moving-Average-Crossover-Trading-Strategy.md eng -0.09 True  script-units -0.09 True
+Triangle-Breakout-Trend-Following-Strategy.md                eng 0.31 True  script-units 0.31 True
+Triple-Confirmation-Trend-Tracking-Strategy.md               eng 0.35 True  script-units 0.33 True
+Turnaround-After-Consolidation-Strategy.md                   eng 0.55 False  script-units 0.40 False
+VB-Strategy-Based-on-Volume-Balances.md                      eng -0.02 True  script-units -0.02 True
+/home/user/algocide/results/pine_review/qtyunits_patch.py:152: RuntimeWarning: Mean of empty slice
+  row[m + "_score"] = np.nanmean([row.get(f"{m}_btc_sharpe", np.nan), row.get(f"{m}_eth_sharpe", np.nan)])
+X48-DayLight-Hunter-Strategy-Optimization-and-Adaptation.md  eng nan False  script-units nan False
+ZVWAP-Strategy-Based-on-Z-Distance-from-VWAP.md              eng 0.57 False  script-units 0.57 False
+94 scripts run; 38 change score; eligible engine 44 vs script units 47

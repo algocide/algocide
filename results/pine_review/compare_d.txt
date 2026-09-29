@@ -1,0 +1,5 @@
+== d: Multi-Trend-Crossover-Strategy.md
+bars: mine 16776 (2021-01-01 00:00:00 .. 2026-09-28 21:00:00), engine 16776; same open times: True
+final equity: mine 2707250.955637, engine 2707250.955637; max rel diff 0.000e+00 at bar 0 (2021-01-01 00:00:00)
+closed trades: mine 95, engine 95
+trade mismatches: 0

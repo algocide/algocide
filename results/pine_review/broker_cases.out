@@ -1,0 +1,43 @@
+== stop_limit_entry: Buy stop-limit (stop 105 above the market, limit 106). TradingView: nothing happens until price reaches the stop (bar 4), then a buy limit at 106 fills at about 105. Engine: the limit leg alone is 'marketable' at the next open, so it buys at 100 on bar 1 - before and without the breakout.
+    open   L entry bar 1 @ 100.00, qty +100.0000
+== stop_limit_entry_short: Sell stop-limit for a breakdown (stop 95, limit 94). TradingView: waits for 95. Engine: sells at the next open.
+    open   S entry bar 1 @ 100.00, qty -100.0000
+== close_with_script_qty: Script enters with qty=2 (its own units) and takes half off with strategy.close(qty=1). The tournament resizes the entry to 100% of equity (100 units at price 100) but keeps the close's absolute qty: 1 unit (1%) is closed instead of half. Repeated every bar, the script's 'close the second half' also only takes 1 unit.
+    closed L entry bar 1 @ 100.00 -> exit bar 3 @ 101.00, qty +1.0000
+    closed L entry bar 1 @ 100.00 -> exit bar 4 @ 102.00, qty +1.0000
+    closed L entry bar 1 @ 100.00 -> exit bar 5 @ 103.00, qty +1.0000
+    open   L entry bar 1 @ 100.00, qty +97.0000
+== exit_with_script_qty: strategy.exit(qty=1) intended as 'half of my 2 units': engine closes 1 unit of a 100-unit position.
+    closed L entry bar 1 @ 100.00 -> exit bar 3 @ 105.00, qty +1.0000
+    open   L entry bar 1 @ 100.00, qty +99.0000
+== order_with_script_qty: strategy.order('S', short, qty=2) used to flatten a 2-unit long: engine keeps 98 of 100 units long.
+    closed B entry bar 1 @ 100.00 -> exit bar 3 @ 100.00, qty +2.0000
+    open   B entry bar 1 @ 100.00, qty +98.0000
+== exit_qty_per_trade_pyramid: Two pyramided entries; one strategy.exit(qty=10) without from_entry. TradingView closes 10 units of the position; the engine creates the exit per trade and closes 10 units of each (20).
+    closed L0 entry bar 1 @ 100.00 -> exit bar 4 @ 105.00, qty +10.0000
+    closed L1 entry bar 2 @ 100.00 -> exit bar 4 @ 105.00, qty +10.0000
+    open   L0 entry bar 1 @ 100.00, qty +40.0000
+    open   L1 entry bar 2 @ 100.00, qty +40.0000
+== trailing_activation_from_pre_entry_price: Buy limit at 95 fills on the falling leg of bar 1 (open 100 -> low 94); the trailing exit (activate at +3 = 98, offset 1) is activated by the leg's *start* (100, before the fill), so the trailing stop sits at 99 right away even though price never traded above 95 after the entry until later. With magnifier-off OHLC paths.
+    closed L entry bar 1 @ 95.00 -> exit bar 2 @ 96.00, qty +105.2632
+== exit_with_from_entry_before_entry: strategy.exit('X', 'L', limit=110) is called once while flat (bar 0); the entry 'L' is created on bar 2. Engine (ledger item 37 rule): the exit does not cover the later entry, so the 111 high is ignored. TradingView's reference says an exit generated before its entry fills waits for the entry.
+    open   L entry bar 3 @ 100.00, qty +100.0000
+== poc_entry_and_exit_same_bar: process_orders_on_close: entry at bar 1's close; a stop placed on the same bar must only act from bar 2.
+    closed L entry bar 1 @ 100.00 -> exit bar 2 @ 95.00, qty +100.0000
+== reversal_fees: Reversal pays two fees (close + open) at 7 bps each.
+    closed L entry bar 1 @ 100.00 -> exit bar 2 @ 100.00, qty +100.0000
+    open   S entry bar 2 @ 100.00, qty -99.8600
+    fees paid 20.9902 (expected 10000*0.0007 + 2*~9993*0.0007 ~ 20.99)
+== funding_sign: Long through a +0.1% funding bar pays 0.1% of notional; short receives it.
+    long: funding paid +10.00, final equity 9990.00
+    short: funding paid -10.00, final equity 10010.00
+== close_then_entry_same_bar: strategy.close('L') and strategy.entry('L') on the same bar: TradingView and engine both close and re-open at the next open (two fills).
+    closed L entry bar 1 @ 100.00 -> exit bar 2 @ 100.00, qty +100.0000
+    open   L entry bar 2 @ 100.00, qty +100.0000
+== limit_entry_touch: A buy limit fills when the low merely touches it (TradingView's backtest rule; optimistic for limit fills).
+    open   L entry bar 1 @ 95.00, qty +105.2632
+== stale_levels_when_exit_turns_na: strategy.exit re-issued each bar with levels from position_avg_price; when flat the call has na levels and is ignored, so the previous exit object (old levels) stays stored. The scope rule must keep it off the next position.
+    closed L entry bar 1 @ 100.00 -> exit bar 3 @ 120.00, qty +100.0000
+    open   L entry bar 5 @ 130.00, qty +92.3077
+== magnifier_marketable_exit_intrabar: Stop entry fills mid-minute at 101; its stop-loss (100.5 - above? no: 101.5 via stop=high of bar 0 + 1) is already through the market right after the fill. With the magnifier it fills at the next minute's open.
+    closed L entry bar 1 @ 101.00 -> exit bar 1 @ 101.10, qty +99.0099

@@ -1,0 +1,5 @@
+== vwaprsi: VWAP-and-RSI-Crossover-Strategy.md
+bars: mine 1048 (2021-01-01 00:00:00 .. 2026-09-26 00:00:00), engine 1048; same open times: True
+final equity: mine 34576.255051, engine 34576.255051; max rel diff 0.000e+00 at bar 0 (2021-01-01 00:00:00)
+closed trades: mine 101, engine 101
+trade mismatches: 0

@@ -41,6 +41,31 @@ one conditional paper test, a watch list. AgenKit (the harness the prompt names)
 from the sandbox; the Jev adapter's wire format is inferred and fails closed, and the six-phase discipline was
 followed by hand. Nothing live was run.
 
+## Session 2026-09-29: the "best 10" Pine Scripts in The Quant Trading Vault
+
+A widely shared post points at a vault of 5,800+ trading strategies (5,283 of them Pine Script, a repackaging of FMZ's
+public library). All 5,283 Pine files were backtested here on Binance BTC and ETH perpetuals, 2021 to 2026-09, with
+costs and funding, and ranked by their Sharpe ratio after the date each was published (rules fixed in advance in
+`docs/pine/preregistration.md`). Read `docs/pine/report.md` first.
+
+| Path | Content |
+|---|---|
+| `docs/pine/report.md` | The top 10, how they were chosen, what went wrong on the way, caveats |
+| `docs/pine/preregistration.md` | The test, committed before any script ran |
+| `docs/research_ledger.md` (items 27-40) | Every run, bug, fix and post-hoc decision, in order |
+| `src/pinebt/` | Pine Script v1-v6 to Python compiler, runtime and TradingView-style broker emulator with a 1-minute bar magnifier |
+| `experiments/pine/` | Index, download, tournament, evaluation, audit, comparison and report scripts |
+| `results/pine_final/` | Final ranking with 1-minute fills, hand review, audit (SOL, doubled costs, per-year, charts) |
+| `results/pine_plain/` | The same rules with TradingView's own fill model (the pre-registered view) |
+| `results/pine_review/` | Independent review: 13 candidates rebuilt from source and matched trade for trade |
+| `tests/test_pinebt.py` | 29 tests: parser, series semantics, indicators, fills, exit scope, magnifier |
+
+**Bottom line of that session:** the ten best scripts are simple ones (moving-average and ATR crossovers, an RSI(2)
+dip-buyer, a weekday effect), none of them beats what luck alone would produce among 3,507 candidates, and the median
+script loses money after costs. Scored with TradingView's own fill model, the leaderboard was topped by fake
+winners (Sharpe up to 17) that lived off a straight-line assumption about prices inside each bar; with 1-minute fills
+every one of them loses money.
+
 ## What is in here
 
 | Path | Content |

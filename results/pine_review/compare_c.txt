@@ -1,0 +1,5 @@
+== c: Pivot-Based-Volume-Weighted-Breakout-Reversal-Strategy.md
+bars: mine 2097 (2021-01-01 00:00:00 .. 2026-09-28 00:00:00), engine 2097; same open times: True
+final equity: mine 13216.893150, engine 13216.893150; max rel diff 0.000e+00 at bar 0 (2021-01-01 00:00:00)
+closed trades: mine 121, engine 121
+trade mismatches: 0

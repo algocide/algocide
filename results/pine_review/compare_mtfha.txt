@@ -1,0 +1,5 @@
+== mtfha: Multi-Timeframe-Heikin-Ashi-Moving-Average-Trend-Following-Trading-System.md
+bars: mine 2097 (2021-01-01 00:00:00 .. 2026-09-28 00:00:00), engine 2097; same open times: True
+final equity: mine 16407.484384, engine 16407.484384; max rel diff 0.000e+00 at bar 0 (2021-01-01 00:00:00)
+closed trades: mine 169, engine 169
+trade mismatches: 0

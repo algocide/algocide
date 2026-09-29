@@ -9,3 +9,7 @@ data/forward/
 *.proposals.json.applied
 data/binance/
 data/pine/
+
+# Pine review: pickled engine runs and a duplicate evaluation (regenerable)
+results/pine_review/engine_runs/
+results/pine_review/t3_mag_eval/

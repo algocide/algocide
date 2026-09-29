@@ -1,0 +1,6 @@
+1h chart, D close: flags=[] values checked 3000, mismatches 0, of which equal to the still-forming HTF bar 0; first mismatch None
+1h chart, D high (lookahead_on requested): flags=['lookahead_on'] values checked 3000, mismatches 0, of which equal to the still-forming HTF bar 0; first mismatch None
+4h chart, D sma(close,3): flags=[] values checked 3000, mismatches 0, of which equal to the still-forming HTF bar 0; first mismatch None
+1d chart, W close: flags=[] values checked 2095, mismatches 0, of which equal to the still-forming HTF bar 0; first mismatch None
+1h chart, 240 close[1]: flags=[] values checked 3000, mismatches 0, of which equal to the still-forming HTF bar 0; first mismatch None
+v2 security (implicit lookahead on TradingView), 1h chart, D close: flags=[] values checked 3000, mismatches 0, of which equal to the still-forming HTF bar 0; first mismatch None

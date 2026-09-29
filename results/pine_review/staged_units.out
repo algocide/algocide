@@ -1,0 +1,6 @@
+                    sharpe      cagr       mdd  trades   days
+BTCUSDT engine    0.829740  0.124749 -0.103208   158.0  580.0
+        fraction  1.329020  0.106571 -0.033700    25.0  580.0
+ETHUSDT engine    1.287350  0.634873 -0.439160   271.0  580.0
+        fraction  0.822634  0.071290 -0.071271    18.0  580.0
+score (mean OOS Sharpe BTC/ETH): {'engine': np.float64(1.0585452142694058), 'fraction': np.float64(1.0758267116916327)}

@@ -1,0 +1,5 @@
+== tuesday: Turnaround-Tuesday-Strategy-Weekend-Filter.md
+bars: mine 25164 (2021-01-01 00:00:00 .. 2026-09-28 22:00:00), engine 25164; same open times: True
+final equity: mine 18963.213866, engine 18963.213866; max rel diff 0.000e+00 at bar 0 (2021-01-01 00:00:00)
+closed trades: mine 120, engine 120
+trade mismatches: 0

@@ -1,0 +1,5 @@
+== b: RSI2-Based-Dynamic-Breakout-Trading-Strategy-with-Moving-Average-Filter-System.md
+bars: mine 2097 (2021-01-01 00:00:00 .. 2026-09-28 00:00:00), engine 2097; same open times: True
+final equity: mine 8989.006236, engine 8989.006236; max rel diff 0.000e+00 at bar 0 (2021-01-01 00:00:00)
+closed trades: mine 87, engine 87
+trade mismatches: 0

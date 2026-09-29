@@ -1,0 +1,4 @@
+hma(9): max |engine - floor(sqrt) reference| / price = 4.23e-16
+hma(14): max |engine - floor(sqrt) reference| / price = 1.71e-02
+hma(21): max |engine - floor(sqrt) reference| / price = 1.37e-02
+hma(55): max |engine - floor(sqrt) reference| / price = 4.94e-16

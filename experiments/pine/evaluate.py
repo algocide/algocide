@@ -103,6 +103,12 @@ def main():
         sk = sk[~sk.set_index(["file", "symbol"]).index.isin(meta.set_index(["file", "symbol"]).index)]
         meta = pd.concat([meta, sk], ignore_index=True)
     end_day = int(pd.Timestamp(a.end, tz="UTC").timestamp() * 1000) // DAY
+    # Before Pine v3, security() looked ahead by default: v1/v2/unversioned scripts calling it without a lookahead
+    # argument asked for lookahead_on implicitly (review finding F3, ledger item 39).
+    import re as _re
+    v2_default_lookahead = {f for f, r in idx.iterrows()
+                            if (pd.isna(r.version) or int(r.version) <= 2)
+                            and _re.search(r"\bsecurity\s*\(", r.source) and "lookahead" not in r.source}
     bh = {s: asset_daily(s) for s in meta.symbol.unique()}
     rows = []
     for m in meta.itertuples():
@@ -137,7 +143,11 @@ def main():
     E = []
     for f in files:
         b, e = piv["BTCUSDT"].loc[f], piv["ETHUSDT"].loc[f]
-        flags = b.flags if isinstance(b.flags, list) else []
+        # b["flags"], not b.flags: pandas objects have their own .flags attribute (ledger item 38)
+        fl = b["flags"]
+        flags = [str(x) for x in fl] if fl is not None and not isinstance(fl, float) else []
+        if f in v2_default_lookahead and "lookahead_on" not in flags:
+            flags += ["lookahead_on", "v2_security_default"]
         reasons = []
         for tag, r in (("BTC", b), ("ETH", e)):
             if r.status != "ok":

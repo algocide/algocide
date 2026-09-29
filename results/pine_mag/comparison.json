@@ -1,0 +1,206 @@
+{
+ "n_eligible_plain": 3674,
+ "n_eligible_mag": 3681,
+ "n_eligible_both": 3672,
+ "spearman_plain_vs_mag_score": 0.9352967134540167,
+ "median_score_change": 0.0,
+ "plain_top10_mean_score": 8.45859880492699,
+ "plain_top10_mean_mag_score": -6.84546392805718,
+ "plain_top10_still_eligible": 10,
+ "plain_top10_positive_mag_score": 0,
+ "plain_top50_positive_mag_score": 3,
+ "mag_top10": [
+  {
+   "file": "Pivot-Based-Volume-Weighted-Breakout-Reversal-Strategy.md",
+   "mag_rank": 1,
+   "mag_score": 1.7472790586523683,
+   "plain_score": 1.880387191684918,
+   "plain_rank": 45,
+   "plain_kept_position": 44
+  },
+  {
+   "file": "Dynamic-ATR-Trailing-Stop-Trading-Strategy-Market-Volatility-Adaptive-System.md",
+   "mag_rank": 2,
+   "mag_score": 1.49325442033426,
+   "plain_score": 1.49325442033426,
+   "plain_rank": 50,
+   "plain_kept_position": 49
+  },
+  {
+   "file": "RSI2-Based-Dynamic-Breakout-Trading-Strategy-with-Moving-Average-Filter-System.md",
+   "mag_rank": 3,
+   "mag_score": 1.2433674727707027,
+   "plain_score": 1.2433674727707027,
+   "plain_rank": 53,
+   "plain_kept_position": 52
+  },
+  {
+   "file": "Breakout-Zone-Momentum-Trading-Strategy.md",
+   "mag_rank": 4,
+   "mag_score": 1.223992311582284,
+   "plain_score": 1.223992311582284,
+   "plain_rank": 54,
+   "plain_kept_position": 53
+  },
+  {
+   "file": "Dual-Moving-Average-Golden-Cross-Algorithm.md",
+   "mag_rank": 5,
+   "mag_score": 1.1952934397120802,
+   "plain_score": 1.1952934397120802,
+   "plain_rank": 57,
+   "plain_kept_position": 56
+  },
+  {
+   "file": "Multi-Indicator-Crossover-Dynamic-Strategy-System-A-Quantitative-Trading-Model-Based-on-EMA-RVI-and-Trading-Signals.md",
+   "mag_rank": 6,
+   "mag_score": 1.194989952418224,
+   "plain_score": 1.1959902987814988,
+   "plain_rank": 56,
+   "plain_kept_position": 55
+  },
+  {
+   "file": "Multi-Trend-Crossover-Strategy.md",
+   "mag_rank": 7,
+   "mag_score": 1.1594121229840115,
+   "plain_score": 1.1594121229840115,
+   "plain_rank": 58,
+   "plain_kept_position": 57
+  },
+  {
+   "file": "Renko-Boxes-and-TEMA-Indicator-Micro-Profit-Strategy.md",
+   "mag_rank": 8,
+   "mag_score": 1.1141400171910891,
+   "plain_score": 1.1141400171910891,
+   "plain_rank": 60,
+   "plain_kept_position": 59
+  },
+  {
+   "file": "Bollinger-Percentage-Bands-Trading-Strategy.md",
+   "mag_rank": 9,
+   "mag_score": 1.1046426294488818,
+   "plain_score": 1.1046426294488818,
+   "plain_rank": 61,
+   "plain_kept_position": 60
+  },
+  {
+   "file": "Turnaround-Tuesday-Strategy-Weekend-Filter.md",
+   "mag_rank": 10,
+   "mag_score": 1.1040837862043846,
+   "plain_score": 1.1040837862043846,
+   "plain_rank": 62,
+   "plain_kept_position": 61
+  }
+ ],
+ "plain_top10": [
+  {
+   "file": "Multi-Indicator-Dynamic-Trailing-Stop-Trading-Strategy.md",
+   "plain_rank": 1,
+   "plain_score": 13.426353957907349,
+   "plain_btc": 9.308029346273884,
+   "plain_eth": 17.544678569540814,
+   "mag_score": -6.810442843305598,
+   "mag_eligible": true,
+   "mag_reasons": NaN,
+   "mag_rank": 3135
+  },
+  {
+   "file": "Open-Close-Cross-Moving-Average-Trend-Following-Strategy.md",
+   "plain_rank": 2,
+   "plain_score": 10.319255273975802,
+   "plain_btc": 10.650175586246444,
+   "plain_eth": 9.988334961705162,
+   "mag_score": -4.780104090502364,
+   "mag_eligible": true,
+   "mag_reasons": NaN,
+   "mag_rank": 2989
+  },
+  {
+   "file": "Multi-Timeframe-Moving-Average-Crossover-Optimization-Strategy.md",
+   "plain_rank": 3,
+   "plain_score": 9.67956981521999,
+   "plain_btc": 10.349364200818686,
+   "plain_eth": 9.009775429621294,
+   "mag_score": -3.15610328212131,
+   "mag_eligible": true,
+   "mag_reasons": NaN,
+   "mag_rank": 2798
+  },
+  {
+   "file": "Trend-Retracement-Trading-Strategy-Based-on-RSI-Indicator.md",
+   "plain_rank": 4,
+   "plain_score": 9.258147457724796,
+   "plain_btc": 9.07729772129167,
+   "plain_eth": 9.43899719415792,
+   "mag_score": -10.92885425623443,
+   "mag_eligible": true,
+   "mag_reasons": NaN,
+   "mag_rank": 3335
+  },
+  {
+   "file": "Multi-Timeframe-Trend-Breakout-Strategy-with-RSI-Filter-and-ATR-Based-Risk-Management.md",
+   "plain_rank": 5,
+   "plain_score": 8.372785674492949,
+   "plain_btc": 4.616926502650817,
+   "plain_eth": 12.128644846335082,
+   "mag_score": -10.38313631715313,
+   "mag_eligible": true,
+   "mag_reasons": NaN,
+   "mag_rank": 3321
+  },
+  {
+   "file": "Dynamic-EMA-Trend-Following-with-Volatility-Adaptive-Nasdaq-Futures-Trading-Strategy.md",
+   "plain_rank": 6,
+   "plain_score": 7.503057635507313,
+   "plain_btc": 5.0802736520832825,
+   "plain_eth": 9.925841618931342,
+   "mag_score": -4.5584767262526285,
+   "mag_eligible": true,
+   "mag_reasons": NaN,
+   "mag_rank": 2973
+  },
+  {
+   "file": "Multi-Moving-Average-Trend-Following-with-ATR-Risk-Management-Quantitative-Trading-Strategy.md",
+   "plain_rank": 7,
+   "plain_score": 7.243957277142933,
+   "plain_btc": 5.311750975257356,
+   "plain_eth": 9.17616357902851,
+   "mag_score": -13.103380577692544,
+   "mag_eligible": true,
+   "mag_reasons": NaN,
+   "mag_rank": 3400
+  },
+  {
+   "file": "Best-TradingView-Strategy.md",
+   "plain_rank": 8,
+   "plain_score": 6.397046734184547,
+   "plain_btc": 6.51460730403577,
+   "plain_eth": 6.279486164333324,
+   "mag_score": -6.569948882233749,
+   "mag_eligible": true,
+   "mag_reasons": NaN,
+   "mag_rank": 3120
+  },
+  {
+   "file": "RSI-Reversal-Trading-Strategy-432118.md",
+   "plain_rank": 9,
+   "plain_score": 6.290188305691657,
+   "plain_btc": 6.468314694092936,
+   "plain_eth": 6.112061917290379,
+   "mag_score": -4.821936376854473,
+   "mag_eligible": true,
+   "mag_reasons": NaN,
+   "mag_rank": 2993
+  },
+  {
+   "file": "RePaNoCHa-Quantitative-Trading-Strategy.md",
+   "plain_rank": 10,
+   "plain_score": 6.09562591742257,
+   "plain_btc": 5.836875225727065,
+   "plain_eth": 6.354376609118075,
+   "mag_score": -3.3422559282215785,
+   "mag_eligible": true,
+   "mag_reasons": NaN,
+   "mag_rank": 2824
+  }
+ ]
+}

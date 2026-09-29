@@ -1,0 +1,16 @@
+EMA-Trend-Following-Automated-Trading-Strategy.md
+                                oos_sharpe  oos_trades  all_trades
+BTCUSDT engine (stop OR limit)    0.682945        50.0       134.0
+        stop-limit (TV)          -0.318148        24.0        54.0
+ETHUSDT engine (stop OR limit)    0.637419        53.0       152.0
+        stop-limit (TV)                NaN         0.0        28.0
+engine (stop OR limit) score 0.6601818916068061
+stop-limit (TV) score nan
+Confirmed-SMA-Crossover-Momentum-Strategy.md
+                                oos_sharpe  oos_trades  all_trades
+BTCUSDT engine (stop OR limit)    0.136022        32.0        78.0
+        stop-limit (TV)           0.899246        14.0        40.0
+ETHUSDT engine (stop OR limit)    0.661930        28.0        69.0
+        stop-limit (TV)           0.139768        14.0        37.0
+engine (stop OR limit) score 0.3989756840013311
+stop-limit (TV) score 0.5195067221401946

@@ -1,0 +1,7 @@
+                                      BTC    ETH  score
+TP through 0 bps, stop slip 0 bps   1.379  2.115  1.747
+TP through 1 bps, stop slip 0 bps   1.379  2.115  1.747
+TP through 5 bps, stop slip 0 bps   1.379  2.115  1.747
+TP through 0 bps, stop slip 10 bps  1.266  2.031  1.648
+TP through 0 bps, stop slip 30 bps  1.049  1.865  1.457
+TP through 5 bps, stop slip 30 bps  1.049  1.865  1.457

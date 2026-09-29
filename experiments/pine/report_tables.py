@@ -32,16 +32,24 @@ def tf_label(ms):
     return str(ms)
 
 
+def short_share(d):
+    nl, ns = d.get("net_long"), d.get("net_short")
+    if nl is None or ns is None or (nl + ns) == 0:
+        return "n/a"
+    return "none" if ns == 0 and d.get("long_share") == 1.0 else pct(ns / (nl + ns))
+
+
 def top_table(top):
     out = ["| # | Script (vault file) | TF | Published | OOS days | OOS Sharpe BTC / ETH | Buy & hold Sharpe BTC / ETH | "
-           "OOS CAGR BTC / ETH | Max DD BTC / ETH | Trades BTC / ETH | DSR BTC / ETH |",
+           "OOS CAGR BTC / ETH | Max DD BTC / ETH | Trades BTC / ETH | Deflated Sharpe (null) BTC / ETH |",
            "|---|---|---|---|---|---|---|---|---|---|---|"]
     for k, r in enumerate(top.itertuples(), 1):
-        out.append(f"| {k} | `{r.file}` | {tf_label(r.tf_ms)} | {str(r.last_modified)[:10]} | {int(r.oos_days)} | "
+        lm = pd.to_datetime(r.last_modified, unit="ms") if isinstance(r.last_modified, (int, float)) else pd.to_datetime(r.last_modified)
+        out.append(f"| {k} | `{r.file}` | {tf_label(r.tf_ms)} | {str(lm)[:10]} | {int(r.oos_days)} | "
                    f"{num(r.oos_sharpe_btc)} / {num(r.oos_sharpe_eth)} | {num(r.bh_sharpe_btc)} / {num(r.bh_sharpe_eth)} | "
                    f"{pct(r.oos_cagr_btc)} / {pct(r.oos_cagr_eth)} | {pct(r.oos_mdd_btc)} / {pct(r.oos_mdd_eth)} | "
                    f"{int(r.oos_trades_btc)} / {int(r.oos_trades_eth)} | "
-                   f"{num(getattr(r, 'dsr_btc', float('nan')))} / {num(getattr(r, 'dsr_eth', float('nan')))} |")
+                   f"{num(getattr(r, 'dsr_null_btc', float('nan')))} / {num(getattr(r, 'dsr_null_eth', float('nan')))} |")
     return "\n".join(out)
 
 
@@ -50,7 +58,7 @@ def audit_tables(top, audit):
     rob = ["| # | Script | Beats B&H Sharpe on both | PSR BTC / ETH | Alpha/yr BTC / ETH | Beta BTC / ETH | "
            "SOL OOS Sharpe | OOS Sharpe at 2x costs BTC / ETH | Full 2021-26 Sharpe BTC / ETH |",
            "|---|---|---|---|---|---|---|---|---|"]
-    det = ["| # | Script | Long share of OOS trades | Net from longs / shorts (BTC) | Top-5 trades' share of net | "
+    det = ["| # | Script | Long share of OOS trades | Short side's share of net | Top-5 trades' share of net | "
            "Median hold (h) | Win rate | Static flags |",
            "|---|---|---|---|---|---|---|---|"]
     for k, r in enumerate(top.itertuples(), 1):
@@ -69,7 +77,7 @@ def audit_tables(top, audit):
         d = (a.get("BTCUSDT_fee7bps") or {}).get("oos_trades_detail") or {}
         flags = [f for f, v in a.get("static", {}).items() if v]
         det.append(f"| {k} | {a['name'][:60]} | {pct(d.get('long_share'))} | "
-                   f"{num(d.get('net_long'), 0)} / {num(d.get('net_short'), 0)} | {pct(d.get('top5_share_of_net'))} | "
+                   f"{short_share(d)} | {pct(d.get('top5_share_of_net'))} | "
                    f"{num(d.get('median_hold_h'), 1)} | {pct(d.get('win_rate'))} | {', '.join(flags) or 'none'} |")
     return "\n".join(rob), "\n".join(det)
 
@@ -91,7 +99,8 @@ def coverage(M):
 
 
 def main():
-    top = pd.read_json(os.path.join(R, "top10.json"))
+    ft = os.path.join(R, "final_top10.json")
+    top = pd.DataFrame(json.load(open(ft))["top"]) if os.path.exists(ft) else pd.read_json(os.path.join(R, "top10.json"))
     summ = json.load(open(os.path.join(R, "summary.json")))
     M = pd.read_parquet(os.path.join(R, "metrics.parquet"))
     print("## Top 10\n")
