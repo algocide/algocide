@@ -1,0 +1,432 @@
+{
+ "frozen_at": "2026-09-29T23:21:34Z",
+ "rule": "n >= 200, win rate > 57%, both halves above break-even 55.59% (models: on the last 30% of the research set)",
+ "n_candidates": 728,
+ "survivors": [
+  {
+   "family": "funding",
+   "params": {
+    "when": "post",
+    "k": 3,
+    "mode": 1
+   },
+   "n": 482,
+   "wins": 283,
+   "win_rate": 0.5871369294605809,
+   "n_h1": 388,
+   "wr_h1": 0.5850515463917526,
+   "n_h2": 94,
+   "wr_h2": 0.5957446808510638,
+   "id": "R0034",
+   "kind": "rule",
+   "sample": "research (all)",
+   "time": "2026-09-29T23:21:23Z",
+   "survivor": true,
+   "research_kelly_half": 0.035159335365159236
+  },
+  {
+   "family": "rsi",
+   "params": {
+    "col": "rsi3",
+    "lo": 10,
+    "mode": 1
+   },
+   "n": 11803,
+   "wins": 6777,
+   "win_rate": 0.5741760569346777,
+   "n_h1": 6288,
+   "wr_h1": 0.5586832061068703,
+   "n_h2": 5515,
+   "wr_h2": 0.5918404351767905,
+   "id": "R0049",
+   "kind": "rule",
+   "sample": "research (all)",
+   "time": "2026-09-29T23:21:23Z",
+   "survivor": true,
+   "research_kelly_half": 0.020576159734744467
+  },
+  {
+   "family": "rsi",
+   "params": {
+    "col": "rsi3",
+    "lo": 15,
+    "mode": 1
+   },
+   "n": 21660,
+   "wins": 12462,
+   "win_rate": 0.5753462603878117,
+   "n_h1": 11454,
+   "wr_h1": 0.5660904487515278,
+   "n_h2": 10206,
+   "wr_h2": 0.5857338820301783,
+   "id": "R0050",
+   "kind": "rule",
+   "sample": "research (all)",
+   "time": "2026-09-29T23:21:23Z",
+   "survivor": true,
+   "research_kelly_half": 0.021892836713571714
+  },
+  {
+   "family": "rsi",
+   "params": {
+    "col": "rsi3",
+    "lo": 20,
+    "mode": 1
+   },
+   "n": 33688,
+   "wins": 19243,
+   "win_rate": 0.5712123011161244,
+   "n_h1": 17581,
+   "wr_h1": 0.562482225129401,
+   "n_h2": 16107,
+   "wr_h2": 0.5807412926056994,
+   "id": "R0051",
+   "kind": "rule",
+   "sample": "research (all)",
+   "time": "2026-09-29T23:21:23Z",
+   "survivor": true,
+   "research_kelly_half": 0.0172414327291941
+  },
+  {
+   "family": "streak",
+   "params": {
+    "n": 5,
+    "mode": -1
+   },
+   "n": 5521,
+   "wins": 3166,
+   "win_rate": 0.5734468393406992,
+   "n_h1": 2875,
+   "wr_h1": 0.576695652173913,
+   "n_h2": 2646,
+   "wr_h2": 0.5699168556311414,
+   "id": "R0102",
+   "kind": "rule",
+   "sample": "research (all)",
+   "time": "2026-09-29T23:21:23Z",
+   "survivor": true,
+   "research_kelly_half": 0.019755666498311262
+  },
+  {
+   "family": "streak",
+   "params": {
+    "n": 6,
+    "mode": -1
+   },
+   "n": 2355,
+   "wins": 1373,
+   "win_rate": 0.5830148619957537,
+   "n_h1": 1217,
+   "wr_h1": 0.5809367296631059,
+   "n_h2": 1138,
+   "wr_h2": 0.5852372583479789,
+   "id": "R0103",
+   "kind": "rule",
+   "sample": "research (all)",
+   "time": "2026-09-29T23:21:23Z",
+   "survivor": true,
+   "research_kelly_half": 0.030521311676564696
+  },
+  {
+   "family": "streak",
+   "params": {
+    "n": 7,
+    "mode": -1
+   },
+   "n": 982,
+   "wins": 580,
+   "win_rate": 0.5906313645621182,
+   "n_h1": 510,
+   "wr_h1": 0.5843137254901961,
+   "n_h2": 472,
+   "wr_h2": 0.597457627118644,
+   "id": "R0104",
+   "kind": "rule",
+   "sample": "research (all)",
+   "time": "2026-09-29T23:21:23Z",
+   "survivor": true,
+   "research_kelly_half": 0.039091166398367606
+  },
+  {
+   "family": "streak",
+   "params": {
+    "n": 8,
+    "mode": -1
+   },
+   "n": 402,
+   "wins": 231,
+   "win_rate": 0.5746268656716418,
+   "n_h1": 212,
+   "wr_h1": 0.5849056603773585,
+   "n_h2": 190,
+   "wr_h2": 0.5631578947368421,
+   "id": "R0105",
+   "kind": "rule",
+   "sample": "research (all)",
+   "time": "2026-09-29T23:21:23Z",
+   "survivor": true,
+   "research_kelly_half": 0.021083395877506773
+  },
+  {
+   "id": "M-logit-0.56",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.56
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 10947,
+   "wins": 6278,
+   "win_rate": 0.5734904540056637,
+   "n_h1": 5557,
+   "wr_h1": 0.5664927118949074,
+   "n_h2": 5390,
+   "wr_h2": 0.5807050092764379,
+   "survivor": true,
+   "research_kelly_half": 0.01980474037956174
+  },
+  {
+   "id": "M-logit-0.57",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.57
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 7850,
+   "wins": 4573,
+   "win_rate": 0.5825477707006369,
+   "n_h1": 3963,
+   "wr_h1": 0.5745647236941711,
+   "n_h2": 3887,
+   "wr_h2": 0.590686905068176,
+   "survivor": true,
+   "research_kelly_half": 0.02999575489954117
+  },
+  {
+   "id": "M-logit-0.58",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.58
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 5335,
+   "wins": 3147,
+   "win_rate": 0.5898781630740394,
+   "n_h1": 2689,
+   "wr_h1": 0.5797694310152472,
+   "n_h2": 2646,
+   "wr_h2": 0.600151171579743,
+   "survivor": true,
+   "research_kelly_half": 0.03824368722103674
+  },
+  {
+   "id": "M-logit-0.59",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.59
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 3471,
+   "wins": 2070,
+   "win_rate": 0.5963699222126189,
+   "n_h1": 1760,
+   "wr_h1": 0.5880681818181818,
+   "n_h2": 1711,
+   "wr_h2": 0.6049094097019287,
+   "survivor": true,
+   "research_kelly_half": 0.04554801518808127
+  },
+  {
+   "id": "M-logit-0.60",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.6
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 2114,
+   "wins": 1277,
+   "win_rate": 0.6040681173131505,
+   "n_h1": 1059,
+   "wr_h1": 0.5826251180358829,
+   "n_h2": 1055,
+   "wr_h2": 0.6255924170616114,
+   "survivor": true,
+   "research_kelly_half": 0.054209787839874804
+  },
+  {
+   "id": "M-logit-0.61",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.61
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 1234,
+   "wins": 765,
+   "win_rate": 0.619935170178282,
+   "n_h1": 598,
+   "wr_h1": 0.5869565217391305,
+   "n_h2": 636,
+   "wr_h2": 0.6509433962264151,
+   "survivor": true,
+   "research_kelly_half": 0.07206290831512331
+  },
+  {
+   "id": "M-logit-0.62",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.62
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 660,
+   "wins": 410,
+   "win_rate": 0.6212121212121212,
+   "n_h1": 317,
+   "wr_h1": 0.5899053627760252,
+   "n_h2": 343,
+   "wr_h2": 0.6501457725947521,
+   "survivor": true,
+   "research_kelly_half": 0.07349969439265779
+  },
+  {
+   "id": "M-lgbm-0.57",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.57
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 9442,
+   "wins": 5443,
+   "win_rate": 0.5764668502435925,
+   "n_h1": 4858,
+   "wr_h1": 0.5710168793742281,
+   "n_h2": 4584,
+   "wr_h2": 0.5822425828970331,
+   "survivor": true,
+   "research_kelly_half": 0.023153689996701532
+  },
+  {
+   "id": "M-lgbm-0.58",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.58
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 6683,
+   "wins": 3901,
+   "win_rate": 0.5837198862786174,
+   "n_h1": 3416,
+   "wr_h1": 0.577576112412178,
+   "n_h2": 3267,
+   "wr_h2": 0.5901438628711356,
+   "survivor": true,
+   "research_kelly_half": 0.03131458334250846
+  },
+  {
+   "id": "M-lgbm-0.59",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.59
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 4623,
+   "wins": 2752,
+   "win_rate": 0.5952844473285746,
+   "n_h1": 2374,
+   "wr_h1": 0.5884582982308341,
+   "n_h2": 2249,
+   "wr_h2": 0.6024899955535794,
+   "survivor": true,
+   "research_kelly_half": 0.04432667219247774
+  },
+  {
+   "id": "M-lgbm-0.60",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.6
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 3126,
+   "wins": 1893,
+   "win_rate": 0.6055662188099808,
+   "n_h1": 1604,
+   "wr_h1": 0.5960099750623441,
+   "n_h2": 1522,
+   "wr_h2": 0.6156373193166885,
+   "survivor": true,
+   "research_kelly_half": 0.05589540562500475
+  },
+  {
+   "id": "M-lgbm-0.61",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.61
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 2010,
+   "wins": 1252,
+   "win_rate": 0.6228855721393035,
+   "n_h1": 1033,
+   "wr_h1": 0.6060019361084221,
+   "n_h2": 977,
+   "wr_h2": 0.6407369498464688,
+   "survivor": true,
+   "research_kelly_half": 0.07538260997038652
+  },
+  {
+   "id": "M-lgbm-0.62",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.62
+   },
+   "sample": "research, last 30% (model fitted on the first 70%)",
+   "time": "2026-09-29T23:21:23Z",
+   "n": 1247,
+   "wins": 778,
+   "win_rate": 0.623897353648757,
+   "n_h1": 649,
+   "wr_h1": 0.5947611710323575,
+   "n_h2": 598,
+   "wr_h2": 0.6555183946488294,
+   "survivor": true,
+   "research_kelly_half": 0.07652103544463427
+  }
+ ],
+ "models": {
+  "logit": {
+   "test_rank_corr": 0.09131806335849008,
+   "n_train": 93891,
+   "n_test": 40259,
+   "best_iteration": 0
+  },
+  "lgbm": {
+   "test_rank_corr": 0.09288149057479304,
+   "n_train": 93891,
+   "n_test": 40259,
+   "best_iteration": 336
+  }
+ }
+}

@@ -1,0 +1,11 @@
+{
+ "n_candles": 201312,
+ "n_research": 134208,
+ "n_holdout": 67104,
+ "research_from": "2021-01-01 00:00:00",
+ "research_to": "2024-10-29 23:45:00",
+ "holdout_from": "2024-10-30 00:00:00",
+ "holdout_to": "2026-09-28 23:45:00",
+ "holdout_sha256": "d03048329b9d6faa64c8375371b92098ae2b8781a21cd89debd8f6bb9ca44056",
+ "dropped_incomplete": 0
+}
