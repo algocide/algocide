@@ -1,0 +1,235 @@
+{
+ "note": "POST-HOC; holdout window only; rules only",
+ "sources": {
+  "spot": {
+   "n_candles": 67104,
+   "direction_agreement_with_perp": 0.9879440867906533,
+   "up_share": 0.5040981163567001,
+   "rules": [
+    {
+     "id": "R0034",
+     "family": "funding",
+     "params": {
+      "when": "post",
+      "k": 3,
+      "mode": 1
+     },
+     "own_n": 0,
+     "own_win_rate": null,
+     "perp_signal_settled_here_n": 15,
+     "perp_signal_settled_here_win_rate": 0.7333333333333333,
+     "perp_on_same_candles_win_rate": 0.7333333333333333
+    },
+    {
+     "id": "R0049",
+     "family": "rsi",
+     "params": {
+      "col": "rsi3",
+      "lo": 10,
+      "mode": 1
+     },
+     "own_n": 5850,
+     "own_win_rate": 0.5753846153846154,
+     "perp_signal_settled_here_n": 5836,
+     "perp_signal_settled_here_win_rate": 0.5757368060315284,
+     "perp_on_same_candles_win_rate": 0.5791638108293352
+    },
+    {
+     "id": "R0050",
+     "family": "rsi",
+     "params": {
+      "col": "rsi3",
+      "lo": 15,
+      "mode": 1
+     },
+     "own_n": 10994,
+     "own_win_rate": 0.5733127160269238,
+     "perp_signal_settled_here_n": 10969,
+     "perp_signal_settled_here_win_rate": 0.5716109034551919,
+     "perp_on_same_candles_win_rate": 0.5744370498678093
+    },
+    {
+     "id": "R0051",
+     "family": "rsi",
+     "params": {
+      "col": "rsi3",
+      "lo": 20,
+      "mode": 1
+     },
+     "own_n": 16997,
+     "own_win_rate": 0.5708654468435607,
+     "perp_signal_settled_here_n": 16962,
+     "perp_signal_settled_here_win_rate": 0.5699799551939629,
+     "perp_on_same_candles_win_rate": 0.5713948826789294
+    },
+    {
+     "id": "R0102",
+     "family": "streak",
+     "params": {
+      "n": 5,
+      "mode": -1
+     },
+     "own_n": 2706,
+     "own_win_rate": 0.5879526977087953,
+     "perp_signal_settled_here_n": 2693,
+     "perp_signal_settled_here_win_rate": 0.5874489417007055,
+     "perp_on_same_candles_win_rate": 0.5900482733011512
+    },
+    {
+     "id": "R0103",
+     "family": "streak",
+     "params": {
+      "n": 6,
+      "mode": -1
+     },
+     "own_n": 1115,
+     "own_win_rate": 0.5973094170403588,
+     "perp_signal_settled_here_n": 1104,
+     "perp_signal_settled_here_win_rate": 0.5969202898550725,
+     "perp_on_same_candles_win_rate": 0.5996376811594203
+    },
+    {
+     "id": "R0104",
+     "family": "streak",
+     "params": {
+      "n": 7,
+      "mode": -1
+     },
+     "own_n": 449,
+     "own_win_rate": 0.5746102449888641,
+     "perp_signal_settled_here_n": 442,
+     "perp_signal_settled_here_win_rate": 0.5678733031674208,
+     "perp_on_same_candles_win_rate": 0.5723981900452488
+    },
+    {
+     "id": "R0105",
+     "family": "streak",
+     "params": {
+      "n": 8,
+      "mode": -1
+     },
+     "own_n": 191,
+     "own_win_rate": 0.5706806282722513,
+     "perp_signal_settled_here_n": 189,
+     "perp_signal_settled_here_win_rate": 0.544973544973545,
+     "perp_on_same_candles_win_rate": 0.544973544973545
+    }
+   ]
+  },
+  "index": {
+   "n_candles": 67008,
+   "direction_agreement_with_perp": 0.9791965138490927,
+   "up_share": 0.5038204393505253,
+   "rules": [
+    {
+     "id": "R0034",
+     "family": "funding",
+     "params": {
+      "when": "post",
+      "k": 3,
+      "mode": 1
+     },
+     "own_n": 0,
+     "own_win_rate": null,
+     "perp_signal_settled_here_n": 15,
+     "perp_signal_settled_here_win_rate": 0.7333333333333333,
+     "perp_on_same_candles_win_rate": 0.7333333333333333
+    },
+    {
+     "id": "R0049",
+     "family": "rsi",
+     "params": {
+      "col": "rsi3",
+      "lo": 10,
+      "mode": 1
+     },
+     "own_n": 5986,
+     "own_win_rate": 0.5746742398930839,
+     "perp_signal_settled_here_n": 5828,
+     "perp_signal_settled_here_win_rate": 0.5737817433081674,
+     "perp_on_same_candles_win_rate": 0.5791008922443377
+    },
+    {
+     "id": "R0050",
+     "family": "rsi",
+     "params": {
+      "col": "rsi3",
+      "lo": 15,
+      "mode": 1
+     },
+     "own_n": 11077,
+     "own_win_rate": 0.5691974361289158,
+     "perp_signal_settled_here_n": 10955,
+     "perp_signal_settled_here_win_rate": 0.5696942035600182,
+     "perp_on_same_candles_win_rate": 0.5743496120492926
+    },
+    {
+     "id": "R0051",
+     "family": "rsi",
+     "params": {
+      "col": "rsi3",
+      "lo": 20,
+      "mode": 1
+     },
+     "own_n": 17134,
+     "own_win_rate": 0.567643282362554,
+     "perp_signal_settled_here_n": 16943,
+     "perp_signal_settled_here_win_rate": 0.5674909992327215,
+     "perp_on_same_candles_win_rate": 0.5713864132680163
+    },
+    {
+     "id": "R0102",
+     "family": "streak",
+     "params": {
+      "n": 5,
+      "mode": -1
+     },
+     "own_n": 2730,
+     "own_win_rate": 0.5871794871794872,
+     "perp_signal_settled_here_n": 2688,
+     "perp_signal_settled_here_win_rate": 0.5866815476190477,
+     "perp_on_same_candles_win_rate": 0.5904017857142857
+    },
+    {
+     "id": "R0103",
+     "family": "streak",
+     "params": {
+      "n": 6,
+      "mode": -1
+     },
+     "own_n": 1127,
+     "own_win_rate": 0.5838509316770186,
+     "perp_signal_settled_here_n": 1101,
+     "perp_signal_settled_here_win_rate": 0.5967302452316077,
+     "perp_on_same_candles_win_rate": 0.5994550408719346
+    },
+    {
+     "id": "R0104",
+     "family": "streak",
+     "params": {
+      "n": 7,
+      "mode": -1
+     },
+     "own_n": 469,
+     "own_win_rate": 0.5607675906183369,
+     "perp_signal_settled_here_n": 441,
+     "perp_signal_settled_here_win_rate": 0.564625850340136,
+     "perp_on_same_candles_win_rate": 0.5714285714285714
+    },
+    {
+     "id": "R0105",
+     "family": "streak",
+     "params": {
+      "n": 8,
+      "mode": -1
+     },
+     "own_n": 206,
+     "own_win_rate": 0.5485436893203883,
+     "perp_signal_settled_here_n": 189,
+     "perp_signal_settled_here_win_rate": 0.5396825396825397,
+     "perp_on_same_candles_win_rate": 0.544973544973545
+    }
+   ]
+  }
+ }
+}
