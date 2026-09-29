@@ -66,6 +66,16 @@ script loses money after costs. Scored with TradingView's own fill model, the le
 winners (Sharpe up to 17) that lived off a straight-line assumption about prices inside each bar; with 1-minute fills
 every one of them loses money.
 
+## Session 2026-09-30: ETH 15-minute up/down candles (1.8x payout, 0.06% fee)
+
+728 strategies were tested on the first two thirds of 2021-2026 Binance ETH data; the last third was hidden until
+the 21 survivors (win rate above 57%, break-even 55.59%) were committed, then opened once. 17 stayed above 57%: all
+of them bet that a stretched 15-minute move reverses (streak fades 59-60%, RSI(3) fades 57-58%, models 57-59%). The
+edge held on spot and index prices and in every year, but it is thin and sits in the first minute of the candle, and
+half Kelly drew down 36-97%. Start with `docs/eth15/report.md`; rules in `docs/eth15/plan.md`, every step in
+`docs/eth15/ledger.md`, control panel at <https://claude.ai/artifact/YAS7tESA11fJnXGVzmovYJ>
+(`results/eth15/control_panel.html`).
+
 ## What is in here
 
 | Path | Content |

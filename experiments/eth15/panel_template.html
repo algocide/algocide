@@ -1,0 +1,537 @@
+<title>ETH 15-Minute Bet Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one working column. Summary first (funnel), then one control row that scopes every chart and table below it,
+   then the selected strategy's bankroll, the survivor table, the evidence charts, the checks, the full log, the ledger. */
+:root {
+  --bg: #f3f5f3; --surface: #fcfdfc; --ink: #101613; --ink-2: #48514c; --muted: #7c857f;
+  --line: #dde2de; --line-strong: #c2cac5; --accent: #1d6b58; --accent-wash: rgba(29,107,88,0.08);
+  --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --band: #edf1ee;
+  --good: #0ca30c; --good-ink: #006300; --critical: #d03b3b; --serious: #c9672f;
+  --good-bg: rgba(12,163,12,0.10); --bad-bg: rgba(208,59,59,0.10); --warn-bg: rgba(236,131,90,0.16);
+  --shadow: 0 1px 2px rgba(16,22,19,0.06);
+  --f-display: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-body: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0e0d; --surface: #131816; --ink: #edf2ef; --ink-2: #b6bfba; --muted: #86908b;
+    --line: #242b28; --line-strong: #37403c; --accent: #5cc3a6; --accent-wash: rgba(92,195,166,0.10);
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --band: #19201d;
+    --good: #0ca30c; --good-ink: #3fcf3f; --critical: #e66767; --serious: #ec835a;
+    --good-bg: rgba(12,163,12,0.16); --bad-bg: rgba(230,103,103,0.14); --warn-bg: rgba(236,131,90,0.16);
+    --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b0e0d; --surface: #131816; --ink: #edf2ef; --ink-2: #b6bfba; --muted: #86908b;
+  --line: #242b28; --line-strong: #37403c; --accent: #5cc3a6; --accent-wash: rgba(92,195,166,0.10);
+  --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --band: #19201d;
+  --good: #0ca30c; --good-ink: #3fcf3f; --critical: #e66767; --serious: #ec835a;
+  --good-bg: rgba(12,163,12,0.16); --bad-bg: rgba(230,103,103,0.14); --warn-bg: rgba(236,131,90,0.16);
+  --shadow: none; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 56px; display: grid; gap: 28px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(28px, 4.2vw, 40px); font-weight: 700; font-stretch: 82%; letter-spacing: -0.01em; }
+h2 { font-size: 19px; font-weight: 650; font-stretch: 88%; }
+h3 { font-size: 15px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font-family: var(--f-data); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.lede { color: var(--ink-2); font-size: 16px; }
+.num, .data { font-family: var(--f-data); }
+.muted { color: var(--muted); }
+header { display: grid; gap: 10px; }
+
+.funnel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 4px; box-shadow: var(--shadow); min-width: 0; }
+.tile .label { font-size: 13px; color: var(--ink-2); }
+.tile .value { font-size: 30px; font-weight: 650; font-stretch: 85%; font-family: var(--f-display); }
+.tile .sub { font-size: 12.5px; color: var(--muted); }
+.tile.key { border-color: var(--accent); }
+@media (max-width: 760px) { .funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.controls { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: end; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); }
+@media (min-width: 900px) { .controls { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; } }
+.ctl { display: grid; gap: 4px; min-width: 0; }
+.ctl label, .ctl .lbl { font-size: 12px; color: var(--ink-2); }
+.ctl select, .ctl input[type=number] { font: inherit; font-size: 14px; color: var(--ink); background: var(--bg); border: 1px solid var(--line-strong); border-radius: 7px; padding: 6px 8px; }
+.ctl select { max-width: 340px; }
+.ctl input[type=number] { width: 92px; font-family: var(--f-data); }
+.ctl input[type=range] { width: 160px; accent-color: var(--accent); }
+.seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 7px; overflow: hidden; }
+.seg button { font: inherit; font-size: 13px; padding: 6px 10px; border: 0; background: var(--bg); color: var(--ink-2); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--surface); }
+button.ghost { font: inherit; font-size: 13px; padding: 6px 10px; border: 1px solid var(--line-strong); border-radius: 7px; background: transparent; color: var(--ink-2); cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 14px; min-width: 0; box-shadow: var(--shadow); }
+.card-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; align-items: baseline; }
+.rule { font-size: 14px; color: var(--ink-2); }
+.main { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); gap: 18px; }
+@media (max-width: 900px) { .main { grid-template-columns: minmax(0, 1fr); } }
+.chart-box { position: relative; min-width: 0; }
+.chart-box svg { display: block; width: 100%; height: auto; overflow: visible; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-content: start; }
+.stat { border-top: 1px solid var(--line); padding-top: 8px; display: grid; gap: 2px; min-width: 0; }
+.stat .label { font-size: 12px; color: var(--ink-2); }
+.stat .value { font-size: 20px; font-weight: 600; font-family: var(--f-display); font-stretch: 88%; }
+.stat .sub { font-size: 12px; color: var(--muted); }
+.note { font-size: 13px; color: var(--ink-2); border-left: 2px solid var(--line-strong); padding-left: 10px; }
+.warn-note { border-left-color: var(--serious); }
+
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.chip svg { width: 11px; height: 11px; }
+.chip.pass { background: var(--good-bg); color: var(--good-ink); }
+.chip.fail { background: var(--bad-bg); color: var(--critical); }
+.chip.warn { background: var(--warn-bg); color: var(--serious); }
+
+.table-wrap { overflow-x: auto; min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; font-weight: 600; color: var(--ink-2); white-space: nowrap; position: sticky; top: 0; background: var(--surface); }
+td.n, th.n { text-align: right; font-family: var(--f-data); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tbody tr { cursor: default; }
+#surv tbody tr { cursor: pointer; }
+#surv tbody tr:hover { background: var(--accent-wash); }
+#surv tbody tr[aria-selected="true"] { background: var(--accent-wash); box-shadow: inset 3px 0 0 var(--accent); }
+td .rule-txt { color: var(--ink-2); font-size: 12.5px; }
+#surv td:first-child { min-width: 280px; }
+.id { font-family: var(--f-data); font-size: 12.5px; }
+.strong { font-weight: 650; }
+.below { color: var(--muted); }
+
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 8px; padding: 7px 9px; font-size: 12.5px; box-shadow: 0 4px 14px rgba(0,0,0,0.12); min-width: 150px; z-index: 3; }
+.tip .v { font-family: var(--f-data); font-weight: 600; font-size: 13.5px; }
+.tip .k { color: var(--ink-2); }
+
+.log-filters { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: end; }
+.log-filters input[type=search] { font: inherit; font-size: 14px; padding: 6px 8px; border: 1px solid var(--line-strong); border-radius: 7px; background: var(--bg); color: var(--ink); width: 220px; }
+.log-box { max-height: 460px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+th.sortable { cursor: pointer; }
+th.sortable:hover { color: var(--ink); }
+
+ol.ledger { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+ol.ledger li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+ol.ledger .t { font-family: var(--f-data); font-size: 12.5px; color: var(--muted); padding-top: 2px; }
+ol.ledger details summary { cursor: pointer; font-size: 14px; }
+ol.ledger details p { margin-top: 6px; font-size: 13.5px; color: var(--ink-2); max-width: none; }
+ol.ledger .dec { margin-top: 6px; font-size: 13.5px; }
+footer { font-size: 12.5px; color: var(--muted); display: grid; gap: 4px; }
+footer code, .path { font-family: var(--f-data); font-size: 12px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Binance ETHUSDT · 15-minute up/down · payout 1.8x · fee 0.06% · break-even 55.59%</div>
+    <h1>ETH 15-Minute Bet Desk</h1>
+    <p class="lede" id="lede"></p>
+  </header>
+
+  <section class="funnel" aria-label="Research funnel" id="funnel"></section>
+
+  <section class="controls" aria-label="Controls">
+    <div class="ctl"><label for="strat">Strategy</label><select id="strat"></select></div>
+    <div class="ctl"><label for="kelly">Kelly multiplier: <span class="num" id="kellyv"></span></label><input id="kelly" type="range" min="0.05" max="1" step="0.05" value="0.5"></div>
+    <div class="ctl"><label for="payout">Payout (x stake)</label><input id="payout" type="number" min="1.3" max="2.5" step="0.01" value="1.8"></div>
+    <div class="ctl"><label for="fee">Fee (% of stake)</label><input id="fee" type="number" min="0" max="2" step="0.01" value="0.06"></div>
+    <div class="ctl"><label for="start">Starting bankroll</label><input id="start" type="number" min="1" step="100" value="1000"></div>
+    <div class="ctl"><span class="lbl" id="period-lbl">Period</span><div class="seg" role="group" aria-labelledby="period-lbl"><button id="p-hold" aria-pressed="true">Holdout only</button><button id="p-all" aria-pressed="false">Research + holdout</button></div></div>
+    <div class="ctl"><span class="lbl">&nbsp;</span><button class="ghost" id="reset">Reset to the pre-registered terms</button></div>
+  </section>
+
+  <section class="card" aria-labelledby="sel-title">
+    <div class="card-head">
+      <div style="display:grid;gap:4px;min-width:0">
+        <h2 id="sel-title"></h2>
+        <div class="rule" id="sel-rule"></div>
+      </div>
+      <div id="sel-chip"></div>
+    </div>
+    <div class="main">
+      <div class="chart-box" id="eq-box"><svg id="eq" role="img" aria-label="Bankroll over time"></svg><div class="tip" id="eq-tip" hidden></div></div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <p class="note" id="sel-note"></p>
+  </section>
+
+  <section class="card" aria-labelledby="surv-title">
+    <div class="card-head"><h2 id="surv-title">The 21 survivors on candles they never saw</h2><span class="muted" style="font-size:13px">Click a row to chart it. Bankroll column uses the terms in the control row.</span></div>
+    <div class="table-wrap"><table id="surv"><thead><tr>
+      <th>Strategy</th><th class="n">Research win rate</th><th class="n">Holdout win rate</th><th class="n">95% interval</th><th class="n">p vs break-even</th><th>57% bar</th><th class="n">Stake per bet</th><th class="n">Holdout bankroll</th>
+    </tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="two">
+    <div class="card" aria-labelledby="sc-title">
+      <div class="card-head"><h2 id="sc-title">Research vs holdout win rate</h2></div>
+      <p class="muted" style="font-size:13px">Each dot is a survivor. On the diagonal the edge held exactly; below it, it faded. Rules with fewer than 100 holdout bets are left out (the funding rule: 15 bets).</p>
+      <div class="chart-box" id="sc-box"><svg id="sc" role="img" aria-label="Scatter of research against holdout win rates"></svg><div class="tip" id="sc-tip" hidden></div></div>
+      <div class="legend" id="sc-legend"></div>
+    </div>
+    <div class="card" aria-labelledby="hi-title">
+      <div class="card-head"><h2 id="hi-title">All candidates on the research set</h2></div>
+      <p class="muted" style="font-size:13px">Win rates of every candidate with at least 200 research bets (models: on the last 30% of the research set). Most sit near a coin flip.</p>
+      <div class="chart-box" id="hi-box"><svg id="hi" role="img" aria-label="Histogram of research win rates"></svg><div class="tip" id="hi-tip" hidden></div></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="ck-title">
+    <div class="card-head"><h2 id="ck-title">Checks run after the holdout was opened</h2><span class="chip warn"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1 11 11H1Z" fill="currentColor"/></svg>Post-hoc</span></div>
+    <p class="muted" style="font-size:13px">Holdout window only. Bold: above 57%. Grey: below the 55.59% break-even. The models are not in these checks because they also use perpetual volume, taker flow and BTC.</p>
+    <div class="two" style="gap:18px">
+      <div class="table-wrap"><h3 style="margin-bottom:8px">Other price sources</h3><table id="src"><thead><tr><th>Rule</th><th class="n">Perpetual</th><th class="n">Spot</th><th class="n">Index</th><th class="n">Perp signal, index settles</th></tr></thead><tbody></tbody></table></div>
+      <div class="table-wrap"><h3 style="margin-bottom:8px">Betting late (reference = price when the bet goes in)</h3><table id="lat"><thead><tr><th>Rule</th><th class="n">At the open</th><th class="n">+1 min</th><th class="n">+2 min</th><th class="n">+5 min</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="log-title">
+    <div class="card-head"><h2 id="log-title">Research log</h2><span class="muted" id="log-count" style="font-size:13px"></span></div>
+    <div class="log-filters">
+      <div class="ctl"><label for="fam">Family</label><select id="fam"></select></div>
+      <div class="ctl"><label for="q">Search</label><input id="q" type="search" placeholder="id or parameter"></div>
+      <div class="ctl"><label for="minn">Minimum bets</label><input id="minn" type="number" min="0" step="50" value="0"></div>
+      <div class="ctl"><label style="display:flex;gap:6px;align-items:center"><input id="only" type="checkbox"> Survivors only</label></div>
+    </div>
+    <div class="log-box"><table id="log"><thead><tr>
+      <th class="sortable" data-k="id">Id</th><th class="sortable" data-k="fam">Family</th><th>Parameters</th><th class="n sortable" data-k="n">Bets</th><th class="n sortable" data-k="wr">Win rate</th><th class="n sortable" data-k="h1">First half</th><th class="n sortable" data-k="h2">Second half</th><th>Survived</th>
+    </tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="card" aria-labelledby="led-title">
+    <div class="card-head"><h2 id="led-title">Ledger</h2><span class="muted" style="font-size:13px">Every step in order, times in UTC. The same text is in <span class="path">docs/eth15/ledger.md</span>.</span></div>
+    <ol class="ledger" id="ledger"></ol>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script type="application/json" id="data">__DATA__</script>
+<script>
+(function () {
+  "use strict";
+  const D = JSON.parse(document.getElementById("data").textContent);
+  const BE = D.break_even, BAR = D.bar, M15 = 900000;
+  const $ = (id) => document.getElementById(id);
+  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const pct = (x, d = 1) => (x == null || isNaN(x)) ? "n/a" : (100 * x).toFixed(d) + "%";
+  const money = (x) => {
+    if (x == null || isNaN(x)) return "n/a";
+    const a = Math.abs(x);
+    if (a >= 1e9) return "$" + (x / 1e9).toFixed(2) + "B";
+    if (a >= 1e6) return "$" + (x / 1e6).toFixed(2) + "M";
+    if (a >= 1e4) return "$" + (x / 1e3).toFixed(1) + "K";
+    return "$" + x.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  };
+  const dateStr = (ms) => new Date(ms).toISOString().slice(0, 16).replace("T", " ");
+  const el = (tag, attrs, text) => { const e = document.createElement(tag); if (attrs) for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
+  const NS = "http://www.w3.org/2000/svg";
+  const sv = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+  const famName = { rsi: "RSI(3) fade", streak: "Streak fade", funding: "Funding", logit: "Logistic model", lgbm: "LightGBM" };
+  const label = (s) => famName[s.family] + " · " + (s.family === "rsi" ? "RSI < " + s.params.lo : s.family === "streak" ? s.params.n + " in a row" : s.family === "funding" ? "> " + s.params.k + " bps" : "threshold " + s.params.threshold.toFixed(2));
+
+  function wilson(w, n) { if (!n) return [NaN, NaN]; const z = 1.96, p = w / n, den = 1 + z * z / n, mid = (p + z * z / (2 * n)) / den, half = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / den; return [mid - half, mid + half]; }
+  function kellyFull(p, payout, fee) { const a = payout - 1 - fee, c = 1 + fee; if (a <= 0) return 0; return Math.max(0, (p * a - (1 - p) * c) / (a * c)); }
+
+  // decode each survivor's bets once
+  const S = D.strategies.map((s) => {
+    const dec = (part, t0) => { const n = part.w.length, t = new Float64Array(n), w = new Uint8Array(n); let idx = 0; for (let i = 0; i < n; i++) { idx += part.d[i]; t[i] = t0 + idx * M15; w[i] = part.w.charCodeAt(i) === 49 ? 1 : 0; } return { t, w }; };
+    return Object.assign({}, s, { H: dec(s.hold, D.hold_t0), R: dec(s.res, D.res_t0) });
+  });
+  const byId = Object.fromEntries(S.map((s) => [s.id, s]));
+  const state = { id: null, mult: 0.5, payout: 1.8, fee: 0.0006, start: 1000, period: "hold" };
+
+  function path(s, st) {
+    const f = st.mult * kellyFull(s.research_wr, st.payout, st.fee), a = st.payout - 1 - st.fee, c = 1 + st.fee;
+    const parts = st.period === "all" ? [s.R, s.H] : [s.H];
+    let n = 0; for (const p of parts) n += p.w.length;
+    const t = new Float64Array(n), b = new Float64Array(n); let B = st.start, k = 0, wins = 0, peak = B, mdd = 0, run = 0, maxRun = 0;
+    const holdFrom = st.period === "all" ? s.R.w.length : 0;
+    for (const p of parts) for (let i = 0; i < p.w.length; i++) {
+      const w = p.w[i];
+      B = w ? B * (1 + f * a) : Math.max(0, B * (1 - f * c));
+      if (w) { run = 0; } else { run++; if (run > maxRun) maxRun = run; }
+      if (k >= holdFrom) wins += w;
+      peak = Math.max(peak, B); mdd = Math.min(mdd, peak > 0 ? B / peak - 1 : 0);
+      t[k] = p.t[i]; b[k] = B; k++;
+    }
+    return { t, b, f, a, c, n, mdd, maxRun, end: B };
+  }
+
+  // ---------------------------------------------------------------- header and funnel
+  const nCand = D.log.length, nSurv = S.length, nPass = S.filter((s) => s.passes).length, nBE = S.filter((s) => s.above_be).length;
+  $("lede").textContent = `${nCand} strategies tested on ${D.split.research_from.slice(0, 10)} to ${D.split.research_to.slice(0, 10)}. ${nSurv} cleared 57% there. ${nPass} stayed above 57% on the ${D.split.n_holdout.toLocaleString("en-US")} candles from ${D.split.holdout_from.slice(0, 10)} to ${D.split.holdout_to.slice(0, 10)}, which were hidden until the survivor list was committed.`;
+  const tiles = [
+    ["Candidates tested", nCand, "704 rules in 14 families, 24 model thresholds", false],
+    ["Cleared 57% on the research set", nSurv, "at least 200 bets, both halves above break-even", false],
+    ["Above 57% on hidden candles", nPass, `${nBE} of ${nSurv} above the 55.59% break-even`, true],
+    ["Hidden candles", D.split.n_holdout.toLocaleString("en-US"), "the last third, opened once at " + D.meta.validated_at.slice(11, 16) + " UTC", false],
+  ];
+  for (const [l, v, sub, key] of tiles) { const t = el("div", { class: "tile" + (key ? " key" : "") }); t.append(el("div", { class: "label" }, l), el("div", { class: "value" }, String(v)), el("div", { class: "sub" }, sub)); $("funnel").append(t); }
+
+  // ---------------------------------------------------------------- controls
+  // held above 57% first, then by the lower end of the 95% interval, so a handful of lucky bets does not top the list
+  const order = [...S].sort((x, y) => (y.passes - x.passes) || (y.ci[0] - x.ci[0]));
+  for (const s of order) $("strat").append(el("option", { value: s.id }, (s.passes ? "✓ " : "✕ ") + label(s) + " · holdout " + pct(s.hold_wr)));
+  const def = order.find((s) => s.family === "streak" && s.params.n === 6) || order[0];
+  state.id = def.id; $("strat").value = def.id;
+  const syncKelly = () => { $("kellyv").textContent = state.mult === 0.5 ? "0.50 (half Kelly)" : state.mult.toFixed(2); };
+  $("strat").addEventListener("change", (e) => { state.id = e.target.value; renderAll(); });
+  $("kelly").addEventListener("input", (e) => { state.mult = +e.target.value; syncKelly(); renderAll(); });
+  $("payout").addEventListener("input", (e) => { const v = +e.target.value; if (v > 1) { state.payout = v; renderAll(); } });
+  $("fee").addEventListener("input", (e) => { const v = +e.target.value; if (v >= 0) { state.fee = v / 100; renderAll(); } });
+  $("start").addEventListener("input", (e) => { const v = +e.target.value; if (v > 0) { state.start = v; renderAll(); } });
+  const setPeriod = (p) => { state.period = p; $("p-hold").setAttribute("aria-pressed", p === "hold"); $("p-all").setAttribute("aria-pressed", p === "all"); renderAll(); };
+  $("p-hold").addEventListener("click", () => setPeriod("hold"));
+  $("p-all").addEventListener("click", () => setPeriod("all"));
+  $("reset").addEventListener("click", () => { Object.assign(state, { mult: 0.5, payout: 1.8, fee: 0.0006, start: 1000 }); $("kelly").value = 0.5; $("payout").value = 1.8; $("fee").value = 0.06; $("start").value = 1000; syncKelly(); setPeriod("hold"); });
+  syncKelly();
+
+  // ---------------------------------------------------------------- chips
+  function chip(kind, text) {
+    const c = el("span", { class: "chip " + kind });
+    const svg = sv("svg", { viewBox: "0 0 12 12", "aria-hidden": "true" });
+    if (kind === "pass") svg.append(sv("path", { d: "M2 6.5 5 9.5 10.5 3", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round" }));
+    else if (kind === "fail") svg.append(sv("path", { d: "M3 3 9 9M9 3 3 9", fill: "none", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round" }));
+    else svg.append(sv("path", { d: "M6 1 11 11H1Z", fill: "currentColor" }));
+    c.append(svg, document.createTextNode(text));
+    return c;
+  }
+  const verdict = (s) => s.passes ? chip("pass", "Held above 57%") : s.above_be ? chip("warn", "Above break-even only") : chip("fail", "Failed");
+
+  // ---------------------------------------------------------------- bankroll chart
+  function niceLogTicks(lo, hi) {
+    const out = []; const steps = [1, 2, 5];
+    for (let e = Math.floor(lo) - 1; e <= Math.ceil(hi) + 1; e++) for (const m of steps) { const v = Math.log10(m) + e; if (v >= lo - 1e-9 && v <= hi + 1e-9) out.push(v); }
+    if (out.length > 9) return out.filter((v) => Math.abs(v - Math.round(v)) < 1e-9);
+    return out;
+  }
+  function renderEquity(s, P) {
+    const svg = $("eq"), box = $("eq-box"), W = Math.max(320, box.clientWidth), H = 330, m = { l: 62, r: 64, t: 14, b: 30 };
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.replaceChildren();
+    const iw = W - m.l - m.r, ih = H - m.t - m.b;
+    if (!P.n) { svg.append(sv("text", { x: W / 2, y: H / 2, "text-anchor": "middle", fill: css("--ink-2"), "font-size": 13 })); svg.lastChild.textContent = "No bets in this period."; return; }
+    const t0 = state.period === "all" ? D.res_t0 : D.hold_t0, t1 = P.t[P.n - 1];
+    const floor = Math.max(1e-2, state.start * 1e-4);
+    const lb = Array.from(P.b, (v) => Math.log10(Math.max(v, floor)));
+    let lo = Math.min(Math.log10(state.start), ...lb.filter((_, i) => i % Math.ceil(P.n / 4000) === 0)), hi = Math.max(Math.log10(state.start), ...lb.filter((_, i) => i % Math.ceil(P.n / 4000) === 0));
+    for (let i = 0; i < P.n; i++) { if (lb[i] < lo) lo = lb[i]; if (lb[i] > hi) hi = lb[i]; }
+    if (hi - lo < 0.2) { const mid = (hi + lo) / 2; lo = mid - 0.1; hi = mid + 0.1; }
+    const pad = (hi - lo) * 0.06; lo -= pad; hi += pad;
+    const X = (t) => m.l + (t - t0) / (t1 - t0 || 1) * iw, Y = (v) => m.t + (hi - v) / (hi - lo) * ih;
+    const ink2 = css("--ink-2"), muted = css("--muted"), line = css("--line"), strong = css("--line-strong"), s1 = css("--series-1"), surf = css("--surface");
+    if (state.period === "all") {
+      const hx = X(D.hold_t0);
+      svg.append(sv("rect", { x: hx, y: m.t, width: Math.max(0, m.l + iw - hx), height: ih, fill: css("--band") }));
+      svg.append(sv("line", { x1: hx, x2: hx, y1: m.t, y2: m.t + ih, stroke: strong, "stroke-width": 1 }));
+      const lab = sv("text", { x: hx + 6, y: m.t + 12, fill: ink2, "font-size": 11.5 }); lab.textContent = "hidden candles →"; svg.append(lab);
+      const lab2 = sv("text", { x: hx - 6, y: m.t + 12, fill: muted, "font-size": 11.5, "text-anchor": "end" }); lab2.textContent = "← research (in-sample)"; svg.append(lab2);
+    }
+    for (const v of niceLogTicks(lo, hi)) {
+      const y = Y(v); svg.append(sv("line", { x1: m.l, x2: m.l + iw, y1: y, y2: y, stroke: line, "stroke-width": 1 }));
+      const tx = sv("text", { x: m.l - 8, y: y + 4, "text-anchor": "end", fill: muted, "font-size": 11, "font-family": css("--f-data") }); tx.textContent = money(Math.pow(10, v)); svg.append(tx);
+    }
+    const ys = Y(Math.log10(state.start));
+    svg.append(sv("line", { x1: m.l, x2: m.l + iw, y1: ys, y2: ys, stroke: strong, "stroke-width": 1 }));
+    const years = []; for (let y = new Date(t0).getUTCFullYear() + 1; y <= new Date(t1).getUTCFullYear(); y++) years.push(y);
+    for (const yr of years) { const tt = Date.UTC(yr, 0, 1); const x = X(tt); if (x < m.l + 20 || x > m.l + iw - 10) continue; svg.append(sv("line", { x1: x, x2: x, y1: m.t + ih, y2: m.t + ih + 4, stroke: strong })); const tx = sv("text", { x, y: H - 10, "text-anchor": "middle", fill: muted, "font-size": 11, "font-family": css("--f-data") }); tx.textContent = yr; svg.append(tx); }
+    svg.append(sv("line", { x1: m.l, x2: m.l + iw, y1: m.t + ih, y2: m.t + ih, stroke: strong, "stroke-width": 1 }));
+    // min/max per pixel column keeps drawdowns visible after downsampling
+    const cols = Math.max(50, Math.round(iw)), pts = [];
+    let cur = -1, mn = null, mx = null;
+    const flush = () => { if (mn) { if (mn.i < mx.i) pts.push(mn, mx); else if (mx.i < mn.i) pts.push(mx, mn); else pts.push(mn); } };
+    for (let i = 0; i < P.n; i++) { const c = Math.floor((P.t[i] - t0) / (t1 - t0 || 1) * (cols - 1)); if (c !== cur) { flush(); cur = c; mn = mx = { i, v: lb[i] }; } else { if (lb[i] < mn.v) mn = { i, v: lb[i] }; if (lb[i] > mx.v) mx = { i, v: lb[i] }; } }
+    flush();
+    const start = [X(state.period === "all" ? P.t[0] : D.hold_t0), ys];
+    let d = `M${start[0].toFixed(1)},${start[1].toFixed(1)}`; for (const p of pts) d += `L${X(P.t[p.i]).toFixed(1)},${Y(p.v).toFixed(1)}`;
+    const area = d + `L${X(P.t[P.n - 1]).toFixed(1)},${(m.t + ih).toFixed(1)}L${start[0].toFixed(1)},${(m.t + ih).toFixed(1)}Z`;
+    svg.append(sv("path", { d: area, fill: s1, "fill-opacity": 0.1, stroke: "none" }));
+    svg.append(sv("path", { d, fill: "none", stroke: s1, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    const ex = X(P.t[P.n - 1]), ey = Y(lb[P.n - 1]);
+    svg.append(sv("circle", { cx: ex, cy: ey, r: 4, fill: s1, stroke: surf, "stroke-width": 2 }));
+    const el2 = sv("text", { x: ex + 8, y: ey + 4, fill: css("--ink"), "font-size": 12, "font-weight": 600, "font-family": css("--f-data") }); el2.textContent = money(P.end); svg.append(el2);
+    const cross = sv("line", { x1: 0, x2: 0, y1: m.t, y2: m.t + ih, stroke: strong, "stroke-width": 1, visibility: "hidden" }), dot = sv("circle", { r: 4, fill: s1, stroke: surf, "stroke-width": 2, visibility: "hidden" });
+    svg.append(cross, dot);
+    const hit = sv("rect", { x: m.l, y: m.t, width: iw, height: ih, fill: "transparent" }); svg.append(hit);
+    const tip = $("eq-tip");
+    const move = (ev) => {
+      const r = svg.getBoundingClientRect(), px = (ev.clientX - r.left) * (W / r.width), tt = t0 + (px - m.l) / iw * (t1 - t0);
+      let lo2 = 0, hi2 = P.n - 1; while (lo2 < hi2) { const mid = (lo2 + hi2) >> 1; if (P.t[mid] < tt) lo2 = mid + 1; else hi2 = mid; }
+      const i = lo2, x = X(P.t[i]), y = Y(lb[i]);
+      cross.setAttribute("x1", x); cross.setAttribute("x2", x); cross.setAttribute("visibility", "visible");
+      dot.setAttribute("cx", x); dot.setAttribute("cy", y); dot.setAttribute("visibility", "visible");
+      tip.replaceChildren(el("div", { class: "v" }, money(P.b[i])), el("div", { class: "k" }, "bet " + (i + 1).toLocaleString("en-US") + " of " + P.n.toLocaleString("en-US")), el("div", { class: "k" }, dateStr(P.t[i]) + " UTC"));
+      tip.hidden = false; const bx = box.getBoundingClientRect(); let left = ev.clientX - bx.left + 14; if (left > bx.width - 170) left -= 190; tip.style.left = left + "px"; tip.style.top = Math.max(0, ev.clientY - bx.top - 30) + "px";
+    };
+    hit.addEventListener("pointermove", move); hit.addEventListener("pointerleave", () => { tip.hidden = true; cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); });
+  }
+
+  function statCell(labelTxt, value, sub) { const d = el("div", { class: "stat" }); d.append(el("div", { class: "label" }, labelTxt), el("div", { class: "value" }, value), el("div", { class: "sub" }, sub || "")); return d; }
+
+  function renderSelected() {
+    const s = byId[state.id], P = path(s, state);
+    $("sel-title").textContent = label(s);
+    $("sel-rule").textContent = s.rule + " Id " + s.id + ".";
+    $("sel-chip").replaceChildren(verdict(s));
+    renderEquity(s, P);
+    const wr = s.hold_wr, ci = s.ci, a = state.payout - 1 - state.fee, c = 1 + state.fee;
+    const ev = wr * a - (1 - wr) * c, be = c / (a + c);
+    const bets = state.period === "all" ? P.n : s.hold_n;
+    const days = (P.t[P.n - 1] - (state.period === "all" ? D.res_t0 : D.hold_t0)) / 86400000;
+    $("stats").replaceChildren(
+      statCell("Holdout win rate", pct(wr), `95% interval ${pct(ci[0])} to ${pct(ci[1])}, ${s.hold_n.toLocaleString("en-US")} bets`),
+      statCell("Research win rate", pct(s.research_wr), `${s.research_n.toLocaleString("en-US")} bets; sets the Kelly stake`),
+      statCell("Stake per bet", pct(P.f, 2), `of bankroll (${state.mult.toFixed(2)} x Kelly at the research win rate)`),
+      statCell("Edge per $1 staked", (ev >= 0 ? "+" : "") + (100 * ev).toFixed(2) + "¢", `holdout win rate vs break-even ${pct(be, 2)}`),
+      statCell("Ending bankroll", money(P.end), `from ${money(state.start)} over ${bets.toLocaleString("en-US")} bets (${(bets / Math.max(1, days)).toFixed(1)} a day)`),
+      statCell("Worst drawdown", pct(P.mdd, 0), `longest losing run: ${P.maxRun} bets`),
+    );
+    const notes = [];
+    if (P.f === 0) notes.push("At these terms Kelly says do not bet: the research win rate does not beat break-even, so the line stays flat.");
+    if (state.period === "all") notes.push("The shaded part is the holdout. Everything left of the line is in-sample: these strategies were picked because they did well there.");
+    notes.push("Kelly assumes the research win rate is the true one and that one bet settles before the next. Bets here are placed at the candle open with no delay; the late-entry check below shows what a minute of latency costs.");
+    $("sel-note").textContent = notes.join(" ");
+    $("sel-note").classList.toggle("warn-note", P.f === 0);
+  }
+
+  // ---------------------------------------------------------------- survivors table
+  function renderSurvivors() {
+    const tb = $("surv").querySelector("tbody"); tb.replaceChildren();
+    for (const s of order) {
+      const P = path(s, Object.assign({}, state, { period: "hold" }));
+      const tr = el("tr", { tabindex: "0", "aria-selected": String(s.id === state.id) });
+      const c1 = el("td"); c1.append(el("div", { class: "strong" }, label(s)), el("div", { class: "rule-txt" }, s.rule)); tr.append(c1);
+      tr.append(el("td", { class: "n" }, pct(s.research_wr) + " · " + s.research_n.toLocaleString("en-US")));
+      tr.append(el("td", { class: "n strong" }, pct(s.hold_wr) + " · " + s.hold_n.toLocaleString("en-US")));
+      tr.append(el("td", { class: "n" }, pct(s.ci[0]) + "–" + pct(s.ci[1])));
+      tr.append(el("td", { class: "n" }, s.p < 1e-4 ? "<0.0001" : s.p.toFixed(4)));
+      const cv = el("td"); cv.append(verdict(s)); tr.append(cv);
+      tr.append(el("td", { class: "n" }, pct(P.f, 2)));
+      tr.append(el("td", { class: "n" }, money(P.end)));
+      const pick = () => { state.id = s.id; $("strat").value = s.id; renderAll(); $("sel-title").scrollIntoView({ behavior: "smooth", block: "center" }); };
+      tr.addEventListener("click", pick); tr.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(); } });
+      tb.append(tr);
+    }
+  }
+
+  // ---------------------------------------------------------------- scatter
+  function renderScatter() {
+    const svg = $("sc"), box = $("sc-box"), W = Math.max(300, box.clientWidth), H = 300, m = { l: 48, r: 16, t: 12, b: 36 };
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.replaceChildren();
+    const pts = S.filter((s) => s.hold_n >= 100);
+    const x0 = 0.55, x1 = 0.635, y0 = 0.535, y1 = 0.625, iw = W - m.l - m.r, ih = H - m.t - m.b;
+    const X = (v) => m.l + (v - x0) / (x1 - x0) * iw, Y = (v) => m.t + (y1 - v) / (y1 - y0) * ih;
+    const muted = css("--muted"), line = css("--line"), strong = css("--line-strong"), ink2 = css("--ink-2"), surf = css("--surface");
+    for (let v = 0.54; v <= 0.62 + 1e-9; v += 0.02) { const y = Y(v); svg.append(sv("line", { x1: m.l, x2: m.l + iw, y1: y, y2: y, stroke: line })); const t = sv("text", { x: m.l - 6, y: y + 4, "text-anchor": "end", fill: muted, "font-size": 11, "font-family": css("--f-data") }); t.textContent = (v * 100).toFixed(0) + "%"; svg.append(t); }
+    for (let v = 0.56; v <= 0.63 + 1e-9; v += 0.01) { const x = X(v); const t = sv("text", { x, y: H - 18, "text-anchor": "middle", fill: muted, "font-size": 11, "font-family": css("--f-data") }); t.textContent = (v * 100).toFixed(0) + "%"; svg.append(t); }
+    const xl = sv("text", { x: m.l + iw / 2, y: H - 2, "text-anchor": "middle", fill: ink2, "font-size": 11.5 }); xl.textContent = "Research win rate"; svg.append(xl);
+    const yl = sv("text", { x: 12, y: m.t + ih / 2, "text-anchor": "middle", fill: ink2, "font-size": 11.5, transform: `rotate(-90 12 ${m.t + ih / 2})` }); yl.textContent = "Holdout win rate"; svg.append(yl);
+    svg.append(sv("line", { x1: X(Math.max(x0, y0)), y1: Y(Math.max(x0, y0)), x2: X(Math.min(x1, y1)), y2: Y(Math.min(x1, y1)), stroke: strong }));
+    for (const [v, txt] of [[BAR, "57% bar"], [BE, "break-even"]]) { const y = Y(v); svg.append(sv("line", { x1: m.l, x2: m.l + iw, y1: y, y2: y, stroke: ink2, "stroke-width": 1, "stroke-opacity": 0.55 })); const t = sv("text", { x: m.l + iw - 4, y: y - 4, "text-anchor": "end", fill: ink2, "font-size": 11 }); t.textContent = txt; svg.append(t); }
+    const colorOf = (s) => s.family === "logit" ? css("--series-2") : s.family === "lgbm" ? css("--series-3") : css("--series-1");
+    const tip = $("sc-tip");
+    for (const s of pts) {
+      const cx = X(s.research_wr), cy = Y(s.hold_wr);
+      svg.append(sv("circle", { cx, cy, r: 5, fill: colorOf(s), stroke: surf, "stroke-width": 2 }));
+      const hit = sv("circle", { cx, cy, r: 12, fill: "transparent", tabindex: 0 }); svg.append(hit);
+      const show = () => { tip.replaceChildren(el("div", { class: "v" }, pct(s.hold_wr) + " holdout"), el("div", { class: "k" }, pct(s.research_wr) + " research"), el("div", { class: "k" }, label(s))); tip.hidden = false; const r = svg.getBoundingClientRect(), sc = r.width / W; let left = cx * sc + 12; if (left > r.width - 170) left -= 190; tip.style.left = left + "px"; tip.style.top = Math.max(0, cy * sc - 20) + "px"; };
+      hit.addEventListener("pointerenter", show); hit.addEventListener("focus", show);
+      hit.addEventListener("pointerleave", () => { tip.hidden = true; }); hit.addEventListener("blur", () => { tip.hidden = true; });
+      hit.addEventListener("click", () => { state.id = s.id; $("strat").value = s.id; renderAll(); });
+    }
+    const lg = $("sc-legend"); lg.replaceChildren();
+    for (const [name, v] of [["Rules (RSI, streak)", "--series-1"], ["Logistic model", "--series-2"], ["LightGBM", "--series-3"]]) { const sp = el("span"); const i = el("i"); i.style.background = css(v); sp.append(i, document.createTextNode(name)); lg.append(sp); }
+  }
+
+  // ---------------------------------------------------------------- histogram
+  function renderHist() {
+    const svg = $("hi"), box = $("hi-box"), W = Math.max(300, box.clientWidth), H = 300, m = { l: 44, r: 12, t: 16, b: 36 };
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.replaceChildren();
+    const vals = D.log.filter((r) => r.n >= D.min_bets && r.wr != null).map((r) => r.wr);
+    const lo = 0.42, hi = 0.64, bw = 0.005, nb = Math.round((hi - lo) / bw), counts = new Array(nb).fill(0);
+    for (const v of vals) { const k = Math.min(nb - 1, Math.max(0, Math.floor((v - lo) / bw))); counts[k]++; }
+    const cmax = Math.max(...counts), iw = W - m.l - m.r, ih = H - m.t - m.b;
+    const X = (v) => m.l + (v - lo) / (hi - lo) * iw, Y = (c) => m.t + ih - c / cmax * ih;
+    const muted = css("--muted"), line = css("--line"), ink2 = css("--ink-2"), s1 = css("--series-1");
+    const step = cmax > 100 ? 50 : cmax > 40 ? 20 : 10;
+    for (let c = 0; c <= cmax; c += step) { const y = Y(c); svg.append(sv("line", { x1: m.l, x2: m.l + iw, y1: y, y2: y, stroke: line })); const t = sv("text", { x: m.l - 6, y: y + 4, "text-anchor": "end", fill: muted, "font-size": 11, "font-family": css("--f-data") }); t.textContent = c; svg.append(t); }
+    const tip = $("hi-tip"), bwpx = iw / nb;
+    counts.forEach((c, k) => {
+      if (!c) return; const x = X(lo + k * bw) + 1, w = Math.max(1, Math.min(24, bwpx - 2)), y = Y(c), h = m.t + ih - y;
+      const r = Math.min(4, w / 2, h);
+      svg.append(sv("path", { d: `M${x},${m.t + ih}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${m.t + ih}Z`, fill: s1 }));
+      const hit = sv("rect", { x: x - 1, y: m.t, width: bwpx, height: ih, fill: "transparent" }); svg.append(hit);
+      hit.addEventListener("pointerenter", () => { tip.replaceChildren(el("div", { class: "v" }, c + " candidates"), el("div", { class: "k" }, pct(lo + k * bw) + " to " + pct(lo + (k + 1) * bw))); tip.hidden = false; const rr = svg.getBoundingClientRect(), sc = rr.width / W; let left = (x + w) * sc + 8; if (left > rr.width - 160) left -= 180; tip.style.left = left + "px"; tip.style.top = Math.max(0, y * sc - 10) + "px"; });
+      hit.addEventListener("pointerleave", () => { tip.hidden = true; });
+    });
+    svg.append(sv("line", { x1: m.l, x2: m.l + iw, y1: m.t + ih, y2: m.t + ih, stroke: css("--line-strong") }));
+    for (let v = 0.44; v <= 0.64 + 1e-9; v += 0.04) { const t = sv("text", { x: X(v), y: H - 18, "text-anchor": "middle", fill: muted, "font-size": 11, "font-family": css("--f-data") }); t.textContent = (v * 100).toFixed(0) + "%"; svg.append(t); }
+    const xl = sv("text", { x: m.l + iw / 2, y: H - 2, "text-anchor": "middle", fill: ink2, "font-size": 11.5 }); xl.textContent = "Win rate on the research set (" + vals.length + " candidates)"; svg.append(xl);
+    for (const [v, txt, dy] of [[0.5, "coin flip", 0], [BE, "break-even", 13], [BAR, "57% bar", 26]]) { const x = X(v); svg.append(sv("line", { x1: x, x2: x, y1: m.t, y2: m.t + ih, stroke: ink2, "stroke-opacity": 0.55 })); const t = sv("text", { x: x + 4, y: m.t + 10 + dy, fill: ink2, "font-size": 11 }); t.textContent = txt; svg.append(t); }
+  }
+
+  // ---------------------------------------------------------------- checks
+  function wrCell(v) { const td = el("td", { class: "n" + (v != null && v > BAR ? " strong" : "") + (v != null && v < BE ? " below" : "") }, v == null ? "n/a" : pct(v)); return td; }
+  function renderChecks() {
+    const src = D.sources.sources, tb = $("src").querySelector("tbody"); tb.replaceChildren();
+    const rules = src.spot.rules.filter((r) => r.family !== "funding");
+    for (const r of rules) {
+      const s = byId[r.id], ix = src.index.rules.find((x) => x.id === r.id);
+      const tr = el("tr"); tr.append(el("td", null, label(s)), wrCell(s.hold_wr), wrCell(r.own_win_rate), wrCell(ix.own_win_rate), wrCell(ix.perp_signal_settled_here_win_rate)); tb.append(tr);
+    }
+    const lt = $("lat").querySelector("tbody"); lt.replaceChildren();
+    for (const r of rules) {
+      const s = byId[r.id], tr = el("tr"); tr.append(el("td", null, label(s)));
+      for (const k of ["0min", "1min", "2min", "5min"]) { const x = D.latency.latency[k].find((y) => y.id === r.id); tr.append(wrCell(x ? x.win_rate : null)); }
+      lt.append(tr);
+    }
+  }
+
+  // ---------------------------------------------------------------- research log
+  const famSel = $("fam"); famSel.append(el("option", { value: "" }, "All families"));
+  for (const f of [...new Set(D.log.map((r) => r.fam))].sort()) famSel.append(el("option", { value: f }, f));
+  let sortK = "wr", sortDir = -1;
+  function renderLog() {
+    const q = $("q").value.trim().toLowerCase(), fam = famSel.value, only = $("only").checked, minn = +$("minn").value || 0;
+    let rows = D.log.filter((r) => (!fam || r.fam === fam) && (!only || r.surv) && r.n >= minn && (!q || (r.id + " " + r.params).toLowerCase().includes(q)));
+    rows.sort((a, b) => { const x = a[sortK], y = b[sortK]; if (x == null) return 1; if (y == null) return -1; return (x < y ? -1 : x > y ? 1 : 0) * sortDir; });
+    $("log-count").textContent = rows.length + " of " + D.log.length + " candidates";
+    const tb = $("log").querySelector("tbody"); tb.replaceChildren();
+    for (const r of rows) {
+      const tr = el("tr"); tr.append(el("td", { class: "id" }, r.id), el("td", null, r.fam), el("td", { class: "id" }, r.params), el("td", { class: "n" }, r.n.toLocaleString("en-US")), wrCell(r.wr), wrCell(r.h1), wrCell(r.h2));
+      const td = el("td"); if (r.surv) td.append(chip("pass", "Yes")); else td.append(el("span", { class: "muted" }, "No")); tr.append(td); tb.append(tr);
+    }
+  }
+  for (const id of ["q", "minn"]) $(id).addEventListener("input", renderLog);
+  for (const id of ["fam", "only"]) $(id).addEventListener("change", renderLog);
+  for (const th of document.querySelectorAll("#log th.sortable")) th.addEventListener("click", () => { const k = th.dataset.k; if (sortK === k) sortDir = -sortDir; else { sortK = k; sortDir = k === "id" || k === "fam" ? 1 : -1; } renderLog(); });
+
+  // ---------------------------------------------------------------- ledger and footer
+  for (const r of D.ledger) {
+    const li = el("li"); li.append(el("div", { class: "t" }, r.time));
+    const body = el("div"); const det = el("details"); const plain = r.item.replace(/\*\*/g, "").replace(/`/g, "");
+    const first = plain.split(/(?<=\.)\s/)[0];
+    det.append(el("summary", null, first)); if (plain.length > first.length) det.append(el("p", null, plain.slice(first.length).trim()));
+    body.append(det, el("div", { class: "dec" }, r.decision.replace(/\*\*/g, "").replace(/`/g, ""))); li.append(body); $("ledger").append(li);
+  }
+  const foot = $("foot");
+  foot.append(el("div", null, "Holdout SHA-256 " + D.split.holdout_sha256.slice(0, 16) + "… · survivors committed " + D.meta.survivors_commit.slice(0, 7) + " at " + D.meta.survivors_commit.slice(-14, -9) + " UTC · holdout opened " + D.meta.validated_at.slice(11, 16) + " UTC"));
+  foot.append(el("div", null, "Code: experiments/eth15/ (prepare, research, validate, posthoc_*, build_panel). Logs: results/eth15/research_log.jsonl, survivors.json, holdout_results.json, bets.json. Rules: docs/eth15/plan.md."));
+
+  function renderAll() { renderSelected(); renderSurvivors(); }
+  renderAll(); renderScatter(); renderHist(); renderChecks(); renderLog();
+  let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { renderSelected(); renderScatter(); renderHist(); }, 120); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { renderSelected(); renderScatter(); renderHist(); });
+})();
+</script>
