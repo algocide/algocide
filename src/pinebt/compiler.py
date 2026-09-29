@@ -317,6 +317,8 @@ class Compiler:
                             self.cfg["calc_on_every_tick"] = v.v
                     if fname == "strategy" and len(n.args) > 6 and isinstance(n.args[6], Num):
                         self.cfg["pyramiding"] = max(1, int(n.args[6].v))
+                if fname in ("math.random", "random"):
+                    self.flags.add("random_signal")      # results are one draw of a random process
                 if fname in ("request.security", "security"):
                     for k, v in n.kwargs:
                         if k == "lookahead" and dotted(v) in ("barmerge.lookahead_on",):

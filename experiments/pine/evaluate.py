@@ -59,6 +59,7 @@ def window_metrics(days, eq, trades, d0, d1, bh: pd.Series):
         tw = np.zeros((0, 6))
         exposure = 0.0
     nt = len(tw)
+    same_bar = float((tw[:, 0] == tw[:, 1]).mean()) if nt else np.nan
     wins = tw[:, 5][tw[:, 5] > 0].sum() if nt else 0.0
     losses = -tw[:, 5][tw[:, 5] < 0].sum() if nt else 0.0
     b = bh.reindex(np.arange(d0 - 1, d1 + 1)).ffill().to_numpy()
@@ -80,7 +81,8 @@ def window_metrics(days, eq, trades, d0, d1, bh: pd.Series):
             "profit_factor": float(wins / losses) if losses > 0 else (np.inf if wins > 0 else np.nan),
             "exposure": exposure, "bh_sharpe": float(bh_sharpe), "bh_cagr": float(bh_cagr), "beta": beta,
             "alpha": alpha, "corr_asset": corr, "skew": float(sps.skew(r)) if n > 2 else 0.0,
-            "kurt": float(sps.kurtosis(r, fisher=False)) if n > 3 else 3.0, "mean_d": float(mu), "sd_d": float(sd)}
+            "kurt": float(sps.kurtosis(r, fisher=False)) if n > 3 else 3.0, "mean_d": float(mu), "sd_d": float(sd),
+            "same_bar_share": same_bar}
 
 
 def main():
@@ -149,6 +151,9 @@ def main():
                 reasons.append(f"{tag}:trades<{MIN_TRADES}")
         if "lookahead_on" in flags:
             reasons.append("lookahead_on")
+        if "random_signal" in flags:
+            # POST-HOC (ledger item 37): found by hand-reading the magnified top 10 (a coin flip in the entry rule)
+            reasons.append("random_signal")
         E.append({"file": f, "eligible": not reasons, "reasons": ";".join(reasons),
                   "score": np.nanmean([b.get("oos_sharpe", np.nan), e.get("oos_sharpe", np.nan)]),
                   "oos_sharpe_btc": b.get("oos_sharpe", np.nan), "oos_sharpe_eth": e.get("oos_sharpe", np.nan),
@@ -164,6 +169,7 @@ def main():
                   "alpha_btc": b.get("oos_alpha", np.nan), "alpha_eth": e.get("oos_alpha", np.nan),
                   "is_alpha_btc": b.get("is_alpha", np.nan), "is_alpha_eth": e.get("is_alpha", np.nan),
                   "exposure_btc": b.get("oos_exposure", np.nan), "tf_ms": b.tf_ms, "flags": ",".join(flags),
+                  "same_bar_btc": b.get("oos_same_bar_share", np.nan), "same_bar_eth": e.get("oos_same_bar_share", np.nan),
                   "last_modified": b.last_modified})
     R = pd.DataFrame(E)
     el = R[R.eligible].sort_values("score", ascending=False).reset_index(drop=True)
@@ -197,11 +203,18 @@ def main():
     # ---- deflated Sharpe per asset (per-period SR, N = eligible count)
     n_el = len(el)
     out_top = []
+    robust_sd = {}
     for s, tag in (("BTCUSDT", "btc"), ("ETHUSDT", "eth")):
         srs = el[f"oos_sharpe_{tag}"].to_numpy() / math.sqrt(365)
         var_sr = float(np.var(srs, ddof=1)) if n_el > 1 else 0.0
+        # POST-HOC (ledger item 36): scripts that lose almost the same amount every day have near-zero volatility and
+        # Sharpe ratios near -1e14, which swamp the plain cross-sectional variance. The null version asks how good the
+        # best of n_el skill-less strategies would look by chance: under SR = 0 a daily Sharpe estimated from n
+        # returns has variance 1/(n - 1), so each script is deflated against sqrt(1/(n - 1)) * Z(n_el).
+        robust_sd[tag] = float(np.var(srs, ddof=1)) if n_el > 1 else 0.0
         el[f"dsr_{tag}"] = np.nan
         el[f"psr_{tag}"] = np.nan
+        el[f"dsr_null_{tag}"] = np.nan
         for k, f in enumerate(el.file):
             if f not in kept[:30]:
                 continue
@@ -211,6 +224,9 @@ def main():
             el.loc[k, f"dsr_{tag}"] = dsr["dsr"]
             el.loc[k, f"psr_{tag}"] = probabilistic_sharpe(sr, int(r.oos_days), r.oos_skew, r.oos_kurt, 0.0)
             el.loc[k, f"sr0_ann_{tag}"] = dsr["sr0"] * math.sqrt(365)
+            dr = deflated_sharpe(sr, int(r.oos_days), r.oos_skew, r.oos_kurt, n_el, 1.0 / max(1, int(r.oos_days) - 1))
+            el.loc[k, f"dsr_null_{tag}"] = dr["dsr"]
+            el.loc[k, f"sr0_null_ann_{tag}"] = dr["sr0"] * math.sqrt(365)
     el.to_csv(os.path.join(a.results, "ranking.csv"), index=False)
     R.to_csv(os.path.join(a.results, "eligibility.csv"), index=False)
     top = el[el.file.isin(kept)].head(10)
@@ -228,6 +244,7 @@ def main():
         "median_bh_sharpe_btc": float(el.bh_sharpe_btc.median()) if n_el else None,
         "median_bh_sharpe_eth": float(el.bh_sharpe_eth.median()) if n_el else None,
         "n_duplicates_collapsed_in_top": int(len(dup_of)),
+        "plain_crosssectional_var_daily_sr": robust_sd,
     }
     # ---- POST-HOC (decided after seeing partial results): is the IS/OOS persistence just directional beta?
     if n_el > 3:

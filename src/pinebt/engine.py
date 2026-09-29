@@ -261,6 +261,7 @@ class Runner:
 
     def run(self) -> dict:
         t0 = time.time()
+        rt._rng.seed(42)            # math.random() draws depend only on the script, not on earlier runs
         bars = Bars(self.symbol, self.tf_ms, end_ms=self.end_ms, max_bars=self.max_bars)
         self.main_start = bars.T[0] if bars.n else None
         bk = Broker(bars, self.script.cfg, self.fee)

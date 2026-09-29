@@ -26,10 +26,10 @@ REPAINT_PATTERNS = {
 }
 
 
-def run(src, sym, tf_ms, fee, end_ms, max_bars):
+def run(src, sym, tf_ms, fee, end_ms, max_bars, magnify):
     from pinebt.engine import CompiledScript, Runner
     cs = CompiledScript(src)
-    r = Runner(cs, sym, tf_ms, end_ms=end_ms, max_bars=max_bars, fee=fee, time_limit=1800).run()
+    r = Runner(cs, sym, tf_ms, end_ms=end_ms, max_bars=max_bars, fee=fee, time_limit=1800, magnify=magnify).run()
     return cs, r
 
 
@@ -40,7 +40,9 @@ def main():
     ap.add_argument("--out", default="results/pine/audit")
     ap.add_argument("--end", default="2026-09-29")
     ap.add_argument("--max-bars", type=int, default=200_000)
+    ap.add_argument("--no-magnify", action="store_true", help="use the plain OHLC path instead of 1-minute fills")
     a = ap.parse_args()
+    magnify = not a.no_magnify
     os.makedirs(a.out, exist_ok=True)
     idx = pd.read_parquet(a.index).set_index("file")
     end_ms = int(pd.Timestamp(a.end, tz="UTC").timestamp() * 1000)
@@ -55,12 +57,12 @@ def main():
         tf = tf_ms_of(row.bt_period)
         lm = row.last_modified
         oos_day = int((lm + pd.Timedelta(days=1)).value // 10**6 // DAY) + 1
-        rec = {"file": f, "name": row["name"], "author": row.author, "last_modified": str(lm), "tf_ms": tf,
+        rec = {"file": f, "name": row["name"], "author": row.author, "last_modified": str(lm), "tf_ms": tf, "magnify": magnify,
                "detail": row.detail, "static": {k: bool(re.search(p, src)) for k, p in REPAINT_PATTERNS.items()}}
         fig, axes = plt.subplots(3, 1, figsize=(9, 8), sharex=False)
         for k, (sym, fee) in enumerate([("BTCUSDT", 0.0007), ("ETHUSDT", 0.0007), ("SOLUSDT", 0.0007),
                                         ("BTCUSDT", 0.0014), ("ETHUSDT", 0.0014)]):
-            cs, r = run(src, sym, tf, fee, end_ms, a.max_bars)
+            cs, r = run(src, sym, tf, fee, end_ms, a.max_bars, magnify)
             days, eq = daily(r["TC"], r["equity"])
             days = days.astype(np.int64)
             tr = np.array([[c[3], c[4], c[5], c[6], c[7], c[8]] for c in r["closed"]], float) if r["closed"] else np.zeros((0, 6))
@@ -83,6 +85,7 @@ def main():
                 oos_t = tr[tr[:, 1] >= d0 * DAY] if len(tr) else tr
                 if len(oos_t):
                     net = oos_t[:, 5]
+                    same_bar = oos_t[:, 0] == oos_t[:, 1]
                     order = np.sort(net)[::-1]
                     tot = net.sum()
                     out["oos_trades_detail"] = {
@@ -90,6 +93,7 @@ def main():
                         "net_long": float(net[oos_t[:, 2] > 0].sum()), "net_short": float(net[oos_t[:, 2] < 0].sum()),
                         "top5_share_of_net": float(order[:5].sum() / tot) if tot > 0 else None,
                         "median_hold_h": float(np.median(oos_t[:, 1] - oos_t[:, 0]) / 3_600_000),
+                        "same_bar_share": float(same_bar.mean()),
                         "win_rate": float((net > 0).mean())}
                 if k < 3:
                     ax = axes[k]

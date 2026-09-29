@@ -4,7 +4,10 @@ Timing (TradingView defaults): the script runs on bar close; market orders fill 
 same bar's close with process_orders_on_close / immediately=true); stop and limit orders are checked intrabar along
 the OHLC path open -> nearer extreme -> farther extreme -> close, gaps fill at the open. strategy.entry reverses an
 opposite position and respects pyramiding; strategy.exit brackets (profit/limit, loss/stop, trailing) persist and
-modify by id, apply to trades of `from_entry` (or all), and allocate qty_percent per trade.
+modify by id and allocate qty_percent per trade. Exit scope follows TradingView: an exit with `from_entry` covers
+entries of that id whose order was created on or before the bar of the (latest) call; an exit without `from_entry`
+covers every entry of the position that was open at the call, including later additions, until that position closes
+(called while flat, it waits for the next position).
 
 Overrides (pre-registered): every opening order is sized at 100/pyramiding percent of current equity (explicit qty
 ignored for openings), total exposure is capped at 1x equity, each fill costs `fee` (fraction of notional), funding is
@@ -39,10 +42,12 @@ def _dir(d):
 
 
 class Trade:
-    __slots__ = ("eid", "q", "q0", "px", "bar", "t", "fee", "exits_done", "trail_on", "trail_ext")
+    __slots__ = ("eid", "q", "q0", "px", "bar", "t", "fee", "exits_done", "trail_on", "trail_ext", "obar", "episode")
 
-    def __init__(self, eid, q, px, bar, t, fee):
+    def __init__(self, eid, q, px, bar, t, fee, obar=None, episode=0):
         self.eid, self.q, self.px, self.bar, self.t, self.fee = eid, q, px, bar, t, fee
+        self.obar = bar if obar is None else obar
+        self.episode = episode
         self.q0 = abs(q)
         self.exits_done = set()
         self.trail_on = {}
@@ -50,14 +55,16 @@ class Trade:
 
 
 class PriceOrder:
-    __slots__ = ("kind", "id", "d", "qty", "limit", "stop", "bar")
+    __slots__ = ("kind", "id", "d", "qty", "limit", "stop", "bar", "obar")
 
-    def __init__(self, kind, oid, d, qty, limit, stop, bar):
+    def __init__(self, kind, oid, d, qty, limit, stop, bar, obar=None):
         self.kind, self.id, self.d, self.qty, self.limit, self.stop, self.bar = kind, oid, d, qty, limit, stop, bar
+        self.obar = bar if obar is None else obar       # bar the order was first created (modifications keep it)
 
 
 class ExitOrder:
-    __slots__ = ("id", "frm", "qty", "pct", "profit", "limit", "loss", "stop", "tprice", "tpoints", "toffset", "bar")
+    __slots__ = ("id", "frm", "qty", "pct", "profit", "limit", "loss", "stop", "tprice", "tpoints", "toffset", "bar",
+                 "episode")
 
 
 class Magnifier:
@@ -95,6 +102,7 @@ class Broker:
         self.allowed = "all"
         self.blown = False
         self.i = 0
+        self.episode = 0        # position episodes: +1 each time a flat book opens a trade
         self.n_fills = 0
         self.fees_paid = 0.0
         self.funding_paid = 0.0
@@ -140,7 +148,8 @@ class Broker:
             self.mkt = [m for m in self.mkt if not (m[0] == "entry" and m[1] == oid)]
             self.mkt.append(("entry", oid, d, None))
         else:
-            self.porders[oid] = PriceOrder("entry", oid, d, None, limit, stop, self.i)
+            old = self.porders.get(oid)
+            self.porders[oid] = PriceOrder("entry", oid, d, None, limit, stop, self.i, old.obar if old else self.i)
 
     def order(self, oid, d, qty=None, limit=None, stop=None, oca=None, when=True):
         if not self._ok(when):
@@ -154,7 +163,8 @@ class Broker:
         if limit is None and stop is None:
             self.mkt.append(("order", oid, d, q))
         else:
-            self.porders[oid] = PriceOrder("order", oid, d, q, limit, stop, self.i)
+            old = self.porders.get(oid)
+            self.porders[oid] = PriceOrder("order", oid, d, q, limit, stop, self.i, old.obar if old else self.i)
 
     def exit(self, oid, frm=None, qty=None, qty_percent=None, profit=None, limit=None, loss=None, stop=None,
              trail_price=None, trail_points=None, trail_offset=None, when=True):
@@ -172,6 +182,7 @@ class Broker:
         x.tpoints = None if _isna(trail_points) else float(trail_points)
         x.toffset = None if _isna(trail_offset) else float(trail_offset)
         x.bar = self.i
+        x.episode = self.episode if self.trades else self.episode + 1
         if x.profit is None and x.limit is None and x.loss is None and x.stop is None and \
                 (x.toffset is None or (x.tprice is None and x.tpoints is None)):
             return      # TradingView ignores an exit without any price condition
@@ -240,7 +251,7 @@ class Broker:
     def _gross(self, px):
         return sum(abs(t.q) for t in self.trades) * px
 
-    def _open(self, eid, d, px, i, qty_units=None):
+    def _open(self, eid, d, px, i, qty_units=None, obar=None):
         eq = self._equity_at(px)
         if eq <= 0:
             return
@@ -253,7 +264,9 @@ class Broker:
         self.cash -= fee
         self.fees_paid += fee
         self.n_fills += 1
-        self.trades.append(Trade(eid, d * q, px, i, self.T[i], fee))
+        if not self.trades:
+            self.episode += 1
+        self.trades.append(Trade(eid, d * q, px, i, self.T[i], fee, obar, self.episode))
 
     def _close_trade(self, tr: Trade, q: float, px: float, i: int):
         """Close q units (q > 0) of trade tr at px."""
@@ -302,7 +315,7 @@ class Broker:
     def _pos(self):
         return sum(t.q for t in self.trades)
 
-    def _exec_entry(self, oid, d, px, i):
+    def _exec_entry(self, oid, d, px, i, obar=None):
         if self.allowed != "all" and ((d == 1) != (self.allowed == "long")):
             pos = self._pos()
             if pos != 0 and (pos > 0) != (d == 1):
@@ -314,9 +327,9 @@ class Broker:
         same = sum(1 for t in self.trades if (t.q > 0) == (d == 1))
         if same >= self.pyr:
             return
-        self._open(oid, d, px, i)
+        self._open(oid, d, px, i, obar=obar)
 
-    def _exec_order(self, oid, d, q, px, i):
+    def _exec_order(self, oid, d, q, px, i, obar=None):
         pos = self._pos()
         if pos != 0 and (pos > 0) != (d == 1):
             want = q if q is not None else abs(pos)
@@ -330,24 +343,31 @@ class Broker:
                     rem -= take
                 return
             self._close_all(px, i)
-            self._open(oid, d, px, i)
+            self._open(oid, d, px, i, obar=obar)
             return
         if self.allowed != "all" and ((d == 1) != (self.allowed == "long")):
             return
-        self._open(oid, d, px, i)
+        self._open(oid, d, px, i, obar=obar)
 
-    def _exec_market(self, m, px, i):
+    def _exec_market(self, m, px, i, obar=None):
         k = m[0]
         if k == "entry":
-            self._exec_entry(m[1], m[2], px, i)
+            self._exec_entry(m[1], m[2], px, i, obar)
         elif k == "order":
-            self._exec_order(m[1], m[2], m[3], px, i)
+            self._exec_order(m[1], m[2], m[3], px, i, obar)
         elif k == "close":
             self._close_id(m[1], m[2], m[3], px, i)
         elif k == "close_all":
             self._close_all(px, i)
 
     # ------------------------------------------------------------------ intrabar price orders
+    @staticmethod
+    def _covers(x: ExitOrder, tr: Trade) -> bool:
+        """TradingView's exit scope (see module docstring)."""
+        if x.frm is None:
+            return tr.episode == x.episode
+        return tr.eid == x.frm and tr.obar <= x.bar
+
     def _exit_levels(self, x: ExitOrder, tr: Trade):
         long = tr.q > 0
         e, tk = tr.px, self.tick
@@ -376,7 +396,7 @@ class Broker:
                 continue
             key = (x.id, x.frm)
             for tr in self.trades:
-                if x.frm is not None and tr.eid != x.frm:
+                if not self._covers(x, tr):
                     continue
                 long = tr.q > 0
                 act = x.tprice if x.tprice is not None else (tr.px + x.tpoints * self.tick if long else tr.px - x.tpoints * self.tick)
@@ -394,8 +414,9 @@ class Broker:
                     elif tr.trail_on.get(key):
                         tr.trail_ext[key] = min(tr.trail_ext[key], lo)
 
-    def _candidates(self, p0, p1, first):
-        """Triggered orders on the segment p0 -> p1: list of (distance, fill_px, kind, payload)."""
+    def _candidates(self, p0, p1, first, touch=False):
+        """Triggered orders on the segment p0 -> p1: list of (distance, fill_px, kind, payload). `touch`: the price
+        sits exactly at p0 after a fill, so orders resting at that very level trigger there too."""
         up = p1 >= p0
         out = []
         for po in self.porders.values():
@@ -406,6 +427,8 @@ class Broker:
                 if lvl is None:
                     continue
                 trig = (typ == "stop" and buy) or (typ == "limit" and not buy)     # needs price rising to lvl
+                if touch and lvl == p0:
+                    out.append((0.0, p0, "po", po)); break
                 if trig:
                     if first and p0 >= lvl:
                         out.append((0.0, p0, "po", po)); break
@@ -419,7 +442,7 @@ class Broker:
         for x in self.exits.values():
             key = (x.id, x.frm)
             for tr in self.trades:
-                if x.frm is not None and tr.eid != x.frm:
+                if not self._covers(x, tr):
                     continue
                 if key in tr.exits_done:
                     continue
@@ -429,6 +452,8 @@ class Broker:
                     if lvl is None:
                         continue
                     rising = (typ == "limit" and long) or (typ == "stop" and not long)
+                    if touch and lvl == p0:
+                        out.append((0.0, p0, "x", (x, tr))); break
                     if rising:
                         if first and p0 >= lvl:
                             out.append((0.0, p0, "x", (x, tr))); break
@@ -499,7 +524,7 @@ class Broker:
             key = (x.id, x.frm)
             trailing = x.toffset is not None and (x.tprice is not None or x.tpoints is not None)
             for tr in self.trades:
-                if x.frm is not None and tr.eid != x.frm:
+                if not self._covers(x, tr):
                     continue
                 if key in tr.exits_done:
                     continue
@@ -546,7 +571,7 @@ class Broker:
                 continue
             key = (x.id, x.frm)
             for tr in self.trades:
-                if x.frm is not None and tr.eid != x.frm:
+                if not self._covers(x, tr):
                     continue
                 if not tr.trail_on.get(key):
                     continue
@@ -566,10 +591,11 @@ class Broker:
         for s in range(3):
             p0, p1 = path[s], path[s + 1]
             first = s == 0
+            touch = False
             for _ in range(50):
                 if not self.porders and not (self.exits and self.trades):
                     break
-                cands = self._candidates(p0, p1, first)
+                cands = self._candidates(p0, p1, first, touch)
                 if not cands:
                     break
                 cands.sort(key=lambda z: z[0])
@@ -578,13 +604,14 @@ class Broker:
                     po = payload
                     del self.porders[po.id]
                     if po.kind == "entry":
-                        self._exec_entry(po.id, po.d, px, i)
+                        self._exec_entry(po.id, po.d, px, i, po.obar)
                     else:
-                        self._exec_order(po.id, po.d, po.qty, px, i)
+                        self._exec_order(po.id, po.d, po.qty, px, i, po.obar)
                 else:
                     self._fill_exit(payload[0], payload[1], px, i)
                 p0 = px
                 first = False
+                touch = True
             self._trail_update(path[s], path[s + 1])
 
     # ------------------------------------------------------------------ per-bar driver
@@ -598,7 +625,7 @@ class Broker:
             q, self.mkt = self.mkt, []
             o = self.O[i]
             for m in q:
-                self._exec_market(m, o, i)
+                self._exec_market(m, o, i, i - 1)
         if self.porders or (self.exits and self.trades):
             self._process_path(i)
         c = self.C[i]
@@ -617,7 +644,7 @@ class Broker:
         if self.poc and self.mkt and not self.blown:
             q, self.mkt = self.mkt, []
             for m in q:
-                self._exec_market(m, c, i)
+                self._exec_market(m, c, i, i)
             self._refresh(c)
         eq = self._equity_at(c)
         if eq <= 0 and not self.blown:

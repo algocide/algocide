@@ -374,3 +374,43 @@ def test_magnifier_jumps_match_brute_force_on_real_data(tf):
     assert out[0]["closed"] == out[1]["closed"]
     assert out[0]["equity"] == out[1]["equity"]
     assert out[0]["minutes_walked"] < out[1]["minutes_walked"]
+
+
+# ---------------------------------------------------------------- exit scope (TradingView rules)
+def test_filled_exit_does_not_carry_over_to_a_later_position():
+    """An exit without from_entry covers the position open at the call only; a later position is not exited."""
+    closes = [100, 100, 100, 130, 100, 100, 100, 100]
+    highs = [100, 100, 100, 130, 100, 100, 125, 100]
+    src = ("//@version=5\nstrategy('t')\nif bar_index == 0 or bar_index == 4\n    strategy.entry('B', strategy.long)\n"
+           "if bar_index == 2\n    strategy.exit('X', limit=120)\n")
+    bk, _ = run_on(src, bars_from(closes, highs=highs))
+    assert len(bk.closed) == 1 and abs(bk.closed[0][7] - 120) < 1e-9     # first position exits at the limit
+    assert len(bk.trades) == 1                                           # the second is untouched by the old limit
+
+
+def test_exit_without_from_entry_covers_later_adds_to_the_same_position():
+    closes = [100] * 6
+    highs = [100, 100, 100, 100, 111, 100]
+    src = ("//@version=5\nstrategy('t', pyramiding=2)\nif bar_index == 0 or bar_index == 2\n"
+           "    strategy.entry('B' + str.tostring(bar_index), strategy.long)\n"
+           "if bar_index == 1\n    strategy.exit('X', limit=110)\n")
+    bk, _ = run_on(src, bars_from(closes, highs=highs))
+    assert len(bk.closed) == 2 and not bk.trades
+
+
+def test_exit_with_from_entry_skips_entries_created_after_the_call():
+    closes = [100] * 8
+    highs = [100, 100, 100, 100, 100, 100, 111, 100]
+    src = ("//@version=5\nstrategy('t')\nif bar_index == 0 or bar_index == 4\n    strategy.entry('L', strategy.long)\n"
+           "if bar_index == 1\n    strategy.exit('X', 'L', limit=110)\nif bar_index == 3\n    strategy.close('L')\n")
+    bk, _ = run_on(src, bars_from(closes, highs=highs))
+    assert len(bk.closed) == 1 and len(bk.trades) == 1                   # the 2nd 'L' keeps running past 111
+
+
+def test_random_is_reproducible_per_run_and_flagged():
+    src = "//@version=5\nstrategy('t')\nif math.random() > 0.5\n    strategy.entry('L', strategy.long)\nelse\n    strategy.close('L')\n"
+    cs = CompiledScript(src)
+    assert "random_signal" in cs.flags
+    a = Runner(cs, "BTCUSDT", H1, end_ms=1_790_640_000_000, max_bars=300).run()
+    b = Runner(cs, "BTCUSDT", H1, end_ms=1_790_640_000_000, max_bars=300).run()
+    assert a["equity"] == b["equity"]
