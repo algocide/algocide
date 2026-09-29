@@ -7,3 +7,5 @@ data/agent*/
 data/paper/
 data/forward/
 *.proposals.json.applied
+data/binance/
+data/pine/
