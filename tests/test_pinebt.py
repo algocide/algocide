@@ -224,3 +224,79 @@ def test_two_partial_take_profits_use_original_qty():
     bk, _ = run_on(src, bars_from(closes, opens, highs, lows))
     assert len(bk.closed) == 2 and not bk.trades
     assert abs(bk.closed[0][5] - 50) < 1e-9 and abs(bk.closed[1][5] - 50) < 1e-9
+
+
+def test_trailing_stop_activates_and_trails():
+    # entry at 100 (bar 1 open); price runs to 110 then falls; trail activates at +2 (20 ticks) with 3 (30 ticks) offset
+    opens = [100, 100, 101, 109, 108]
+    closes = [100, 101, 109, 108, 100]
+    highs = [100, 101, 110, 109, 108]
+    lows = [100, 100, 101, 106, 100]
+    src = ("//@version=5\nstrategy('t')\nif bar_index == 0\n    strategy.entry('L', strategy.long)\n"
+           "strategy.exit('T', 'L', trail_points=20, trail_offset=30)\n")
+    bk, _ = run_on(src, bars_from(closes, opens, highs, lows))
+    assert len(bk.closed) == 1
+    # highest high after activation is 110 -> stop 107; bar 3 path open 109 -> high 109 -> low 106: fills at 107
+    assert abs(bk.closed[0][7] - 107) < 1e-9 and bk.closed[0][2] == 3
+
+
+def test_stop_entry_breakout_and_cancel():
+    opens = [100, 100, 100, 104]
+    closes = [100, 100, 103, 105]
+    highs = [100, 101, 104, 106]
+    lows = [100, 99, 99, 103]
+    src = "//@version=5\nstrategy('t')\nif bar_index == 0\n    strategy.entry('B', strategy.long, stop=102)\n"
+    bk, _ = run_on(src, bars_from(closes, opens, highs, lows))
+    assert bk.trades and bk.trades[0].px == 102 and bk.trades[0].bar == 2
+
+
+def test_order_reduces_then_allow_entry_in():
+    closes = [100] * 6
+    src = ("//@version=5\nstrategy('t')\nstrategy.risk.allow_entry_in(strategy.direction.long)\n"
+           "if bar_index == 0\n    strategy.entry('L', strategy.long)\n"
+           "if bar_index == 2\n    strategy.order('R', strategy.short, qty=strategy.position_size / 2)\n"
+           "if bar_index == 3\n    strategy.entry('S', strategy.short)\n")
+    bk, _ = run_on(src, bars_from(closes))
+    # bar 3: half closed by strategy.order; bar 4: short entry is not allowed and only closes the long
+    assert len(bk.closed) == 2 and not bk.trades
+    assert abs(bk.closed[0][5] - 50) < 1e-9 and abs(bk.closed[1][5] - 50) < 1e-9
+
+
+def test_pyramiding_counts_all_entries_same_direction():
+    closes = [100] * 6
+    src = "//@version=5\nstrategy('t', pyramiding=3)\nstrategy.entry('L' + str.tostring(bar_index), strategy.long)\n"
+    bk, _ = run_on(src, bars_from(closes))
+    assert len(bk.trades) == 3
+
+
+def test_security_daily_on_hourly_real_data():
+    """request.security(..., 'D', close) on BTC hourly bars must equal the last completed UTC day's close."""
+    from pinebt.engine import CompiledScript, Runner
+    from pinebt.data import resample
+    src = "//@version=5\nstrategy('t')\nd = request.security(syminfo.tickerid, 'D', close)\nif d > 0 and bar_index == 3000\n    strategy.entry('L', strategy.long)\n"
+    cs = CompiledScript(src)
+    code = cs.pysrc.replace("        return None", "        PROBE.append((D.tf_ms, g_d))")
+    from pinebt import engine
+    g = dict(engine.EXEC_GLOBALS); raw = []; g["PROBE"] = raw
+    exec(compile(code, "<p>", "exec"), g)
+    cs.build = g["build"]
+    r = Runner(cs, "BTCUSDT", H1, max_bars=24 * 60)
+    r_res = r.run()
+    rec = [v for tf, v in raw if tf == H1]
+    assert len(rec) == r_res["n_bars"]
+    bo, tc, o, h, l, c, v, f = resample("BTCUSDT", 86_400_000)
+    daily_close = dict(zip(((tc - 1) // 86_400_000).tolist(), c.tolist()))
+    TC = r_res["TC"]
+    for k in range(48, len(rec), 7):
+        day_of_bar_close = (TC[k] - 1) // 86_400_000
+        last_complete = day_of_bar_close if TC[k] % 86_400_000 == 0 else day_of_bar_close - 1
+        assert rec[k] == daily_close[last_complete]
+
+
+def test_lower_timeframe_security_obeys_bar_cap():
+    """A 1m request from a daily chart runs its shadow on at most max_bars bars and says so."""
+    from pinebt.engine import CompiledScript, Runner
+    src = "//@version=5\nstrategy('t')\nm = request.security(syminfo.tickerid, '1', close)\nif m > 0\n    strategy.entry('L', strategy.long)\n"
+    r = Runner(CompiledScript(src), "BTCUSDT", 86_400_000, max_bars=300, end_ms=1_759_104_000_000).run()
+    (n, capped), = r["shadow_bars"].values()
+    assert n == 300 and capped

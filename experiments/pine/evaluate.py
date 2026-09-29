@@ -95,6 +95,11 @@ def main():
     idx = idx[idx.lang == "pinescript"].set_index("file")
     meta = pd.DataFrame([json.loads(l) for l in open(os.path.join(a.runs, "meta.jsonl"))])
     meta = meta.drop_duplicates(["file", "symbol"], keep="last")
+    sk_path = os.path.join(a.runs, "skipped.jsonl")
+    if os.path.exists(sk_path):
+        sk = pd.DataFrame([json.loads(l) for l in open(sk_path)])
+        sk = sk[~sk.set_index(["file", "symbol"]).index.isin(meta.set_index(["file", "symbol"]).index)]
+        meta = pd.concat([meta, sk], ignore_index=True)
     end_day = int(pd.Timestamp(a.end, tz="UTC").timestamp() * 1000) // DAY
     bh = {s: asset_daily(s) for s in meta.symbol.unique()}
     rows = []
@@ -156,6 +161,8 @@ def main():
                   "bh_sharpe_btc": b.get("oos_bh_sharpe", np.nan), "bh_sharpe_eth": e.get("oos_bh_sharpe", np.nan),
                   "bh_cagr_btc": b.get("oos_bh_cagr", np.nan), "bh_cagr_eth": e.get("oos_bh_cagr", np.nan),
                   "beta_btc": b.get("oos_beta", np.nan), "beta_eth": e.get("oos_beta", np.nan),
+                  "alpha_btc": b.get("oos_alpha", np.nan), "alpha_eth": e.get("oos_alpha", np.nan),
+                  "is_alpha_btc": b.get("is_alpha", np.nan), "is_alpha_eth": e.get("is_alpha", np.nan),
                   "exposure_btc": b.get("oos_exposure", np.nan), "tf_ms": b.tf_ms, "flags": ",".join(flags),
                   "last_modified": b.last_modified})
     R = pd.DataFrame(E)
@@ -222,6 +229,27 @@ def main():
         "median_bh_sharpe_eth": float(el.bh_sharpe_eth.median()) if n_el else None,
         "n_duplicates_collapsed_in_top": int(len(dup_of)),
     }
+    # ---- POST-HOC (decided after seeing partial results): is the IS/OOS persistence just directional beta?
+    if n_el > 3:
+        el["alpha_mean"] = (el.alpha_btc + el.alpha_eth) / 2
+        el["is_alpha_mean"] = (el.is_alpha_btc + el.is_alpha_eth) / 2
+        spa = sps.spearmanr(el.is_alpha_mean, el.alpha_mean, nan_policy="omit")
+        long_bias = (el.beta_btc + el.beta_eth) / 2
+        summ["posthoc"] = {
+            "spearman_is_vs_oos_alpha": {"rho": float(spa.correlation), "p": float(spa.pvalue)},
+            "spearman_oos_score_vs_beta": float(sps.spearmanr(long_bias, el.score, nan_policy="omit").correlation),
+            "share_positive_alpha_both": float(((el.alpha_btc > 0) & (el.alpha_eth > 0)).mean()),
+            "median_beta_btc": float(el.beta_btc.median()),
+            "spearman_oos_alpha_vs_oos_trades": float(sps.spearmanr((el.oos_trades_btc + el.oos_trades_eth) / 2,
+                                                                     el.alpha_mean, nan_policy="omit").correlation),
+        }
+        # alpha persistence within turnover terciles (does it survive holding trading frequency fixed?)
+        tt = (el.oos_trades_btc + el.oos_trades_eth) / 2
+        terc = pd.qcut(tt.rank(method="first"), 3, labels=["low", "mid", "high"])
+        summ["posthoc"]["alpha_persistence_by_turnover_tercile"] = {
+            str(k): float(sps.spearmanr(g.is_alpha_mean, g.alpha_mean, nan_policy="omit").correlation)
+            for k, g in el.groupby(terc, observed=True) if len(g) > 10}
+        el.sort_values("alpha_mean", ascending=False).head(25).to_csv(os.path.join(a.results, "posthoc_top_by_alpha.csv"), index=False)
     json.dump(summ, open(os.path.join(a.results, "summary.json"), "w"), indent=1, default=str)
     print(json.dumps(summ, indent=1, default=str))
 

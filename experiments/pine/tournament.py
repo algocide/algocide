@@ -39,6 +39,8 @@ def classify(e: BaseException) -> str:
         return "compile_error"
     if isinstance(e, TimeoutError) or type(e).__name__ == "HardTimeout":
         return "timeout"
+    if isinstance(e, MemoryError):
+        return "memory_limit"
     return "crash"
 
 
@@ -62,7 +64,7 @@ def _alarm(signum, frame):
 
 
 def work(task):
-    file, src, tf_ms, symbols, max_bars, end_ms, fee, out, time_limit = task
+    file, src, tf_ms, symbols, max_bars, end_ms, fee, out, time_limit, max_rss_mb = task
     from pinebt.engine import CompiledScript, Runner
     signal.signal(signal.SIGALRM, _alarm)
     metas = []
@@ -81,7 +83,8 @@ def work(task):
         try:
             signal.alarm(int(time_limit * 1.5) + 30)
             try:
-                r = Runner(cs, sym, tf_ms, end_ms=end_ms, max_bars=max_bars, fee=fee, time_limit=time_limit).run()
+                r = Runner(cs, sym, tf_ms, end_ms=end_ms, max_bars=max_bars, fee=fee, time_limit=time_limit,
+                           max_rss_mb=max_rss_mb).run()
             finally:
                 signal.alarm(0)
             days, deq = daily(r["TC"], r["equity"])
@@ -94,7 +97,7 @@ def work(task):
                         us_per_bar=round(1e6 * r["seconds"] / max(1, nb), 1), err_bars=r["err_bars"],
                         first_err=r["first_err"], blown=r["blown"], n_closed=len(cl), n_fills=r["n_fills"],
                         fees=round(r["fees"], 2), funding=round(r["funding"], 2), eq_end=round(r["equity"][-1], 4) if nb else None,
-                        sec_calls=r["sec_calls"])
+                        sec_calls=r["sec_calls"], shadow_bars=r["shadow_bars"])
         except BaseException as e:
             if isinstance(e, KeyboardInterrupt):
                 raise
@@ -114,9 +117,15 @@ def main():
     ap.add_argument("--fee", type=float, default=0.0007)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--time-limit", type=float, default=900.0)
+    ap.add_argument("--max-rss-mb", type=float, default=5000.0,
+                    help="per-worker memory guard; a run above it is recorded as memory_limit instead of risking an OOM kill")
+    ap.add_argument("--tasks-per-child", type=int, default=20)
     ap.add_argument("--sample", type=int, default=0)
     ap.add_argument("--files", default="")
+    ap.add_argument("--files-from", default="", help="JSON list of vault file names to run")
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--min-tf-ms", type=int, default=0,
+                    help="skip scripts whose timeframe is below this (their capped OOS window cannot reach 365 days)")
     a = ap.parse_args()
     os.makedirs(os.path.join(a.out, "runs"), exist_ok=True)
     end_ms = int(pd.Timestamp(a.end, tz="UTC").timestamp() * 1000)
@@ -124,6 +133,8 @@ def main():
     p = df[df.lang == "pinescript"].copy()
     if a.files:
         p = p[p.file.isin(a.files.split(","))]
+    if a.files_from:
+        p = p[p.file.isin(json.load(open(a.files_from)))]
     if a.sample:
         p = p.sample(min(a.sample, len(p)), random_state=a.seed)
     done = set()
@@ -137,12 +148,19 @@ def main():
                 pass
     syms = a.symbols.split(",")
     p["tf_ms"] = p.bt_period.map(tf_ms_of)
-    p = p[~p.file.isin(done)].sort_values(["tf_ms", "file"])
-    tasks = [(r.file, r.source, int(r.tf_ms), syms, a.max_bars, end_ms, a.fee, a.out, a.time_limit) for r in p.itertuples()]
+    skipped = p[p.tf_ms < a.min_tf_ms]
+    if len(skipped):
+        with open(os.path.join(a.out, "skipped.jsonl"), "w") as fs:
+            for r in skipped.itertuples():
+                for sym in syms:
+                    fs.write(json.dumps({"file": r.file, "symbol": sym, "tf_ms": int(r.tf_ms), "status": "not_run_bar_cap"}) + "\n")
+    p = p[(p.tf_ms >= a.min_tf_ms) & ~p.file.isin(done)].sort_values(["tf_ms", "file"], ascending=[False, True])
+    tasks = [(r.file, r.source, int(r.tf_ms), syms, a.max_bars, end_ms, a.fee, a.out, a.time_limit, a.max_rss_mb)
+             for r in p.itertuples()]
     print(f"{len(tasks)} scripts to run ({len(done)} already done)", flush=True)
     t0 = time.time()
     n = 0
-    with Pool(a.workers, maxtasksperchild=40) as pool, open(meta_path, "a") as fo:
+    with Pool(a.workers, maxtasksperchild=a.tasks_per_child) as pool, open(meta_path, "a") as fo:
         for metas in pool.imap_unordered(work, tasks, chunksize=1):
             for m in metas:
                 fo.write(json.dumps(m, default=str) + "\n")

@@ -2,6 +2,7 @@
 from __future__ import annotations
 import copy
 import math
+import os
 import time
 import numpy as np
 from . import runtime as rt
@@ -11,9 +12,18 @@ from .data import Bars as _Bars
 from functools import lru_cache
 
 NA = rt.NA
+_PAGE_MB = os.sysconf("SC_PAGE_SIZE") / 2**20
 
 
-@lru_cache(maxsize=6)
+def rss_mb() -> float:
+    try:
+        with open("/proc/self/statm") as f:
+            return int(f.read().split()[1]) * _PAGE_MB
+    except OSError:
+        return 0.0
+
+
+@lru_cache(maxsize=4)
 def _bars_cached(symbol, tf_ms, start_ms, end_ms, max_bars, heikin_ashi):
     return _Bars(symbol, tf_ms, start_ms=start_ms, end_ms=end_ms, max_bars=max_bars, heikin_ashi=heikin_ashi)
 
@@ -192,13 +202,22 @@ class SecurityHub:
 
 class Runner:
     def __init__(self, script: CompiledScript, symbol: str, tf_ms: int, end_ms: int | None = None,
-                 max_bars: int | None = None, fee: float = 0.0007, time_limit: float = 300.0):
+                 max_bars: int | None = None, fee: float = 0.0007, time_limit: float = 300.0,
+                 max_rss_mb: float | None = None):
         self.script, self.symbol, self.tf_ms = script, symbol, tf_ms
         self.end_ms, self.max_bars, self.fee, self.time_limit = end_ms, max_bars, fee, time_limit
+        self.max_rss_mb = max_rss_mb
+        self.shadow_bars = {}           # "symbol|tf_ms|ha" -> (bars, capped)
         self.shadows = {}
         self.in_progress = set()
         self.main_start = None
         self.deadline = None
+
+    def check_memory(self):
+        if self.max_rss_mb is not None:
+            m = rss_mb()
+            if m > self.max_rss_mb:
+                raise MemoryError(f"process RSS {m:.0f} MB above the {self.max_rss_mb:.0f} MB limit")
 
     def instantiate(self, bars: Bars, bk: Broker, hub: SecurityHub, symbol: str, tf_ms: int):
         cfg = tf_cfg(symbol, tf_ms)
@@ -215,14 +234,18 @@ class Runner:
         start = None
         if tf_ms < self.tf_ms and self.main_start is not None:
             start = self.main_start - 2000 * tf_ms
-        bars = Bars(sym, tf_ms, start_ms=start, end_ms=self.end_ms, heikin_ashi=ha)
+        # the bar cap applies to every series the engine computes, security shadow runs included
+        bars = Bars(sym, tf_ms, start_ms=start, end_ms=self.end_ms, max_bars=self.max_bars, heikin_ashi=ha)
+        self.shadow_bars[f"{sym}|{tf_ms}|{int(ha)}"] = (bars.n, bool(getattr(bars, "capped", False)))
         bk = Broker(bars, self.script.cfg, self.fee, shadow=True)
         hub = SecurityHub(self, sym, tf_ms, bars, ha=ha, recording=True)
         step = self.instantiate(bars, bk, hub, sym, tf_ms)
         errors = 0
         for i in range(bars.n):
-            if (i & 1023) == 0 and self.deadline is not None and time.time() > self.deadline:
-                raise TimeoutError(f"time limit in security shadow run after {i}/{bars.n} bars")
+            if (i & 1023) == 0:
+                if self.deadline is not None and time.time() > self.deadline:
+                    raise TimeoutError(f"time limit in security shadow run after {i}/{bars.n} bars")
+                self.check_memory()
             bk.begin_bar(i)
             try:
                 step(i)
@@ -256,9 +279,11 @@ class Runner:
                 if first_err is None:
                     first_err = f"bar {i}: {type(e).__name__}: {str(e)[:160]}"
             bk.end_bar(i)
-            if (i & 1023) == 0 and time.time() > deadline:
-                raise TimeoutError(f"time limit after {i}/{n} bars")
+            if (i & 1023) == 0:
+                if time.time() > deadline:
+                    raise TimeoutError(f"time limit after {i}/{n} bars")
+                self.check_memory()
         return {"n_bars": n, "T": bars.T, "TC": bars.TC, "close": bars.C, "equity": bk.eq_close,
                 "closed": bk.closed, "n_fills": bk.n_fills, "fees": bk.fees_paid, "funding": bk.funding_paid,
                 "blown": bk.blown, "err_bars": err_bars, "first_err": first_err, "seconds": time.time() - t0,
-                "sec_calls": hub.calls, "initial_capital": bk.initial_capital}
+                "sec_calls": hub.calls, "initial_capital": bk.initial_capital, "shadow_bars": dict(self.shadow_bars)}

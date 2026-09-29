@@ -1421,7 +1421,7 @@ def _parse_datestr(s):
         y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
         h, mi, se = int(m.group(4) or 0), int(m.group(5) or 0), int(m.group(6) or 0)
         return calendar.timegm((y, mo, d, h, mi, se)) * 1000
-    m = _re.match(r"^(\d{1,2})\s+([A-Za-z]{3})[a-z]*\s+(\d{4})(?:\s+(\d{2}):(\d{2})(?::(\d{2}))?)?", s)
+    m = _re.match(r"^(\d{1,2})\s*([A-Za-z]{3})[a-z]*\s+(\d{4})(?:\s+(\d{2}):(\d{2})(?::(\d{2}))?)?", s)
     if m:
         d, mo, y = int(m.group(1)), _MONTHS.get(m.group(2).lower(), 1), int(m.group(3))
         h, mi, se = int(m.group(4) or 0), int(m.group(5) or 0), int(m.group(6) or 0)

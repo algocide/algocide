@@ -54,7 +54,7 @@ def bin_open_time(b: np.ndarray, tf_ms: int) -> np.ndarray:
     return b * tf_ms
 
 
-@lru_cache(maxsize=64)
+@lru_cache(maxsize=16)
 def resample(symbol: str, tf_ms: int):
     t, o, h, l, c, v = load_1m(symbol)
     b = bin_index(t, tf_ms)
@@ -106,7 +106,8 @@ class Bars:
         if end_ms is not None:
             sel &= tc <= end_ms
         idx = np.flatnonzero(sel)
-        if max_bars is not None and len(idx) > max_bars:
+        self.capped = max_bars is not None and len(idx) > max_bars
+        if self.capped:
             idx = idx[-max_bars:]
         bo, tc, o, h, l, c, v, fund = (x[idx] for x in (bo, tc, o, h, l, c, v, fund))
         if heikin_ashi:

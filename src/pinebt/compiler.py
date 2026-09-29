@@ -162,6 +162,23 @@ def _words(s: str) -> set:
     return {w for w in re.split(r"[^A-Za-z0-9]+", s.lower()) if w}
 
 
+DATE_WORDS = {"year", "yr", "yy", "yyyy", "month", "mon", "mm", "day", "dd", "date", "time", "timestamp", "period"}
+
+
+def _ordered_words(s: str) -> list:
+    s = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", s or "")
+    return [w for w in re.split(r"[^A-Za-z0-9]+", s.lower()) if w]
+
+
+def _to_is_end(s: str) -> bool:
+    """'to' marks the end of a date window only as the first word or right before a date word."""
+    w = _ordered_words(s)
+    for k, x in enumerate(w):
+        if x == "to" and (k == 0 or (k + 1 < len(w) and w[k + 1] in DATE_WORDS)):
+            return True
+    return False
+
+
 def dotted(node) -> Optional[str]:
     if isinstance(node, Name):
         return node.id
@@ -1320,7 +1337,7 @@ class Compiler:
             return "NA"
         words = _words(varname) | _words(title_s)
         is_start = bool(words & START_WORDS)
-        is_end = bool(words & END_WORDS)
+        is_end = bool((words - {"to"}) & END_WORDS) or _to_is_end(varname) or _to_is_end(title_s)
         if is_start != is_end:
             if isinstance(defval, Call) and dotted(defval.func) == "timestamp" or fname == "input.time" or \
                     (isinstance(defval, Num) and defval.v >= 1e11):
