@@ -1,0 +1,725 @@
+{
+ "meta": {
+  "validated_at": "2026-09-29T23:23:42Z",
+  "survivors_commit": "ed42a84be0f8968789482a38534c6d27f7bebf9b 2026-09-29T23:23:01+00:00",
+  "holdout_sha256": "d03048329b9d6faa64c8375371b92098ae2b8781a21cd89debd8f6bb9ca44056",
+  "holdout_from": "2024-10-30 00:00:00",
+  "holdout_to": "2026-09-28 23:45:00",
+  "n_holdout_candles": 67104,
+  "holdout_up_share": 0.5033082975679543,
+  "break_even": 0.5558888888888889,
+  "bar": 0.57,
+  "payout": 1.8,
+  "fee": 0.0006,
+  "t0_ms": 1609459200000,
+  "n_research_candles": 134208,
+  "research_from": "2021-01-01 00:00:00"
+ },
+ "results": [
+  {
+   "id": "R0034",
+   "kind": "rule",
+   "family": "funding",
+   "params": {
+    "when": "post",
+    "k": 3,
+    "mode": 1
+   },
+   "research_n": 482,
+   "research_win_rate": 0.5871369294605809,
+   "half_kelly_fraction": 0.035159335365159236,
+   "holdout_n": 15,
+   "holdout_wins": 11,
+   "holdout_win_rate": 0.7333333333333333,
+   "wilson95": [
+    0.4804911034231324,
+    0.8910272389681718
+   ],
+   "p_value_vs_break_even": 0.12983641389222939,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    14,
+    0.7142857142857143
+   ],
+   "holdout_h2": [
+    1,
+    1.0
+   ],
+   "ev_per_unit_stake": 0.31939999999999996,
+   "bankroll_end": 1175.4467954678157,
+   "max_drawdown": -0.06912319920977661,
+   "up_share_of_bets": 0.9333333333333333
+  },
+  {
+   "id": "R0049",
+   "kind": "rule",
+   "family": "rsi",
+   "params": {
+    "col": "rsi3",
+    "lo": 10,
+    "mode": 1
+   },
+   "research_n": 11803,
+   "research_win_rate": 0.5741760569346777,
+   "half_kelly_fraction": 0.020576159734744467,
+   "holdout_n": 5836,
+   "holdout_wins": 3380,
+   "holdout_win_rate": 0.5791638108293352,
+   "wilson95": [
+    0.5664493222736179,
+    0.5917741473492569
+   ],
+   "p_value_vs_break_even": 0.0001773038306333738,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    2930,
+    0.5723549488054608
+   ],
+   "holdout_h2": [
+    2906,
+    0.5860289057123194
+   ],
+   "ev_per_unit_stake": 0.041894859492803416,
+   "bankroll_end": 57441.21789161475,
+   "max_drawdown": -0.5575997589724708,
+   "up_share_of_bets": 0.5066826593557231
+  },
+  {
+   "id": "R0050",
+   "kind": "rule",
+   "family": "rsi",
+   "params": {
+    "col": "rsi3",
+    "lo": 15,
+    "mode": 1
+   },
+   "research_n": 21660,
+   "research_win_rate": 0.5753462603878117,
+   "half_kelly_fraction": 0.021892836713571714,
+   "holdout_n": 10969,
+   "holdout_wins": 6301,
+   "holdout_win_rate": 0.5744370498678093,
+   "wilson95": [
+    0.5651597191791702,
+    0.5836622596234766
+   ],
+   "p_value_vs_break_even": 4.698954282168405e-05,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    5431,
+    0.5663781992266618
+   ],
+   "holdout_h2": [
+    5538,
+    0.5823401950162513
+   ],
+   "ev_per_unit_stake": 0.033386689762056776,
+   "bankroll_end": 375050.48039153626,
+   "max_drawdown": -0.7577177899422454,
+   "up_share_of_bets": 0.49849576078038105
+  },
+  {
+   "id": "R0051",
+   "kind": "rule",
+   "family": "rsi",
+   "params": {
+    "col": "rsi3",
+    "lo": 20,
+    "mode": 1
+   },
+   "research_n": 33688,
+   "research_win_rate": 0.5712123011161244,
+   "half_kelly_fraction": 0.0172414327291941,
+   "holdout_n": 16962,
+   "holdout_wins": 9692,
+   "holdout_win_rate": 0.5713948826789294,
+   "wilson95": [
+    0.5639319757897324,
+    0.5788254574754702
+   ],
+   "p_value_vs_break_even": 2.4382890104431162e-05,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    8449,
+    0.5664575689430702
+   ],
+   "holdout_h2": [
+    8513,
+    0.5762950781158228
+   ],
+   "ev_per_unit_stake": 0.02791078882207282,
+   "bankroll_end": 471452.1739249318,
+   "max_drawdown": -0.7435414121413675,
+   "up_share_of_bets": 0.49481193255512324
+  },
+  {
+   "id": "R0102",
+   "kind": "rule",
+   "family": "streak",
+   "params": {
+    "n": 5,
+    "mode": -1
+   },
+   "research_n": 5521,
+   "research_win_rate": 0.5734468393406992,
+   "half_kelly_fraction": 0.019755666498311262,
+   "holdout_n": 2693,
+   "holdout_wins": 1589,
+   "holdout_win_rate": 0.5900482733011512,
+   "wilson95": [
+    0.5713569718243092,
+    0.6084830306437632
+   ],
+   "p_value_vs_break_even": 0.00018681879165990912,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    1381,
+    0.5778421433743663
+   ],
+   "holdout_h2": [
+    1312,
+    0.6028963414634146
+   ],
+   "ev_per_unit_stake": 0.061486891942072186,
+   "bankroll_end": 17401.40307154337,
+   "max_drawdown": -0.35642984143306833,
+   "up_share_of_bets": 0.4801336799108801
+  },
+  {
+   "id": "R0103",
+   "kind": "rule",
+   "family": "streak",
+   "params": {
+    "n": 6,
+    "mode": -1
+   },
+   "research_n": 2355,
+   "research_win_rate": 0.5830148619957537,
+   "half_kelly_fraction": 0.030521311676564696,
+   "holdout_n": 1104,
+   "holdout_wins": 662,
+   "holdout_win_rate": 0.5996376811594203,
+   "wilson95": [
+    0.5704372827937759,
+    0.6281470635604322
+   ],
+   "p_value_vs_break_even": 0.0018342482720308795,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    583,
+    0.5969125214408233
+   ],
+   "holdout_h2": [
+    521,
+    0.6026871401151631
+   ],
+   "ev_per_unit_stake": 0.07874782608695657,
+   "bankroll_end": 9479.565983956845,
+   "max_drawdown": -0.3635738799006787,
+   "up_share_of_bets": 0.48278985507246375
+  },
+  {
+   "id": "R0104",
+   "kind": "rule",
+   "family": "streak",
+   "params": {
+    "n": 7,
+    "mode": -1
+   },
+   "research_n": 982,
+   "research_win_rate": 0.5906313645621182,
+   "half_kelly_fraction": 0.039091166398367606,
+   "holdout_n": 442,
+   "holdout_wins": 253,
+   "holdout_win_rate": 0.5723981900452488,
+   "wilson95": [
+    0.5258466660543062,
+    0.6177020741260628
+   ],
+   "p_value_vs_break_even": 0.2579793100576343,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    235,
+    0.574468085106383
+   ],
+   "holdout_h2": [
+    207,
+    0.5700483091787439
+   ],
+   "ev_per_unit_stake": 0.029716742081447922,
+   "bankroll_end": 1276.3103263528305,
+   "max_drawdown": -0.5098703115475025,
+   "up_share_of_bets": 0.4660633484162896
+  },
+  {
+   "id": "R0105",
+   "kind": "rule",
+   "family": "streak",
+   "params": {
+    "n": 8,
+    "mode": -1
+   },
+   "research_n": 402,
+   "research_win_rate": 0.5746268656716418,
+   "half_kelly_fraction": 0.021083395877506773,
+   "holdout_n": 189,
+   "holdout_wins": 103,
+   "holdout_win_rate": 0.544973544973545,
+   "wilson95": [
+    0.47378706331514275,
+    0.61436818949338
+   ],
+   "p_value_vs_break_even": 0.6470685142747266,
+   "passes_57": false,
+   "above_break_even": false,
+   "holdout_h1": [
+    100,
+    0.52
+   ],
+   "holdout_h2": [
+    89,
+    0.5730337078651685
+   ],
+   "ev_per_unit_stake": -0.019647619047619025,
+   "bankroll_end": 893.8939317105938,
+   "max_drawdown": -0.28196505965088636,
+   "up_share_of_bets": 0.48148148148148145
+  },
+  {
+   "id": "M-logit-0.56",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.56
+   },
+   "research_n": 10947,
+   "research_win_rate": 0.5734904540056637,
+   "half_kelly_fraction": 0.01980474037956174,
+   "holdout_n": 18042,
+   "holdout_wins": 10169,
+   "holdout_win_rate": 0.563629309389203,
+   "wilson95": [
+    0.5563798593716701,
+    0.5708516685832244
+   ],
+   "p_value_vs_break_even": 0.0184900241294606,
+   "passes_57": false,
+   "above_break_even": true,
+   "holdout_h1": [
+    8889,
+    0.563167960400495
+   ],
+   "holdout_h2": [
+    9153,
+    0.5640773516879711
+   ],
+   "ev_per_unit_stake": 0.01393275690056539,
+   "bankroll_end": 8590.78919061329,
+   "max_drawdown": -0.9190513688816737,
+   "up_share_of_bets": 0.5339208513468573
+  },
+  {
+   "id": "M-logit-0.57",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.57
+   },
+   "research_n": 7850,
+   "research_win_rate": 0.5825477707006369,
+   "half_kelly_fraction": 0.02999575489954117,
+   "holdout_n": 12920,
+   "holdout_wins": 7384,
+   "holdout_win_rate": 0.5715170278637771,
+   "wilson95": [
+    0.5629639240925862,
+    0.5800276148937783
+   ],
+   "p_value_vs_break_even": 0.00017816203864049962,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    6342,
+    0.5679596341847998
+   ],
+   "holdout_h2": [
+    6578,
+    0.5749467923380966
+   ],
+   "ev_per_unit_stake": 0.02813065015479882,
+   "bankroll_end": 527370.139769898,
+   "max_drawdown": -0.8765270762628269,
+   "up_share_of_bets": 0.5400928792569659
+  },
+  {
+   "id": "M-logit-0.58",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.58
+   },
+   "research_n": 5335,
+   "research_win_rate": 0.5898781630740394,
+   "half_kelly_fraction": 0.03824368722103674,
+   "holdout_n": 8841,
+   "holdout_wins": 5127,
+   "holdout_win_rate": 0.5799117746861214,
+   "wilson95": [
+    0.5695906350838269,
+    0.5901634977657653
+   ],
+   "p_value_vs_break_even": 2.7591235031015057e-06,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    4337,
+    0.5699792483283376
+   ],
+   "holdout_h2": [
+    4504,
+    0.5894760213143873
+   ],
+   "ev_per_unit_stake": 0.04324119443501856,
+   "bankroll_end": 13114334.371457325,
+   "max_drawdown": -0.8478196067393464,
+   "up_share_of_bets": 0.5455265241488519
+  },
+  {
+   "id": "M-logit-0.59",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.59
+   },
+   "research_n": 3471,
+   "research_win_rate": 0.5963699222126189,
+   "half_kelly_fraction": 0.04554801518808127,
+   "holdout_n": 5704,
+   "holdout_wins": 3338,
+   "holdout_win_rate": 0.585203366058906,
+   "wilson95": [
+    0.5723641182231787,
+    0.5979279235181338
+   ],
+   "p_value_vs_break_even": 4.23134901075843e-06,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    2795,
+    0.5695885509838998
+   ],
+   "holdout_h2": [
+    2909,
+    0.600206256445514
+   ],
+   "ev_per_unit_stake": 0.052766058906030866,
+   "bankroll_end": 8217175.824279233,
+   "max_drawdown": -0.9217480591875551,
+   "up_share_of_bets": 0.5506661991584852
+  },
+  {
+   "id": "M-logit-0.60",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.6
+   },
+   "research_n": 2114,
+   "research_win_rate": 0.6040681173131505,
+   "half_kelly_fraction": 0.054209787839874804,
+   "holdout_n": 3486,
+   "holdout_wins": 2047,
+   "holdout_win_rate": 0.587205966724039,
+   "wilson95": [
+    0.5707748388244925,
+    0.6034451028485049
+   ],
+   "p_value_vs_break_even": 0.00010215768467386958,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    1689,
+    0.5671995263469508
+   ],
+   "holdout_h2": [
+    1797,
+    0.6060100166944908
+   ],
+   "ev_per_unit_stake": 0.056370740103270256,
+   "bankroll_end": 726067.0162124652,
+   "max_drawdown": -0.9091451636174297,
+   "up_share_of_bets": 0.5599541021227769
+  },
+  {
+   "id": "M-logit-0.61",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.61
+   },
+   "research_n": 1234,
+   "research_win_rate": 0.619935170178282,
+   "half_kelly_fraction": 0.07206290831512331,
+   "holdout_n": 2009,
+   "holdout_wins": 1173,
+   "holdout_win_rate": 0.5838725734196117,
+   "wilson95": [
+    0.5621779647746363,
+    0.6052470328009305
+   ],
+   "p_value_vs_break_even": 0.006089580661331336,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    974,
+    0.5657084188911704
+   ],
+   "holdout_h2": [
+    1035,
+    0.6009661835748792
+   ],
+   "ev_per_unit_stake": 0.05037063215530119,
+   "bankroll_end": 22963.78348095407,
+   "max_drawdown": -0.9313015026118683,
+   "up_share_of_bets": 0.5724240915878547
+  },
+  {
+   "id": "M-logit-0.62",
+   "kind": "model",
+   "family": "logit",
+   "params": {
+    "threshold": 0.62
+   },
+   "research_n": 660,
+   "research_win_rate": 0.6212121212121212,
+   "half_kelly_fraction": 0.07349969439265779,
+   "holdout_n": 1089,
+   "holdout_wins": 641,
+   "holdout_win_rate": 0.588613406795225,
+   "wilson95": [
+    0.5591247938676633,
+    0.6174790250206368
+   ],
+   "p_value_vs_break_even": 0.015870595984513982,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    517,
+    0.5725338491295938
+   ],
+   "holdout_h2": [
+    572,
+    0.6031468531468531
+   ],
+   "ev_per_unit_stake": 0.058904132231405004,
+   "bankroll_end": 10755.343506337626,
+   "max_drawdown": -0.8663494497742619,
+   "up_share_of_bets": 0.581267217630854
+  },
+  {
+   "id": "M-lgbm-0.57",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.57
+   },
+   "research_n": 9442,
+   "research_win_rate": 0.5764668502435925,
+   "half_kelly_fraction": 0.023153689996701532,
+   "holdout_n": 14774,
+   "holdout_wins": 8326,
+   "holdout_win_rate": 0.563557601191282,
+   "wilson95": [
+    0.5555448703132427,
+    0.571537287611633
+   ],
+   "p_value_vs_break_even": 0.030845423802543293,
+   "passes_57": false,
+   "above_break_even": true,
+   "holdout_h1": [
+    7230,
+    0.5661134163208852
+   ],
+   "holdout_h2": [
+    7544,
+    0.5611081654294804
+   ],
+   "ev_per_unit_stake": 0.01380368214430755,
+   "bankroll_end": 4736.966669479219,
+   "max_drawdown": -0.8589808501315102,
+   "up_share_of_bets": 0.5023690266684716
+  },
+  {
+   "id": "M-lgbm-0.58",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.58
+   },
+   "research_n": 6683,
+   "research_win_rate": 0.5837198862786174,
+   "half_kelly_fraction": 0.03131458334250846,
+   "holdout_n": 10411,
+   "holdout_wins": 5922,
+   "holdout_win_rate": 0.5688214388627413,
+   "wilson95": [
+    0.5592845791532725,
+    0.5783075278644664
+   ],
+   "p_value_vs_break_even": 0.004045516759971927,
+   "passes_57": false,
+   "above_break_even": true,
+   "holdout_h1": [
+    5053,
+    0.5747080942014645
+   ],
+   "holdout_h2": [
+    5358,
+    0.5632698768197089
+   ],
+   "ev_per_unit_stake": 0.02327858995293436,
+   "bankroll_end": 33560.48808232694,
+   "max_drawdown": -0.864882442345427,
+   "up_share_of_bets": 0.5002401306310633
+  },
+  {
+   "id": "M-lgbm-0.59",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.59
+   },
+   "research_n": 4623,
+   "research_win_rate": 0.5952844473285746,
+   "half_kelly_fraction": 0.04432667219247774,
+   "holdout_n": 7163,
+   "holdout_wins": 4136,
+   "holdout_win_rate": 0.5774116990087952,
+   "wilson95": [
+    0.5659336144882574,
+    0.5888067944528304
+   ],
+   "p_value_vs_break_even": 0.00012598133796631338,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    3420,
+    0.5827485380116959
+   ],
+   "holdout_h2": [
+    3743,
+    0.5725353994122362
+   ],
+   "ev_per_unit_stake": 0.03874105821583135,
+   "bankroll_end": 808701.7179241909,
+   "max_drawdown": -0.8538766416512173,
+   "up_share_of_bets": 0.49853413374284516
+  },
+  {
+   "id": "M-lgbm-0.60",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.6
+   },
+   "research_n": 3126,
+   "research_win_rate": 0.6055662188099808,
+   "half_kelly_fraction": 0.05589540562500475,
+   "holdout_n": 4735,
+   "holdout_wins": 2762,
+   "holdout_win_rate": 0.5833157338965154,
+   "wilson95": [
+    0.5692109958467478,
+    0.5972853901054648
+   ],
+   "p_value_vs_break_even": 7.474052123814702e-05,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    2244,
+    0.5877896613190731
+   ],
+   "holdout_h2": [
+    2491,
+    0.5792854275391409
+   ],
+   "ev_per_unit_stake": 0.04936832101372768,
+   "bankroll_end": 1316016.2140395783,
+   "max_drawdown": -0.7789641973039383,
+   "up_share_of_bets": 0.4992608236536431
+  },
+  {
+   "id": "M-lgbm-0.61",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.61
+   },
+   "research_n": 2010,
+   "research_win_rate": 0.6228855721393035,
+   "half_kelly_fraction": 0.07538260997038652,
+   "holdout_n": 3002,
+   "holdout_wins": 1722,
+   "holdout_win_rate": 0.5736175882744837,
+   "wilson95": [
+    0.5558431847656151,
+    0.5912038186426818
+   ],
+   "p_value_vs_break_even": 0.02627180082108202,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    1400,
+    0.5735714285714286
+   ],
+   "holdout_h2": [
+    1602,
+    0.5736579275905118
+   ],
+   "ev_per_unit_stake": 0.031911658894070716,
+   "bankroll_end": 1462.039050840705,
+   "max_drawdown": -0.9721747316031203,
+   "up_share_of_bets": 0.49633577614923385
+  },
+  {
+   "id": "M-lgbm-0.62",
+   "kind": "model",
+   "family": "lgbm",
+   "params": {
+    "threshold": 0.62
+   },
+   "research_n": 1247,
+   "research_win_rate": 0.623897353648757,
+   "half_kelly_fraction": 0.07652103544463427,
+   "holdout_n": 1821,
+   "holdout_wins": 1049,
+   "holdout_win_rate": 0.5760571114772103,
+   "wilson95": [
+    0.5532223395770488,
+    0.598571657227934
+   ],
+   "p_value_vs_break_even": 0.04359562332975953,
+   "passes_57": true,
+   "above_break_even": true,
+   "holdout_h1": [
+    852,
+    0.5809859154929577
+   ],
+   "holdout_h2": [
+    969,
+    0.5717234262125903
+   ],
+   "ev_per_unit_stake": 0.03630280065897851,
+   "bankroll_end": 2196.8499159433663,
+   "max_drawdown": -0.9664183645105832,
+   "up_share_of_bets": 0.485447556287754
+  }
+ ]
+}
